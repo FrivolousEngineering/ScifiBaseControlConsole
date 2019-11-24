@@ -29,15 +29,6 @@ class NodeItem(QGraphicsItem):
         return QRectF(0, 0, self._size, self._size)
 
     def paint(self, painter, option, widget):
-        """
-        Draws the backdrop rect.
-
-        Args:
-            painter (QtGui.QPainter): painter used for drawing the item.
-            option (QtGui.QStyleOptionGraphicsItem):
-                used to describe the parameters needed to draw.
-            widget (QtWidgets.QWidget): not used.
-        """
         painter.save()
 
         rect = self.boundingRect()
