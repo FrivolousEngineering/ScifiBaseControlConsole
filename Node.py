@@ -1,7 +1,5 @@
 from PySide2.QtCore import QObject
-from PySide2.QtWidgets import QGraphicsItem
 
-from ConnectionPort import ConnectionPort
 from NodeItem import NodeItem
 
 
