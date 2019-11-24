@@ -12,6 +12,6 @@ class NodeViewer(QGraphicsView):
         super(NodeViewer, self).__init__(parent)
 
         self.setScene(NodeScene(self))
-        self._animated_line = AnimatedLine()
-        self.scene().addItem(self._animated_line.line)
+        self._connection = Connection()
+        self.scene().addItem(self._connection.item)
 

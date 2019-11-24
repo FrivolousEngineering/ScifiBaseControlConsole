@@ -1,40 +1,51 @@
-from PySide2.QtCore import QPointF, QPropertyAnimation, QObject, Property
+from PySide2.QtCore import QObject, Property, QPropertyAnimation, QPointF
 from PySide2.QtGui import QColor, QPen, QPainterPath
-from PySide2.QtWidgets import QGraphicsPathItem
+from PySide2.QtWidgets import QGraphicsLineItem, QGraphicsPathItem
 
 
-class Connection(QGraphicsPathItem, QObject):
+class Connection(QObject):
     def __init__(self):
         super(Connection, self).__init__()
         self._color = QColor(255, 0, 0)
 
-        self.updatePath()
+        self._space = 4
+
+        self._dash_shift = 0
+        self._dashes = [max(0, self._dash_shift - self._space), min(self._dash_shift, 4), self._space, self._space, min(2 * self._space - self._dash_shift, 4), max(self._space - self._dash_shift, 0)]
+
+        self.item = QGraphicsPathItem()
+
+        path = QPainterPath()
+        ctr_point1 = QPointF(75, 0)
+        ctr_point2 = QPointF(125, 200)
+        path.cubicTo(ctr_point1, ctr_point2, QPointF(200, 200))
+        self.item.setPath(path)
+
+        self.anim = QPropertyAnimation(self, b'dashShift')
+        self.anim.setDuration(1000)
+        self.anim.setStartValue(0.)
+        self.anim.setEndValue(2 * self._space)
+        self.anim.setLoopCount(-1)
+
+        self.anim.start()
+
+    def _recreatePen(self):
+        pen = QPen()
+        pen.setColor(self._color)
+        pen.setDashPattern(self._dashes)
+        pen.setWidth(5)
+        return pen
 
     def setColor(self, color):
         self._color = color
+        self.item.setPen(self._recreatePen())
 
-    color = Property(QColor, fset=setColor)
+    def setDashShift(self, dash_shift):
+        self._dash_shift = dash_shift
 
+        self._dashes = [max(0, self._dash_shift - self._space), min(self._dash_shift, 4), self._space, self._space, min(2 * self._space - self._dash_shift, 4), max(self._space - self._dash_shift, 0)]
 
+        self.item.setPen(self._recreatePen())
 
-    def resetPath(self):
-        path = QPainterPath(QPointF(0.0, 0.0))
-        self.setPath(path)
-
-    def paint(self, painter, option, widget):
-
-        pen = QPen(self._color, 2)
-
-        painter.save()
-        painter.setPen(pen)
-        painter.setRenderHint(painter.Antialiasing, True)
-        painter.drawPath(self.path())
-        painter.restore()
-
-    def updatePath(self):
-        path = QPainterPath()
-
-        path.moveTo(10, 20)
-        path.lineTo(200, 200)
-
-        self.setPath(path)
+    dashShift = Property(float, fset= setDashShift)
+    color = Property(QColor, fset= setColor)
