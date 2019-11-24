@@ -2,11 +2,16 @@ from PySide2.QtCore import QObject, Property, QPropertyAnimation, QPointF
 from PySide2.QtGui import QColor, QPen, QPainterPath
 from PySide2.QtWidgets import  QGraphicsPathItem
 
+resource_colors = {"fuel":QColor(255, 0, 0, 255),
+                   "energy": QColor(255, 255, 0, 255),
+                   "water": QColor(0, 0, 255, 255)}
+
 
 class Connection(QObject):
-    def __init__(self, origin, target):
+    def __init__(self, origin, target, resource_type: str):
         super(Connection, self).__init__()
-        self._color = QColor(255, 0, 0, 127)
+
+        self._color = resource_colors[resource_type]
 
         self._background_color = QColor(70, 70, 70)
 
