@@ -19,6 +19,12 @@ class NodeItem(QGraphicsItem):
     def getSize(self):
         return self._size
 
+    def setSize(self, size):
+        self._size = size
+
+    def setName(self, name):
+        self._name = name
+
     def boundingRect(self):
         return QRectF(0, 0, self._size, self._size)
 
