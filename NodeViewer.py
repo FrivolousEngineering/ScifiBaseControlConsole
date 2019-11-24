@@ -1,5 +1,6 @@
 from PySide2.QtWidgets import QGraphicsView
 
+from Generator import Generator
 from Node import Node
 from NodeScene import NodeScene
 from Connection import Connection
@@ -12,8 +13,11 @@ class NodeViewer(QGraphicsView):
         self.setScene(NodeScene(self))
 
         self._node = Node("Fuel Storage")
-        self._node_2 = Node("Generator")
+
+        self._node_2 = Generator("Generator")
+        
         self._node_3 = Node("Battery")
+        self._node_3.setSupportedInputs(["energy"])
         self._node_4 = Node("Water Storage")
         self._node_4.setPosition(0, 350)
 

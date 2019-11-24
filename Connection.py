@@ -12,6 +12,7 @@ class Connection(QObject):
         super(Connection, self).__init__()
 
         self._color = resource_colors[resource_type]
+        self._resource_type = resource_type
 
         self._background_color = QColor(70, 70, 70)
 
@@ -49,7 +50,7 @@ class Connection(QObject):
         origin_pos.setY(origin_pos.y() + self.origin.getSize() / 2)
 
         target_pos = self.target.getPosition()
-        target_pos.setY(target_pos.y() + self.target.getSize() / 2)
+        target_pos.setY(target_pos.y() + self.target.getSize() / 2 + self.target.getInputOffset(self._resource_type))
         path.moveTo(origin_pos)
 
         difference = target_pos.x() - origin_pos.x()
