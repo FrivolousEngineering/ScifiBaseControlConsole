@@ -10,7 +10,15 @@ Item
 
     property double temperature: 290
 
-    property variant temperature_data: [0, 20, 25, 27.5, 50, 60, 0, 20, 25, 27.5, 50, 60]
+    property variant temperatureData: []
+
+    onTemperatureDataChanged:
+    {
+        for(var i in temperatureData)
+        {
+            splineSeries.append(i, temperatureData[i])
+        }
+    }
 
     implicitWidth: 700
     implicitHeight: 700
@@ -44,7 +52,7 @@ Item
             color: "white"
         }
     }
-    
+
     Item
     {
         id: content
@@ -116,10 +124,7 @@ Item
 
             Component.onCompleted:
             {
-                for(var i in temperature_data)
-                {
-                    splineSeries.append(i, temperature_data[i])
-                }
+
             }
         }
     }

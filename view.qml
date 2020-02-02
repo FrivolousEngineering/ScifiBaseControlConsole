@@ -5,10 +5,16 @@ Rectangle {
     height: 750
     color: "green"
 
-    NodeWidget
+    Repeater
     {
-        x: 25
-        y: 25
-        nodeName: "BLARG"
+
+        model: backend.nodeData
+        NodeWidget
+        {
+            x: 25
+            y: 25
+            nodeName: modelData.id
+            temperatureData: modelData.temperatureHistory
+        }
     }
 }
