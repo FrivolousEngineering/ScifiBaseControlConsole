@@ -1,7 +1,7 @@
 from PySide2.QtCore import QObject
 
 from NodeItem import NodeItem
-
+from PySide2.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 
 class Node(QObject):
     def __init__(self, name, parent=None):
@@ -14,7 +14,22 @@ class Node(QObject):
 
         self._supported_inputs = []
         self._supported_outputs = []
-        self._offset = 20
+        self._offset = 100
+        self._node_id = name
+        self._source_url = "http://localhost:5000/%s/" % self._node_id
+
+        self._network_manager = QNetworkAccessManager()
+        self._network_manager.finished.connect(self._onFinished)
+        self.update()
+
+    def _onFinished(self, reply:QNetworkReply):
+        http_status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
+        print("ZOMG", http_status_code)
+
+        print(reply.readAll())
+
+    def update(self):
+        self._network_manager.get(QNetworkRequest(self._source_url))
 
     def setSupportedInputs(self, supported_inputs):
         self._supported_inputs = supported_inputs
