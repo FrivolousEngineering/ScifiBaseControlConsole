@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtCharts 2.3
+import QtQuick.Controls 2.2
 
 
 Item
@@ -9,11 +10,13 @@ Item
     property string nodeName: ""
 
     property double temperature: 290
+    property var controller: null
 
     property variant temperatureData: []
 
     onTemperatureDataChanged:
     {
+        splineSeries.clear()
         for(var i in temperatureData)
         {
             splineSeries.append(i, temperatureData[i])
@@ -63,10 +66,21 @@ Item
             right: parent.right
             bottom: parent.bottom
         }
-
+        Button
+        {
+            id: button
+            text: "UPDATE"
+            onClicked: controller.update()
+        }
         ChartView
         {
-            anchors.fill: parent
+            anchors
+            {
+                top: button.bottom
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
             antialiasing: true
             theme: ChartView.ChartThemeDark
 
@@ -119,11 +133,6 @@ Item
                         splineSeries.axisX.max = xMax + 1
                     }
                 }
-
-            }
-
-            Component.onCompleted:
-            {
 
             }
         }

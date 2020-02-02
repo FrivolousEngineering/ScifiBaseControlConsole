@@ -22,6 +22,7 @@ class NodeData(QObject):
     temperatureChanged = Signal()
     temperatureHistoryChanged = Signal()
 
+    @Slot()
     def update(self):
         self._network_manager.get(QNetworkRequest(self._source_url))
         self._network_manager.get(QNetworkRequest(self._temperature_history_url))
