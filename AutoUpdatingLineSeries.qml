@@ -1,5 +1,5 @@
 import QtCharts 2.3
-SplineSeries
+LineSeries
 {
     id: splineSeries
 
@@ -8,6 +8,13 @@ SplineSeries
     property double xMin: 10000
     property double xMax: 0
 
+    function resetMinMax()
+    {
+        yMin = 10000
+        yMax = 0
+        xMin = 10000
+        xMax = 0
+    }
     axisX: ValueAxis
     {
         tickType: ValueAxis.TicksDynamic
@@ -29,7 +36,7 @@ SplineSeries
             {
                 yMax = y_value;
             }
-            splineSeries.axisY.min = 0
+            splineSeries.axisY.min = yMin - 10
             splineSeries.axisY.max = yMax + 10
         }
 
@@ -48,5 +55,4 @@ SplineSeries
             splineSeries.axisX.max = xMax + 1
         }
     }
-
 }

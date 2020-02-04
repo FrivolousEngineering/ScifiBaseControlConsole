@@ -4,6 +4,7 @@ from PySide2.QtQuick import QQuickView
 from PySide2.QtCore import QUrl, QObject, Slot, Property, Signal, QByteArray
 import json
 
+
 class NodeData(QObject):
     def __init__(self, node_id: str, parent=None):
         QObject.__init__(self, parent)
@@ -12,6 +13,8 @@ class NodeData(QObject):
 
         self._source_url = "http://localhost:5000/%s/" % self._node_id
         self._temperature_history_url = "http://localhost:5000/%s/temperature/history/" % self._node_id
+        self._all_chart_data_url = "http://localhost:5000/%s/all_property_chart_data" % self._node_id
+        self._all_chart_data = {}
 
         self._network_manager = QNetworkAccessManager()
         self._network_manager.finished.connect(self._onNetworkFinished)
@@ -21,11 +24,13 @@ class NodeData(QObject):
 
     temperatureChanged = Signal()
     temperatureHistoryChanged = Signal()
+    historyPropertiesChanged = Signal()
+    historyDataChanged = Signal()
 
     @Slot()
     def update(self):
         self._network_manager.get(QNetworkRequest(self._source_url))
-        self._network_manager.get(QNetworkRequest(self._temperature_history_url))
+        self._network_manager.get(QNetworkRequest(self._all_chart_data_url))
 
     def _onNetworkFinished(self, reply: QNetworkReply):
         http_status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
@@ -40,10 +45,25 @@ class NodeData(QObject):
         if url == self._source_url:
             self._handleBaseUpdate(self._data)
         else:
-            self._handleTemperatureHistoryUpdate(self._data)
+            self._handleAllChartDataUpdate(self._data)
+            #self._handleTemperatureHistoryUpdate(self._data)
+
+    def _handleAllChartDataUpdate(self, data):
+        all_keys = set(data.keys())
+        keys_changed = False
+        data_changed = False
+        if set(self._all_chart_data.keys()) != all_keys:
+            keys_changed = True
+        if self._all_chart_data != data:
+            data_changed = True
+            self._all_chart_data = data
+
+        if data_changed:
+            self.historyDataChanged.emit()
+        if keys_changed:
+            self.historyPropertiesChanged.emit()
 
     def _handleBaseUpdate(self, data):
-
         self._updateTemperature(data["temperature"])
 
     def _handleTemperatureHistoryUpdate(self, data):
@@ -67,6 +87,14 @@ class NodeData(QObject):
     @Property("QVariantList", notify=temperatureHistoryChanged)
     def temperatureHistory(self):
         return self._temperature_history
+
+    @Property("QVariantList", notify=historyPropertiesChanged)
+    def allHistoryProperties(self):
+        return list(self._all_chart_data.keys())
+
+    @Property("QVariantMap", notify=historyDataChanged)
+    def historyData(self):
+        return self._all_chart_data
 
 
 class TestObject(QObject):

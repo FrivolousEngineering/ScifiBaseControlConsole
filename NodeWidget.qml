@@ -11,15 +11,17 @@ Item
 
     property double temperature: 290
     property var controller: null
+    property string activeProperty: "temperature"
+    property variant temperatureData:  controller.historyData[activeProperty]
+    property variant activeData: controller.historyData[activeProperty]
 
-    property variant temperatureData: []
-
-    onTemperatureDataChanged:
+    onActiveDataChanged:
     {
-        temperatureSplineSeries.clear()
-        for(var i in temperatureData)
+        historyGraph.clear()
+        historyGraph.resetMinMax()
+        for(var i in activeData)
         {
-            temperatureSplineSeries.append(i, temperatureData[i])
+            historyGraph.append(i, activeData[i])
         }
     }
 
@@ -66,12 +68,29 @@ Item
             right: parent.right
             bottom: parent.bottom
         }
-        Button
+
+        Row
         {
             id: button
-            text: "UPDATE"
-            onClicked: controller.update()
+            Button
+            {
+
+                text: "UPDATE"
+                onClicked: controller.update()
+            }
+            Repeater
+            {
+                model: controller.allHistoryProperties
+
+                Button
+                {
+                    text: modelData
+                    onClicked: activeProperty = modelData
+                    highlighted: modelData == activeProperty
+                }
+            }
         }
+
         ChartView
         {
             anchors
@@ -84,10 +103,10 @@ Item
             antialiasing: true
             theme: ChartView.ChartThemeDark
 
-            AutoUpdatingSplineSeries
+            AutoUpdatingLineSeries
             {
-                id: temperatureSplineSeries
-                name: "Temperature"
+                id: historyGraph
+                name: activeProperty
             }
         }
     }

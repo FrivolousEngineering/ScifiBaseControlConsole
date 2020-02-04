@@ -15,7 +15,6 @@ Rectangle {
             y: 25
             controller: modelData
             nodeName: modelData.id
-            temperatureData: modelData.temperatureHistory
         }
     }
 }
