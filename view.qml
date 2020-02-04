@@ -3,11 +3,13 @@ import QtQuick.Controls 2.2
 
 Rectangle
 {
-    width: 1200
+    width: 1000
     height: 750
     color: "green"
+
     ScrollView
     {
+        anchors.fill: parent
         Grid
         {
             spacing: 5

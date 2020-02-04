@@ -73,19 +73,12 @@ Item
 
         ScrollView
         {
-            id: button
+            id: menuBar
             width: parent.width
-            height: updateButton.height
             clip: true
             Row
             {
-
-                Button
-                {
-                    id: updateButton
-                    text: "UPDATE"
-                    onClicked: controller.update()
-                }
+                spacing: 2
                 Repeater
                 {
                     model: controller.allHistoryProperties
@@ -93,7 +86,11 @@ Item
                     Button
                     {
                         text: modelData
-                        onClicked: activeProperty = modelData
+                        onClicked:
+                        {
+                            controller.update()
+                            activeProperty = modelData
+                        }
                         highlighted: modelData == activeProperty
                     }
                 }
@@ -104,7 +101,7 @@ Item
         {
             anchors
             {
-                top: button.bottom
+                top: menuBar.bottom
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom

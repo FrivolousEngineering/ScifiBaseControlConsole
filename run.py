@@ -106,6 +106,7 @@ class TestObject(QObject):
     def nodeData(self):
         return self._data
 
+
 if __name__ == '__main__':
     app = QApplication([])
     view = QQuickView()
