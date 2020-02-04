@@ -75,34 +75,71 @@ Item
             bottom: parent.bottom
         }
 
-        ScrollView
+        property string activeMainMenu: "history"
+
+
+        Column
         {
             id: menuBar
-            anchors
+            spacing: defaultMargin
+            anchors.left: parent.left
+            anchors.right: parent.right
+            ScrollView
             {
-                top: parent.top
-                margins: defaultMargin
-                left: parent.left
-                right: parent.right
-            }
-            clip: true
-
-            Row
-            {
-                spacing: 2
-                Repeater
+                id: mainMenuBar
+                anchors
                 {
-                    model: controller.allHistoryProperties
-
+                    margins: defaultMargin
+                    left: parent.left
+                    right: parent.right
+                }
+                clip: true
+                Row
+                {
+                    spacing: defaultMargin
                     Button
                     {
-                        text: modelData
-                        onClicked:
+                        text: "History"
+                        highlighted: content.activeMainMenu == "history"
+                        onClicked: content.activeMainMenu = "history"
+                    }
+                    Button
+                    {
+                        text: "Connections"
+                        highlighted: content.activeMainMenu == "connection"
+                        onClicked: content.activeMainMenu = "connection"
+                    }
+                }
+            }
+            ScrollView
+            {
+                id: subMenuBar
+                anchors
+                {
+                    margins: defaultMargin
+                    left: parent.left
+                    right: parent.right
+                }
+                height: visible ? contentHeight: 0
+                visible: content.activeMainMenu == "history"
+                clip: true
+                Row
+                {
+                    spacing: defaultMargin
+                    Repeater
+                    {
+                        model: controller.allHistoryProperties
+
+                        Button
                         {
-                            controller.update()
-                            activeProperty = modelData
+                            text: modelData
+                            onClicked:
+                            {
+                                controller.update()
+                                activeProperty = modelData
+                            }
+                            highlighted: modelData == activeProperty
                         }
-                        highlighted: modelData == activeProperty
                     }
                 }
             }
@@ -110,6 +147,7 @@ Item
 
         ChartView
         {
+            visible: content.activeMainMenu == "history"
             anchors
             {
                 top: menuBar.bottom
