@@ -105,9 +105,9 @@ Item
                     }
                     Button
                     {
-                        text: "Connections"
-                        highlighted: content.activeMainMenu == "connection"
-                        onClicked: content.activeMainMenu = "connection"
+                        text: "Controls"
+                        highlighted: content.activeMainMenu == "control"
+                        onClicked: content.activeMainMenu = "control"
                     }
                 }
             }
@@ -145,9 +145,9 @@ Item
             }
         }
 
-        ChartView
+
+        Item
         {
-            visible: content.activeMainMenu == "history"
             anchors
             {
                 top: menuBar.bottom
@@ -156,15 +156,32 @@ Item
                 right: parent.right
                 bottom: parent.bottom
             }
-            antialiasing: true
-            theme: ChartView.ChartThemeDark
 
-            AutoUpdatingLineSeries
+            ChartView
             {
-                id: historyGraph
-                name: activeProperty
-                color: "red"
-                width: 3
+                visible: content.activeMainMenu == "history"
+                anchors.fill: parent
+                antialiasing: true
+                theme: ChartView.ChartThemeDark
+
+                AutoUpdatingLineSeries
+                {
+                    id: historyGraph
+                    name: activeProperty
+                    color: "red"
+                    width: 3
+                }
+            }
+
+            Item
+            {
+                id: "controls_page"
+                visible: content.activeMainMenu == "control"
+                Button
+                {
+                    text: controller.enabled ? "Disable": "Enable"
+                    onClicked: controller.toggleEnabled()
+                }
             }
         }
     }

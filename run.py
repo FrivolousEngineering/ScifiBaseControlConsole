@@ -21,11 +21,13 @@ class NodeData(QObject):
         self.update()
         self._temperature_history = []
         self._data = None
+        self._enabled = True
 
     temperatureChanged = Signal()
     temperatureHistoryChanged = Signal()
     historyPropertiesChanged = Signal()
     historyDataChanged = Signal()
+    enabledChanged = Signal()
 
     @Slot()
     def update(self):
@@ -44,9 +46,12 @@ class NodeData(QObject):
 
         if url == self._source_url:
             self._handleBaseUpdate(self._data)
-        else:
+        elif url == self._all_chart_data_url:
             self._handleAllChartDataUpdate(self._data)
-            #self._handleTemperatureHistoryUpdate(self._data)
+        else:
+            # Right now this happens when you enable / disable the node
+            # Force an update to get new data, yay!
+            self.update()
 
     def _handleAllChartDataUpdate(self, data):
         all_keys = set(data.keys())
@@ -65,6 +70,12 @@ class NodeData(QObject):
 
     def _handleBaseUpdate(self, data):
         self._updateTemperature(data["temperature"])
+        self._updateEnabled(data["enabled"])
+
+    def _updateEnabled(self, enabled):
+        if self._enabled != bool(enabled):
+            self._enabled = bool(enabled)
+            self.enabledChanged.emit()
 
     def _handleTemperatureHistoryUpdate(self, data):
         if self._temperature_history != data:
@@ -79,6 +90,10 @@ class NodeData(QObject):
     @Property(str, constant=True)
     def id(self):
         return self._node_id
+
+    @Property(bool, notify = enabledChanged)
+    def enabled(self):
+        return self._enabled
 
     @Property(float, notify=temperatureChanged)
     def temperature(self):
@@ -95,6 +110,14 @@ class NodeData(QObject):
     @Property("QVariantMap", notify=historyDataChanged)
     def historyData(self):
         return self._all_chart_data
+
+    @Slot()
+    def toggleEnabled(self):
+        url = self._source_url + "enabled/"
+        self._network_manager.put(QNetworkRequest(url), QByteArray())
+        # Already trigger an update, so the interface feels snappy
+        self._enabled = not self._enabled
+        self.enabledChanged.emit()
 
 
 class TestObject(QObject):
