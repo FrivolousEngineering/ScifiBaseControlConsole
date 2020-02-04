@@ -68,6 +68,7 @@ Item
         anchors
         {
             top: titleBar.bottom
+            topMargin: defaultMargin
             left: parent.left
             rightMargin: borderWidth
             right: parent.right
@@ -177,6 +178,8 @@ Item
             {
                 id: "controls_page"
                 visible: content.activeMainMenu == "control"
+                anchors.left: parent.left
+                anchors.margins: defaultMargin
                 Button
                 {
                     text: controller.enabled ? "Disable": "Enable"
