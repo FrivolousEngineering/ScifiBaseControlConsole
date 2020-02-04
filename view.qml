@@ -13,6 +13,7 @@ Rectangle
         Grid
         {
             spacing: 5
+            columns: 2
             Repeater
             {
 

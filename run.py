@@ -100,7 +100,7 @@ class NodeData(QObject):
 class TestObject(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-        self._data = [ NodeData("generator_1"), NodeData("generator_2")]
+        self._data = [ NodeData("generator_1"), NodeData("generator_2"), NodeData("fluid_cooler_1"), NodeData("fluid_cooler_2")]
 
     @Property("QVariantList", constant=True)
     def nodeData(self):

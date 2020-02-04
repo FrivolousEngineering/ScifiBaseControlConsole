@@ -14,7 +14,9 @@ Item
     property string activeProperty: "temperature"
     property variant temperatureData:  controller.historyData[activeProperty]
     property variant activeData: controller.historyData[activeProperty]
-    property int borderWidth: 1
+    property int borderWidth: 3
+
+    property int defaultMargin: 3
     onActiveDataChanged:
     {
         historyGraph.clear()
@@ -39,10 +41,10 @@ Item
     Rectangle
     {
         id: titleBar
-        border.width: 1
+        border.width: borderWidth
         border.color: "white"
         width: parent.width
-        height: 20
+        height: 50
         color: "transparent"  // We only want this for the border.
         anchors
         {
@@ -55,6 +57,8 @@ Item
             text: nodeName
             anchors.centerIn: parent
             color: "white"
+            font.pointSize : 20
+            font.weight: Font.Bold
         }
     }
 
@@ -74,8 +78,15 @@ Item
         ScrollView
         {
             id: menuBar
-            width: parent.width
+            anchors
+            {
+                top: parent.top
+                margins: defaultMargin
+                left: parent.left
+                right: parent.right
+            }
             clip: true
+
             Row
             {
                 spacing: 2
@@ -102,6 +113,7 @@ Item
             anchors
             {
                 top: menuBar.bottom
+                topMargin: defaultMargin
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
