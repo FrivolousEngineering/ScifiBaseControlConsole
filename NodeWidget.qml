@@ -14,7 +14,7 @@ Item
     property string activeProperty: "temperature"
     property variant temperatureData:  controller.historyData[activeProperty]
     property variant activeData: controller.historyData[activeProperty]
-
+    property int borderWidth: 1
     onActiveDataChanged:
     {
         historyGraph.clear()
@@ -25,14 +25,14 @@ Item
         }
     }
 
-    implicitWidth: 700
-    implicitHeight: 700
+    implicitWidth: 500
+    implicitHeight: 500
     Rectangle
     {
         id: background
         anchors.fill: parent
         color: "#16161d"
-        border.width: 1
+        border.width: borderWidth
         border.color: "white"
     }
 
@@ -65,28 +65,37 @@ Item
         {
             top: titleBar.bottom
             left: parent.left
+            rightMargin: borderWidth
             right: parent.right
+            leftMargin: borderWidth
             bottom: parent.bottom
         }
 
-        Row
+        ScrollView
         {
             id: button
-            Button
+            width: parent.width
+            height: updateButton.height
+            clip: true
+            Row
             {
-
-                text: "UPDATE"
-                onClicked: controller.update()
-            }
-            Repeater
-            {
-                model: controller.allHistoryProperties
 
                 Button
                 {
-                    text: modelData
-                    onClicked: activeProperty = modelData
-                    highlighted: modelData == activeProperty
+                    id: updateButton
+                    text: "UPDATE"
+                    onClicked: controller.update()
+                }
+                Repeater
+                {
+                    model: controller.allHistoryProperties
+
+                    Button
+                    {
+                        text: modelData
+                        onClicked: activeProperty = modelData
+                        highlighted: modelData == activeProperty
+                    }
                 }
             }
         }
@@ -107,6 +116,8 @@ Item
             {
                 id: historyGraph
                 name: activeProperty
+                color: "red"
+                width: 3
             }
         }
     }

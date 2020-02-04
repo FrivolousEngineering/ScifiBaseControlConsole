@@ -36,7 +36,7 @@ LineSeries
             {
                 yMax = y_value;
             }
-            splineSeries.axisY.min = yMin - 10
+            splineSeries.axisY.min = Math.max(yMin - 10, 0)
             splineSeries.axisY.max = yMax + 10
         }
 
