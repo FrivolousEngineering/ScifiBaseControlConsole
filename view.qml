@@ -1,20 +1,26 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.2
 
-Rectangle {
-    width: 750
+Rectangle
+{
+    width: 1200
     height: 750
     color: "green"
-
-    Repeater
+    ScrollView
     {
-
-        model: backend.nodeData
-        NodeWidget
+        Grid
         {
-            x: 25
-            y: 25
-            controller: modelData
-            nodeName: modelData.id
+            spacing: 5
+            Repeater
+            {
+
+                model: backend.nodeData
+                NodeWidget
+                {
+                    controller: modelData
+                    nodeName: modelData.id
+                }
+            }
         }
     }
 }

@@ -98,10 +98,9 @@ class NodeData(QObject):
 
 
 class TestObject(QObject):
-
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-        self._data = [ NodeData("generator_1")]
+        self._data = [ NodeData("generator_1"), NodeData("generator_2")]
 
     @Property("QVariantList", constant=True)
     def nodeData(self):
@@ -114,8 +113,6 @@ if __name__ == '__main__':
     beep = TestObject()
     view.rootContext().setContextProperty("backend", beep)
     view.setSource(url)
-
-
 
     view.show()
     app.exec_()
