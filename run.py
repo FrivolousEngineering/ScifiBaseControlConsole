@@ -14,6 +14,8 @@ class NodeData(QObject):
         self._source_url = "http://localhost:5000/%s/" % self._node_id
         self._temperature_history_url = "http://localhost:5000/%s/temperature/history/" % self._node_id
         self._all_chart_data_url = "http://localhost:5000/%s/all_property_chart_data" % self._node_id
+        self._incoming_connections_url = "http://localhost:5000/%s/connections/incoming" % self._node_id
+        self._outgoing_connections_url = "http://localhost:5000/%s/connections/outgoing" % self._node_id
         self._all_chart_data = {}
 
         self._network_manager = QNetworkAccessManager()
@@ -22,7 +24,8 @@ class NodeData(QObject):
         self._temperature_history = []
         self._data = None
         self._enabled = True
-
+        self._incoming_connections = []
+        self._outgoing_connections = []
         self._onFinishedCallbacks = {}
         self.update()
 
@@ -31,6 +34,8 @@ class NodeData(QObject):
     historyPropertiesChanged = Signal()
     historyDataChanged = Signal()
     enabledChanged = Signal()
+    incomingConnectionsChanged = Signal()
+    outgoingConnectionsChanged = Signal()
 
     @Slot()
     def update(self):
@@ -39,6 +44,30 @@ class NodeData(QObject):
 
         reply = self._network_manager.get(QNetworkRequest(self._all_chart_data_url))
         self._onFinishedCallbacks[reply] = self._onChartDataFinished
+
+        reply = self._network_manager.get(QNetworkRequest(self._incoming_connections_url))
+        self._onFinishedCallbacks[reply] = self._onIncomingConnectionsFinished
+
+        reply = self._network_manager.get(QNetworkRequest(self._outgoing_connections_url))
+        self._onFinishedCallbacks[reply] = self._onOutgoingConnectionsFinished
+
+    def _onIncomingConnectionsFinished(self, reply: QNetworkReply):
+        # Todo: Handle errors.
+        self._incoming_connections = json.loads(bytes(reply.readAll().data()))
+        self.incomingConnectionsChanged.emit()
+
+    def _onOutgoingConnectionsFinished(self, reply: QNetworkReply):
+        # Todo: Handle errors.
+        self._outgoing_connections =json.loads(bytes(reply.readAll().data()))
+        self.outgoingConnectionsChanged.emit()
+
+    @Property("QVariantList", notify=incomingConnectionsChanged)
+    def incomingConnections(self):
+        return self._incoming_connections
+
+    @Property("QVariantList", notify=outgoingConnectionsChanged)
+    def outgoingConnections(self):
+        return self._outgoing_connections
 
     def _onSourceUrlFinished(self, reply: QNetworkReply):
         # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.

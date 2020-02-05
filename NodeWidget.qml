@@ -16,6 +16,21 @@ Item
     property variant activeData: controller.historyData[activeProperty]
     property int borderWidth: 3
 
+    property color borderColor: highlighted ?  "red":  "white"
+
+    SequentialAnimation on borderColor{
+        running: highlighted
+        loops: Animation.Infinite
+        ColorAnimation { from: "white"; to: "red"; duration: 300 }
+        ColorAnimation { from: "red"; to: "white";  duration: 300 }
+    }
+
+
+    property bool highlighted: false
+
+    signal connectionHovered(string node_id)
+
+
     property int defaultMargin: 3
     onActiveDataChanged:
     {
@@ -35,14 +50,14 @@ Item
         anchors.fill: parent
         color: "#16161d"
         border.width: borderWidth
-        border.color: "white"
+        border.color: borderColor
     }
 
     Rectangle
     {
         id: titleBar
         border.width: borderWidth
-        border.color: "white"
+        border.color: borderColor
         width: parent.width
         height: 50
         color: "transparent"  // We only want this for the border.
@@ -109,6 +124,12 @@ Item
                         text: "Controls"
                         highlighted: content.activeMainMenu == "control"
                         onClicked: content.activeMainMenu = "control"
+                    }
+                    Button
+                    {
+                        text: "Connections"
+                        highlighted: content.activeMainMenu == "connection"
+                        onClicked: content.activeMainMenu = "connection"
                     }
                 }
             }
@@ -184,6 +205,77 @@ Item
                 {
                     text: controller.enabled ? "Disable": "Enable"
                     onClicked: controller.toggleEnabled()
+                }
+            }
+
+            Item
+            {
+                id: "connections_page"
+                visible: content.activeMainMenu == "connection"
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: defaultMargin
+
+                ScrollView
+                {
+                    anchors.fill: parent
+                    Column
+                    {
+                        spacing: defaultMargin
+                        Text
+                        {
+                            text: "Incoming Connections"
+                            color: "white"
+                            font.pointSize : 15
+                            font.weight: Font.Bold
+                        }
+                        id: incomingConnections
+                        width: parent.width / 2
+                        Repeater
+                        {
+                            model: controller.incomingConnections
+
+                            Button
+                            {
+                                text: modelData["origin"]
+                                hoverEnabled: true
+                                onHoveredChanged:
+                                {
+                                    if(hovered){base.connectionHovered(text)}
+                                    else {base.connectionHovered("")}
+                                }
+                            }
+                        }
+                    }
+                    Column
+                    {
+                        id: outgoingConnections
+                        width: parent.width / 2
+                        anchors.left: incomingConnections.right
+                        spacing: defaultMargin
+                        Text
+                        {
+                            text: "Outgoing Connections"
+                            color: "white"
+                            font.pointSize : 15
+                            font.weight: Font.Bold
+                        }
+                        Repeater
+                        {
+                            model: controller.outgoingConnections
+
+                            Button
+                            {
+                                text: modelData["target"]
+                                hoverEnabled: true
+                                onHoveredChanged:
+                                {
+                                    if(hovered){base.connectionHovered(text)}
+                                    else {base.connectionHovered("")}
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

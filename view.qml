@@ -7,6 +7,8 @@ Rectangle
     height: 750
     color: "black"
 
+
+    property string highlightedNode: ""
     ScrollView
     {
         anchors.fill: parent
@@ -22,6 +24,8 @@ Rectangle
                 {
                     controller: modelData
                     nodeName: modelData.id
+                    onConnectionHovered: highlightedNode = node_id
+                    highlighted: modelData.id == highlightedNode
                 }
             }
         }
