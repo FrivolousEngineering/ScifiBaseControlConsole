@@ -16,7 +16,7 @@ Item
     property variant activeData: controller.historyData[activeProperty]
     property int borderWidth: 3
 
-    property color borderColor: highlighted ?  "red":  "white"
+    property color borderColor: highlighted ?  "red":  "white"  // To ensure it jumps back to white again.
 
     SequentialAnimation on borderColor{
         running: highlighted
@@ -235,15 +235,17 @@ Item
                         {
                             model: controller.incomingConnections
 
-                            Button
+                            ConnectionWidget
                             {
                                 text: modelData["origin"]
-                                hoverEnabled: true
+                                resourceType: modelData["resource_type"]
                                 onHoveredChanged:
                                 {
                                     if(hovered){base.connectionHovered(text)}
                                     else {base.connectionHovered("")}
                                 }
+                                borderColor: base.borderColor
+                                borderWidth: base.borderWidth
                             }
                         }
                     }
@@ -264,15 +266,17 @@ Item
                         {
                             model: controller.outgoingConnections
 
-                            Button
+                            ConnectionWidget
                             {
                                 text: modelData["target"]
-                                hoverEnabled: true
+                                resourceType: modelData["resource_type"]
                                 onHoveredChanged:
                                 {
                                     if(hovered){base.connectionHovered(text)}
                                     else {base.connectionHovered("")}
                                 }
+                                borderColor: base.borderColor
+                                borderWidth: base.borderWidth
                             }
                         }
                     }
