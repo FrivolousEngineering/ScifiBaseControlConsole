@@ -18,10 +18,13 @@ class NodeData(QObject):
 
         self._network_manager = QNetworkAccessManager()
         self._network_manager.finished.connect(self._onNetworkFinished)
-        self.update()
+
         self._temperature_history = []
         self._data = None
         self._enabled = True
+
+        self._onFinishedCallbacks = {}
+        self.update()
 
     temperatureChanged = Signal()
     temperatureHistoryChanged = Signal()
@@ -31,29 +34,26 @@ class NodeData(QObject):
 
     @Slot()
     def update(self):
-        self._network_manager.get(QNetworkRequest(self._source_url))
-        self._network_manager.get(QNetworkRequest(self._all_chart_data_url))
+        reply = self._network_manager.get(QNetworkRequest(self._source_url))
+        self._onFinishedCallbacks[reply] = self._onSourceUrlFinished
 
-    def _onNetworkFinished(self, reply: QNetworkReply):
-        http_status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
-        if http_status_code != 200:
-            print("http request failed :(", reply.readAll())
-            return
-        url = reply.url().toString()
+        reply = self._network_manager.get(QNetworkRequest(self._all_chart_data_url))
+        self._onFinishedCallbacks[reply] = self._onChartDataFinished
+
+    def _onSourceUrlFinished(self, reply: QNetworkReply):
         # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.
         # So, yes, the extra .data() is needed.
-        self._data = json.loads(bytes(reply.readAll().data()))
+        data = json.loads(bytes(reply.readAll().data()))
+        self._updateTemperature(data["temperature"])
+        self._updateEnabled(data["enabled"])
 
-        if url == self._source_url:
-            self._handleBaseUpdate(self._data)
-        elif url == self._all_chart_data_url:
-            self._handleAllChartDataUpdate(self._data)
-        else:
-            # Right now this happens when you enable / disable the node
-            # Force an update to get new data, yay!
-            self.update()
+    def _onPutUpdateFinished(self, reply: QNetworkReply):
+        pass
 
-    def _handleAllChartDataUpdate(self, data):
+    def _onChartDataFinished(self, reply: QNetworkReply):
+        # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.
+        # So, yes, the extra .data() is needed.
+        data = json.loads(bytes(reply.readAll().data()))
         all_keys = set(data.keys())
         keys_changed = False
         data_changed = False
@@ -68,9 +68,12 @@ class NodeData(QObject):
         if keys_changed:
             self.historyPropertiesChanged.emit()
 
-    def _handleBaseUpdate(self, data):
-        self._updateTemperature(data["temperature"])
-        self._updateEnabled(data["enabled"])
+    def _onNetworkFinished(self, reply: QNetworkReply):
+        if reply in self._onFinishedCallbacks:
+            self._onFinishedCallbacks[reply](reply)
+            del self._onFinishedCallbacks[reply]
+        else:
+            print("GOT A RESPONSE WITH NO CALLBACK!", reply.readAll())
 
     def _updateEnabled(self, enabled):
         if self._enabled != bool(enabled):
@@ -114,7 +117,8 @@ class NodeData(QObject):
     @Slot()
     def toggleEnabled(self):
         url = self._source_url + "enabled/"
-        self._network_manager.put(QNetworkRequest(url), QByteArray())
+        reply = self._network_manager.put(QNetworkRequest(url), QByteArray())
+        self._onFinishedCallbacks[reply] = self._onPutUpdateFinished
         # Already trigger an update, so the interface feels snappy
         self._enabled = not self._enabled
         self.enabledChanged.emit()

@@ -5,7 +5,7 @@ Rectangle
 {
     width: 1000
     height: 750
-    color: "green"
+    color: "black"
 
     ScrollView
     {
