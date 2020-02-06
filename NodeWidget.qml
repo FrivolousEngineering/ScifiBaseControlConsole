@@ -174,6 +174,7 @@ Item
 
                             Button
                             {
+                                id: button
                                 text: modelData
                                 onClicked:
                                 {
@@ -181,26 +182,48 @@ Item
                                     activeProperty = modelData
                                 }
                                 highlighted: modelData == activeProperty
+                                hoverEnabled: true
+                                onHoveredChanged:
+                                {
+                                    if(hovered)
+                                    {
+                                        activeProperty = modelData
+                                        chartPopup.parent = button
+                                        chartPopup.open()
+                                    }
+                                    else
+                                    {
+                                        chartPopup.close()
+                                    }
+                                }
                             }
                         }
                     }
                 }
-                ChartView
+                Popup
                 {
-                    visible: content.activeMainMenu == "history"
-                    anchors.top: subMenuBar.bottom
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    antialiasing: true
-                    theme: ChartView.ChartThemeDark
-
-                    AutoUpdatingLineSeries
+                    id: chartPopup
+                    width: 400
+                    height: 400
+                    y: parent.height
+                    ChartView
                     {
-                        id: historyGraph
-                        name: activeProperty
-                        color: "red"
-                        width: 3
+                        visible: content.activeMainMenu == "history"
+                        anchors.fill:parent
+                        //anchors.top: subMenuBar.bottom
+                        //anchors.left: parent.left
+                        //anchors.right: parent.right
+                        //anchors.bottom: parent.bottom
+                        antialiasing: true
+                        theme: ChartView.ChartThemeDark
+
+                        AutoUpdatingLineSeries
+                        {
+                            id: historyGraph
+                            name: activeProperty
+                            color: "red"
+                            width: 3
+                        }
                     }
                 }
             }
