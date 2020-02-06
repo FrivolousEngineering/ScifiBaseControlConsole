@@ -133,38 +133,7 @@ Item
                     }
                 }
             }
-            ScrollView
-            {
-                id: subMenuBar
-                anchors
-                {
-                    margins: defaultMargin
-                    left: parent.left
-                    right: parent.right
-                }
-                height: visible ? contentHeight: 0
-                visible: content.activeMainMenu == "history"
-                clip: true
-                Row
-                {
-                    spacing: defaultMargin
-                    Repeater
-                    {
-                        model: controller.allHistoryProperties
 
-                        Button
-                        {
-                            text: modelData
-                            onClicked:
-                            {
-                                controller.update()
-                                activeProperty = modelData
-                            }
-                            highlighted: modelData == activeProperty
-                        }
-                    }
-                }
-            }
         }
 
 
@@ -179,21 +148,63 @@ Item
                 bottom: parent.bottom
             }
 
-            ChartView
+
+            Item
             {
                 visible: content.activeMainMenu == "history"
                 anchors.fill: parent
-                antialiasing: true
-                theme: ChartView.ChartThemeDark
-
-                AutoUpdatingLineSeries
+                ScrollView
                 {
-                    id: historyGraph
-                    name: activeProperty
-                    color: "red"
-                    width: 3
+                    id: subMenuBar
+                    anchors
+                    {
+                        margins: defaultMargin
+                        left: parent.left
+                        right: parent.right
+                    }
+
+
+                    clip: true
+                    Row
+                    {
+                        spacing: defaultMargin
+                        Repeater
+                        {
+                            model: controller.allHistoryProperties
+
+                            Button
+                            {
+                                text: modelData
+                                onClicked:
+                                {
+                                    controller.update()
+                                    activeProperty = modelData
+                                }
+                                highlighted: modelData == activeProperty
+                            }
+                        }
+                    }
+                }
+                ChartView
+                {
+                    visible: content.activeMainMenu == "history"
+                    anchors.top: subMenuBar.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    antialiasing: true
+                    theme: ChartView.ChartThemeDark
+
+                    AutoUpdatingLineSeries
+                    {
+                        id: historyGraph
+                        name: activeProperty
+                        color: "red"
+                        width: 3
+                    }
                 }
             }
+
 
             Item
             {
