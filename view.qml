@@ -131,7 +131,6 @@ Rectangle
                     id: node
                     controller: modelData
                     nodeName: modelData.id
-                    opacity: 0.5
                     onConnectionHovered:
                     {
                         for(var n in grid.children)
