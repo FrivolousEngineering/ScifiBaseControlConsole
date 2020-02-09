@@ -131,6 +131,19 @@ Rectangle
                     id: node
                     controller: modelData
                     nodeName: modelData.id
+                    opacity:
+                    {
+                        if(highlightedNode == node || activeNode == node || activeNode == null || highlightedNode == null)
+                        {
+                            return 1
+                        }
+                        return 0.1
+                    }
+
+                    Behavior on opacity
+                    {
+                        NumberAnimation { duration: 1000}
+                    }
                     onConnectionHovered:
                     {
                         for(var n in grid.children)
