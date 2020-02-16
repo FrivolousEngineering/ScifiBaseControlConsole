@@ -40,7 +40,7 @@ Item
         id: leftButton
         width: 20
         anchors.right: content.left
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.bottom: parent.verticalCenter
         onClicked: content.setContentPosition(content.contentItem.contentY - content.availableHeight)
         enabled: content.contentItem.contentY - content.availableHeight >= 0
         background: Item{}
@@ -49,6 +49,7 @@ Item
         {
             opacity: enabled ? 1.0 : 0.3
             Behavior on opacity { NumberAnimation { duration: 150} }
+            transform: Rotation { origin.x: 5; origin.y: 5; angle: 90}
             text: "<"
             color: "white"
             font.weight: Font.Bold
@@ -58,8 +59,8 @@ Item
     {
         id: rightButton
         width: 20
-        anchors.left: content.right
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: content.left
+        anchors.top: parent.verticalCenter
         onClicked: content.setContentPosition(content.contentItem.contentY + content.availableHeight)
         enabled: content.contentHeight > content.contentItem.contentY + content.availableHeight
         visible: content.availableHeight < content.contentHeight
@@ -68,6 +69,7 @@ Item
         {
             opacity: enabled ? 1.0 : 0.3
             text: ">"
+            transform: Rotation { origin.x: 5; origin.y: 5; angle: 90}
             Behavior on opacity { NumberAnimation { duration: 150} }
             color: "white"
             font.weight: Font.Bold
