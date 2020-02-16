@@ -107,10 +107,6 @@ Rectangle
                     }
                 }
 
-
-
-
-                //ctx.lineTo(target_x, target_y)
                 ctx.stroke();
             }
         }
