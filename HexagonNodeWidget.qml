@@ -8,6 +8,22 @@ Item
     property alias title: titleText.text
     property bool highlighted: false
     property double angleSize: 15
+    property int indexx
+
+    property color borderColor: hovered ? "white": "#BA6300"
+    property bool hovered: false
+
+    signal clicked(int indexx)
+
+    MouseArea
+    {
+        anchors.fill: base
+        hoverEnabled: true
+        onEntered: hovered = true
+        onExited: hovered = false
+        onClicked: base.clicked(indexx)
+    }
+
     Item
     {
         id: title
@@ -18,6 +34,7 @@ Item
             anchors.fill: parent
             cornerSide: CutoffRectangle.Direction.UpLeft
             color: base.highlighted ? background.border.color : "#333333"
+            border.color: base.borderColor
             angleSize: base.angleSize
             CutoffRectangle
             {
@@ -25,6 +42,7 @@ Item
                 anchors.margins: 3
                 angleSize: base.angleSize - 2
                 cornerSide: CutoffRectangle.Direction.UpLeft
+                border.color: base.borderColor
             }
         }
         Text
@@ -56,12 +74,14 @@ Item
             cornerSide: CutoffRectangle.Direction.Right
             color: base.highlighted ? background.border.color : "#333333"
             angleSize: base.angleSize
+            border.color: base.borderColor
             CutoffRectangle
             {
                 anchors.fill: parent
                 anchors.margins: 3
                 cornerSide: CutoffRectangle.Direction.Right
                 angleSize: base.angleSize - 2
+                border.color: base.borderColor
             }
         }
     }

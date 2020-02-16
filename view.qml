@@ -12,6 +12,7 @@ Rectangle
     property var activeNode: null
     property int object_width: 450
     property int object_height: 350
+    property int activeNodeIndex: 0
     onHighlightedNodeChanged: mycanvas.requestPaint()
 
     ScrollView
@@ -174,6 +175,9 @@ Rectangle
                 HexagonNodeWidget
                 {
                     title: modelData.id
+                    onClicked: activeNodeIndex = index
+                    highlighted: activeNodeIndex == index
+                    indexx: index
                 }
             }
         }
@@ -196,6 +200,11 @@ Rectangle
             SidebarItem
             {
                 title: "STATS"
+                contents: Text
+                {
+                    color: "white"
+                    text: "Temp: " + backend.nodeData[activeNodeIndex].temperature + "<br>" + "Enabled: " + backend.nodeData[activeNodeIndex].enabled
+                }
             }
             SidebarItem
             {
