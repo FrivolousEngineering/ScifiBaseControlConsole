@@ -13,6 +13,7 @@ Rectangle
     property int object_width: 450
     property int object_height: 350
     onHighlightedNodeChanged: mycanvas.requestPaint()
+
     ScrollView
     {
         anchors.fill: parent
@@ -21,8 +22,7 @@ Rectangle
             anchors.fill: parent
             onPaint: {
                 var ctx = getContext("2d");
-                ctx.fillStyle = Qt.rgba(0, 0, 0, 1);
-                ctx.fillRect(0, 0, width, height);
+                ctx.reset();
                 if(activeNode == null)
                 {
                     return
@@ -31,7 +31,6 @@ Rectangle
                 ctx.strokeStyle = "red"
                 ctx.lineWidth = 3
                 ctx.fillStyle = Qt.rgba(0, 0, 0, 1);
-                ctx.fillRect(0, 0, width, height);
                 ctx.beginPath();
 
                 var origin_x = activeNode.x
