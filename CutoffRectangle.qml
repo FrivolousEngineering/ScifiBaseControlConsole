@@ -9,12 +9,13 @@ Shape
     implicitWidth: 200
     implicitHeight: 150
 
-    property int angleSize: 15
+    property double angleSize: 15
+    property alias color: shapePath.fillColor
 
     property int cornerSide: CutoffRectangle.Direction.All
 
     // Simple object to ensure that border.width and border.color work
-    property BorderGroup border: BorderGroup { color: "#BA6300"; width: 3}
+    property BorderGroup border: BorderGroup { color: "#BA6300"; width: 1}
 
     enum Direction
     {
@@ -22,14 +23,18 @@ Shape
         Left = 1,
         Up = 2,
         Right = 3,
-        All = 4
+        All = 4,
+        UpLeft = 5,
+        UpRight = 6,
+        DownLeft = 7,
+        DownRight = 8
     }
 
     function recalculatePoints()
     {
         shapePath.pathElements = [] // Clear the previous path
-
-        if(cornerSide == CutoffRectangle.Direction.Right || cornerSide == CutoffRectangle.Direction.Up || cornerSide == CutoffRectangle.Direction.All )
+        // Upper right Corner
+        if(cornerSide == CutoffRectangle.Direction.Right || cornerSide == CutoffRectangle.Direction.Up || cornerSide == CutoffRectangle.Direction.All || cornerSide == CutoffRectangle.Direction.UpRight)
         {
             shapePath.pathElements.push(createPathLine(base.width - angleSize, 0))
         } else
@@ -37,8 +42,8 @@ Shape
             shapePath.pathElements.push(createPathLine(base.width, 0))
         }
         shapePath.pathElements.push(createPathLine(base.width, angleSize))
-
-        if(cornerSide == CutoffRectangle.Direction.Right || cornerSide == CutoffRectangle.Direction.Down || cornerSide == CutoffRectangle.Direction.All )
+        // Lower right corner
+        if(cornerSide == CutoffRectangle.Direction.Right || cornerSide == CutoffRectangle.Direction.Down || cornerSide == CutoffRectangle.Direction.All || cornerSide == CutoffRectangle.Direction.DownRight)
         {
             shapePath.pathElements.push(createPathLine(base.width, base.height - angleSize))
         }
@@ -46,10 +51,9 @@ Shape
         {
             shapePath.pathElements.push(createPathLine(base.width, base.height))
         }
-
         shapePath.pathElements.push(createPathLine(base.width - angleSize, base.height))
-
-        if(cornerSide == CutoffRectangle.Direction.Left || cornerSide == CutoffRectangle.Direction.Down || cornerSide == CutoffRectangle.Direction.All )
+        // Lower left corner
+        if(cornerSide == CutoffRectangle.Direction.Left || cornerSide == CutoffRectangle.Direction.Down || cornerSide == CutoffRectangle.Direction.All || cornerSide == CutoffRectangle.Direction.DownLeft)
         {
             shapePath.pathElements.push(createPathLine(angleSize, base.height))
         }
@@ -59,7 +63,8 @@ Shape
         }
         shapePath.pathElements.push(createPathLine(0, base.height - angleSize))
 
-        if(cornerSide == CutoffRectangle.Direction.Left || cornerSide == CutoffRectangle.Direction.Up || cornerSide == CutoffRectangle.Direction.All )
+        // Upper left corner
+        if(cornerSide == CutoffRectangle.Direction.Left || cornerSide == CutoffRectangle.Direction.Up || cornerSide == CutoffRectangle.Direction.All || cornerSide == CutoffRectangle.Direction.UpLeft)
         {
             shapePath.pathElements.push(createPathLine(0, base.angleSize))
         }
@@ -85,7 +90,7 @@ Shape
         id: shapePath
         strokeWidth: base.border.width
         strokeColor: base.border.color
-
+        fillColor: "#333333"
         startX: angleSize
         startY: 0
     }

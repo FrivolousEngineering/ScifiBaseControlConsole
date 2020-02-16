@@ -3,8 +3,8 @@ import QtQuick.Controls 2.2
 
 Rectangle
 {
-    width: 1000
-    height: 1500
+    width: 1024
+    height: 768
     color: "black"
 
 
@@ -157,7 +157,6 @@ Rectangle
                     highlighted: node == highlightedNode
                     width: object_width
                     height: object_height
-
                 }
             }
         }
