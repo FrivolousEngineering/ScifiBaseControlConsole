@@ -7,6 +7,7 @@ Item
     implicitWidth: 250
     implicitHeight: width * 0.866025404
     property var contents: []
+    property string title: ""
     onContentsChanged:
     {
         print(content.availableHeight)
@@ -14,12 +15,24 @@ Item
         {
             contents.width = 0.5 * base.width
         }
-        print(content.availableHeight)
     }
     Hexagon
     {
         width: parent.width
         border.width: 5
+    }
+
+    Text
+    {
+        text: base.title
+        color: "white"
+        font.weight: Font.Bold
+        font.pointSize: 15
+        width: base.width / 3
+        horizontalAlignment: Text.AlignRight
+        transform:
+        [Rotation { origin.x: 50; origin.y: 50; angle: 300},
+        Translate{x: base.width / 3 * 2 + 30; y: base.height / 2 - 5}]
     }
 
     Button
@@ -100,7 +113,7 @@ Item
         contentData: base.contents
 
         ScrollBar.vertical: ScrollBar
-            {
+        {
             policy: ScrollBar.AlwaysOff
             interactive: false
         }

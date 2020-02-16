@@ -118,6 +118,7 @@ Rectangle
             spacing: 25
             columns: 2
             anchors.fill:parent
+            visible: false
             Repeater
             {
                 model: backend.nodeData
@@ -158,6 +159,48 @@ Rectangle
                     width: object_width
                     height: object_height
                 }
+            }
+        }
+        Column
+        {
+            spacing: 5
+            anchors.left: parent.left
+            anchors.leftMargin: 3
+            anchors.top:parent.top
+            anchors.topMargin: 3
+            HexagonNodeWidget
+            {
+                title: "Generator"
+            }
+            HexagonNodeWidget
+            {
+                title: "Water Tank"
+                highlighted: true
+            }
+        }
+        Column
+        {
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.top: parent.top
+            anchors.topMargin: 50
+            SidebarItem
+            {
+                contents: Text
+                {
+                    color: "white"
+                    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam maximus eget velit at efficitur. Praesent condimentum tortor lacus, nec tincidunt justo laoreet vel. Donec velit lacus, fermentum quis lacus et, auctor tristique quam. Nam efficitur sagittis nisl. Nulla vitae sem bibendum, dignissim nunc mattis, venenatis nisl. Morbi suscipit vel ante eget pretium. Vestibulum venenatis lobortis pellentesque. Praesent non mi pellentesque, aliquet elit pellentesque, porttitor sem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; "
+                    wrapMode: Text.Wrap
+                }
+                title: "INFO"
+            }
+            SidebarItem
+            {
+                title: "STATS"
+            }
+            SidebarItem
+            {
+                title: "CONNECT"
             }
         }
     }
