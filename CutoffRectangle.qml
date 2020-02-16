@@ -1,6 +1,8 @@
 import QtQuick.Shapes 1.13
 import QtQuick 2.13
 
+
+// The Cutoff rectangle works mostly like a regular rectangle, but provides the option to have Cutoff corners
 Shape
 {
     id: base
@@ -21,11 +23,6 @@ Shape
         Up = 2,
         Right = 3,
         All = 4
-    }
-
-    ListModel
-    {
-        id: points
     }
 
     function recalculatePoints()
@@ -91,15 +88,5 @@ Shape
 
         startX: angleSize
         startY: 0
-
-        // Top left
-        /*
-        PathLine { x: base.width; y: angleSize }
-        PathLine { x: base.width; y: base.height - angleSize }
-        PathLine { x: base.width - angleSize; y: base.height }
-        PathLine { x: angleSize; y: base.height }
-        PathLine { x: 0; y: base.height - angleSize }
-        PathLine { x: 0; y: angleSize }
-        PathLine { x: angleSize; y: 0}*/
     }
 }
