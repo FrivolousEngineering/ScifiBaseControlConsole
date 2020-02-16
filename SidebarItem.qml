@@ -10,7 +10,6 @@ Item
     property string title: ""
     onContentsChanged:
     {
-        print(content.availableHeight)
         for(var i in contents)
         {
             contents.width = 0.5 * base.width
@@ -30,9 +29,10 @@ Item
         font.pointSize: 15
         width: base.width / 3
         horizontalAlignment: Text.AlignRight
-        transform:
-        [Rotation { origin.x: 50; origin.y: 50; angle: 300},
-        Translate{x: base.width / 3 * 2 + 30; y: base.height / 2 - 5}]
+        transform:[
+            Rotation { origin.x: 50; origin.y: 50; angle: 300},
+            Translate{x: base.width / 3 * 2 + 30; y: base.height / 2 - 5}
+        ]
     }
 
     Button
@@ -44,6 +44,7 @@ Item
         onClicked: content.setContentPosition(content.contentItem.contentY - content.availableHeight)
         enabled: content.contentItem.contentY - content.availableHeight >= 0
         background: Item{}
+        visible: content.availableHeight < content.contentHeight
         contentItem: Text
         {
             opacity: enabled ? 1.0 : 0.3
@@ -60,6 +61,7 @@ Item
         anchors.verticalCenter: parent.verticalCenter
         onClicked: content.setContentPosition(content.contentItem.contentY + content.availableHeight)
         enabled: content.contentHeight > content.contentItem.contentY + content.availableHeight
+        visible: content.availableHeight < content.contentHeight
         background: Item {}
         contentItem: Text
         {
