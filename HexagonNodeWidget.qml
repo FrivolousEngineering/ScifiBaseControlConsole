@@ -3,8 +3,8 @@ import QtQuick 2.0
 Item
 {
     id: base
-    implicitWidth: 200
-    implicitHeight: 100
+    implicitWidth: 240
+    implicitHeight: 95
     property alias title: titleText.text
     property bool highlighted: false
     property double angleSize: 15
@@ -38,7 +38,7 @@ Item
             anchors.leftMargin: 8
             horizontalAlignment: Text.AlignHCenter
             transform: Rotation { origin.x: 50; origin.y: 50; angle: 270}
-            font.pointSize : 10
+            font.pointSize : 9
             font.weight: Font.Bold
         }
     }

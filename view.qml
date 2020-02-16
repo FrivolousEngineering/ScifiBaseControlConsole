@@ -161,21 +161,20 @@ Rectangle
                 }
             }
         }
-        Column
+        Grid
         {
-            spacing: 5
+            spacing: 12
             anchors.left: parent.left
-            anchors.leftMargin: 3
+            anchors.leftMargin: 12
             anchors.top:parent.top
-            anchors.topMargin: 3
-            HexagonNodeWidget
-            {
-                title: "Generator"
-            }
-            HexagonNodeWidget
-            {
-                title: "Water Tank"
-                highlighted: true
+            anchors.topMargin: 12
+            columns: 3
+            Repeater {
+                model: backend.nodeData
+                HexagonNodeWidget
+                {
+                    title: modelData.id
+                }
             }
         }
         Column
