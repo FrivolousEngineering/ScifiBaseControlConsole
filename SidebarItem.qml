@@ -48,6 +48,7 @@ Item
         contentItem: Text
         {
             opacity: enabled ? 1.0 : 0.3
+            Behavior on opacity { NumberAnimation { duration: 150} }
             text: "<"
             color: "white"
             font.weight: Font.Bold
@@ -67,6 +68,7 @@ Item
         {
             opacity: enabled ? 1.0 : 0.3
             text: ">"
+            Behavior on opacity { NumberAnimation { duration: 150} }
             color: "white"
             font.weight: Font.Bold
         }
