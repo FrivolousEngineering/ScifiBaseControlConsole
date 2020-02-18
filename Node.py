@@ -14,7 +14,10 @@ class Node(QObject):
         self._all_chart_data_url = "http://localhost:5000/%s/all_property_chart_data" % self._node_id
         self._incoming_connections_url = "http://localhost:5000/%s/connections/incoming" % self._node_id
         self._outgoing_connections_url = "http://localhost:5000/%s/connections/outgoing" % self._node_id
+        
         self._description_url = "http://localhost:5000/%s/description" % self._node_id
+
+        self._static_properties_url = "http://localhost:5000/%s/static_properties" % self._node_id
         self._all_chart_data = {}
 
         self._network_manager = QNetworkAccessManager()
@@ -27,6 +30,7 @@ class Node(QObject):
         self._outgoing_connections = []
         self._onFinishedCallbacks = {}
         self._description = ""
+        self._static_properties = {}
         self.update()
 
     temperatureChanged = Signal()
@@ -36,7 +40,8 @@ class Node(QObject):
     enabledChanged = Signal()
     incomingConnectionsChanged = Signal()
     outgoingConnectionsChanged = Signal()
-    descriptionChanged = Signal()
+
+    staticPropertiesChanged = Signal()
 
     @Slot()
     def update(self):
@@ -52,13 +57,14 @@ class Node(QObject):
         reply = self._network_manager.get(QNetworkRequest(self._outgoing_connections_url))
         self._onFinishedCallbacks[reply] = self._onOutgoingConnectionsFinished
 
-        reply = self._network_manager.get(QNetworkRequest(self._description_url))
-        self._onFinishedCallbacks[reply] = self._onDescriptionFinished
+        reply = self._network_manager.get(QNetworkRequest(self._static_properties_url))
+        self._onFinishedCallbacks[reply] = self._onStaticPropertiesFinished
 
-    def _onDescriptionFinished(self, reply: QNetworkReply):
+    def _onStaticPropertiesFinished(self, reply: QNetworkReply):
         # Todo: Handle errors.
-        self._description = json.loads(bytes(reply.readAll().data()))
-        self.descriptionChanged.emit()
+        result = json.loads(bytes(reply.readAll().data()))
+        self._static_properties = result
+        self.staticPropertiesChanged.emit()
 
     def _onIncomingConnectionsFinished(self, reply: QNetworkReply):
         # Todo: Handle errors.
@@ -74,9 +80,25 @@ class Node(QObject):
     def incomingConnections(self):
         return self._incoming_connections
 
-    @Property(str, notify=descriptionChanged)
+    @Property(str, notify=staticPropertiesChanged)
     def description(self):
-        return self._description
+        return self._static_properties.get("description", "")
+
+    @Property(float, notify=staticPropertiesChanged)
+    def surface_area(self):
+        return self._static_properties.get("surface_area", 0)
+
+    @Property(float, notify=staticPropertiesChanged)
+    def max_safe_temperature(self):
+        return self._static_properties.get("max_safe_temperature", 0)
+
+    @Property(float, notify=staticPropertiesChanged)
+    def heat_convection(self):
+        return self._static_properties.get("heat_convection", 0)
+
+    @Property(float, notify=staticPropertiesChanged)
+    def heat_emissivity(self):
+        return self._static_properties.get("heat_emissivity", 0)
 
     @Property("QVariantList", notify=outgoingConnectionsChanged)
     def outgoingConnections(self):

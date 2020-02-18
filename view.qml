@@ -200,11 +200,41 @@ Rectangle
             SidebarItem
             {
                 title: "STATS"
-                contents: Text
+                contents:
+                Column
                 {
-                    color: "white"
-                    text: "Temp: " + backend.nodeData[activeNodeIndex].temperature + "<br>" + "Enabled: " + backend.nodeData[activeNodeIndex].enabled
+                    Text
+                    {
+                        color: "white"
+                        text: "Temp: " + backend.nodeData[activeNodeIndex].temperature
+                    }
+                    Text
+                    {
+                       color: "white"
+                       text: "Enabled: " + backend.nodeData[activeNodeIndex].enabled
+                    }
+                    Text
+                    {
+                       color: "white"
+                       text: "Surf area: " + backend.nodeData[activeNodeIndex].surface_area + " m²"
+                    }
+                    Text
+                    {
+                       color: "white"
+                       text: "Max tmp: " + backend.nodeData[activeNodeIndex].max_safe_temperature + " K"
+                    }
+                    Text
+                    {
+                       color: "white"
+                       text: "Conv coef: " + backend.nodeData[activeNodeIndex].heat_convection
+                    }
+                    Text
+                    {
+                       color: "white"
+                       text: "H Emissivity: " + backend.nodeData[activeNodeIndex].heat_emissivity
+                    }
                 }
+
             }
             SidebarItem
             {
