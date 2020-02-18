@@ -192,7 +192,7 @@ Rectangle
                 contents: Text
                 {
                     color: "white"
-                    text: "<b>Lorem ipsum</b> <br>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam maximus eget velit at efficitur. <br> <br> Praesent condimentum tortor lacus, nec tincidunt justo laoreet vel. Donec velit lacus, fermentum quis lacus et, auctor tristique quam. Nam efficitur sagittis nisl. Nulla vitae sem bibendum, dignissim nunc mattis, venenatis nisl. Morbi suscipit vel ante eget pretium. Vestibulum venenatis lobortis pellentesque. Praesent non mi pellentesque, aliquet elit pellentesque, porttitor sem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; "
+                    text: backend.nodeData[activeNodeIndex].description
                     wrapMode: Text.Wrap
                 }
                 title: "INFO"

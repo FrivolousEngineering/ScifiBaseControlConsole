@@ -14,6 +14,7 @@ class Node(QObject):
         self._all_chart_data_url = "http://localhost:5000/%s/all_property_chart_data" % self._node_id
         self._incoming_connections_url = "http://localhost:5000/%s/connections/incoming" % self._node_id
         self._outgoing_connections_url = "http://localhost:5000/%s/connections/outgoing" % self._node_id
+        self._description_url = "http://localhost:5000/%s/description" % self._node_id
         self._all_chart_data = {}
 
         self._network_manager = QNetworkAccessManager()
@@ -25,6 +26,7 @@ class Node(QObject):
         self._incoming_connections = []
         self._outgoing_connections = []
         self._onFinishedCallbacks = {}
+        self._description = ""
         self.update()
 
     temperatureChanged = Signal()
@@ -34,6 +36,7 @@ class Node(QObject):
     enabledChanged = Signal()
     incomingConnectionsChanged = Signal()
     outgoingConnectionsChanged = Signal()
+    descriptionChanged = Signal()
 
     @Slot()
     def update(self):
@@ -49,6 +52,14 @@ class Node(QObject):
         reply = self._network_manager.get(QNetworkRequest(self._outgoing_connections_url))
         self._onFinishedCallbacks[reply] = self._onOutgoingConnectionsFinished
 
+        reply = self._network_manager.get(QNetworkRequest(self._description_url))
+        self._onFinishedCallbacks[reply] = self._onDescriptionFinished
+
+    def _onDescriptionFinished(self, reply: QNetworkReply):
+        # Todo: Handle errors.
+        self._description = json.loads(bytes(reply.readAll().data()))
+        self.descriptionChanged.emit()
+
     def _onIncomingConnectionsFinished(self, reply: QNetworkReply):
         # Todo: Handle errors.
         self._incoming_connections = json.loads(bytes(reply.readAll().data()))
@@ -62,6 +73,10 @@ class Node(QObject):
     @Property("QVariantList", notify=incomingConnectionsChanged)
     def incomingConnections(self):
         return self._incoming_connections
+
+    @Property(str, notify=descriptionChanged)
+    def description(self):
+        return self._description
 
     @Property("QVariantList", notify=outgoingConnectionsChanged)
     def outgoingConnections(self):
