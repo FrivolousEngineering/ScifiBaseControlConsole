@@ -1,5 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
+import QtCharts 2.3
+import QtGraphicalEffects 1.12
 
 Rectangle
 {
@@ -13,8 +15,21 @@ Rectangle
     property int object_width: 450
     property int object_height: 350
     property int activeNodeIndex: 0
-    onHighlightedNodeChanged: mycanvas.requestPaint()
 
+    property string activeProperty: "temperature"
+    property variant activeNodeGraphData: backend.nodeData[activeNodeIndex].historyData[activeProperty]
+    onHighlightedNodeChanged: mycanvas.requestPaint()
+    onActiveNodeGraphDataChanged:
+    {
+        historyGraph.clear()
+        maxTemperatureGraph.clear()
+        historyGraph.resetMinMax()
+        for(var i in activeNodeGraphData)
+        {
+            historyGraph.append(i, activeNodeGraphData[i])
+            maxTemperatureGraph.append(i, backend.nodeData[activeNodeIndex].max_safe_temperature)
+        }
+    }
     ScrollView
     {
         anchors.fill: parent
@@ -181,65 +196,193 @@ Rectangle
                 }
             }
         }
-        Column
+
+        Button
         {
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            anchors.top: parent.top
-            anchors.topMargin: 50
-            SidebarItem
+            id: chartButton
+            anchors.verticalCenter: infoSidebarItem.bottom
+            anchors.right: infoSidebarItem.left
+            anchors.rightMargin: -50
+
+            property bool collapsed: true
+
+            width: collapsed ? 50: 450
+            height: width * 0.866025404
+
+            Behavior on width
             {
-                contents: Text
-                {
-                    color: "white"
-                    text: backend.nodeData[activeNodeIndex].description
-                    wrapMode: Text.Wrap
-                }
-                title: "INFO"
+                NumberAnimation { duration: 200}
             }
-            SidebarItem
+
+            contentItem: Item
             {
-                title: "STATS"
-                contents:
-                Column
+                id: content
+                ChartView
                 {
-                    Text
+                    id: chartView
+
+                    antialiasing: true
+                    theme: ChartView.ChartThemeDark
+                    anchors.fill: parent
+
+                    opacity: 0
+
+                    AutoUpdatingLineSeries
                     {
-                        color: "white"
-                        text: "Temp: " + backend.nodeData[activeNodeIndex].temperature
+                        id: historyGraph
+                        color: "red"
+                        width: 3
+                        onHovered: selectedPointText.text = point.y
                     }
-                    Text
+
+                    LineSeries
                     {
-                       color: "white"
-                       text: "Enabled: " + backend.nodeData[activeNodeIndex].enabled
+                        id: maxTemperatureGraph
+                        color: "blue"
+                        width: 3
                     }
-                    Text
-                    {
-                       color: "white"
-                       text: "Surf area: " + backend.nodeData[activeNodeIndex].surface_area + " m²"
-                    }
-                    Text
-                    {
-                       color: "white"
-                       text: "Max tmp: " + backend.nodeData[activeNodeIndex].max_safe_temperature + " K"
-                    }
-                    Text
-                    {
-                       color: "white"
-                       text: "Conv coef: " + backend.nodeData[activeNodeIndex].heat_convection
-                    }
-                    Text
-                    {
-                       color: "white"
-                       text: "H Emissivity: " + backend.nodeData[activeNodeIndex].heat_emissivity
-                    }
+                }
+                Hexagon
+                {
+                    id: hexagon
+                    width: parent.width
+                    visible: false
+
+                }
+                OpacityMask
+                {
+                    anchors.fill: parent
+                    source: chartView
+                    maskSource: hexagon
+                }
+                Text
+                {
+                    id: selectedPointText
+                    anchors.bottom: parent.bottom
+                    width: parent.width / 3
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    color: "white"
+                    text: ""
+                    horizontalAlignment: Text.AlignHCenter
+                    visible: !chartButton.collapsed
                 }
 
             }
-            SidebarItem
+
+
+
+            onClicked:
             {
-                title: "CONNECT"
+                collapsed = !collapsed
             }
+
+            background:Hexagon {
+                border.width: 0
+            }
+        }
+
+        SidebarItem
+        {
+            id: infoSidebarItem
+            anchors.right: parent.right
+            contents: Text
+            {
+                color: "white"
+                text: backend.nodeData[activeNodeIndex].description
+                wrapMode: Text.Wrap
+            }
+            title: "INFO"
+        }
+
+        SidebarItem
+        {
+            id: statsSideBarItem
+            title: "STATS"
+            anchors.top: infoSidebarItem.bottom
+            anchors.right: parent.right
+            contents:
+            Column
+            {
+                Text
+                {
+                    color: "white"
+                    text: "Temp: " + backend.nodeData[activeNodeIndex].temperature
+                }
+                Text
+                {
+                   color: "white"
+                   text: "Enabled: " + backend.nodeData[activeNodeIndex].enabled
+                }
+                Text
+                {
+                   color: "white"
+                   text: "Surf area: " + backend.nodeData[activeNodeIndex].surface_area + " m²"
+                }
+                Text
+                {
+                   color: "white"
+                   text: "Max tmp: " + backend.nodeData[activeNodeIndex].max_safe_temperature + " K"
+                }
+                Text
+                {
+                   color: "white"
+                   text: "Con coef: " + backend.nodeData[activeNodeIndex].heat_convection + " W/m K"
+                }
+                Text
+                {
+                   color: "white"
+                   text: "H Emissivity: " + backend.nodeData[activeNodeIndex].heat_emissivity
+                }
+            }
+
+        }
+        SidebarItem
+        {
+            id: connectSideBarItem
+            title: "CONNECT"
+            anchors.top: statsSideBarItem.bottom
+            anchors.right: parent.right
+                /*Popup
+                {
+                    id: chartPopup
+                    width: 400
+                    height: 400
+                    y: -height
+                    x: -width
+                    background: Item{}
+                    ChartView
+                    {
+                        id: chartView
+                        anchors.fill:parent
+
+                        antialiasing: true
+                        theme: ChartView.ChartThemeDark
+
+                        visible: false
+
+                        AutoUpdatingLineSeries
+                        {
+                            id: historyGraph
+                            name: "temperature"
+                            color: "red"
+                            width: 3
+                        }
+                    }
+                    Hexagon
+                    {
+                        id: hexagon
+                        width: parent.width
+                        visible: false
+
+                    }
+                    OpacityMask
+                    {
+                        anchors.fill: parent
+                        source: chartView
+                        maskSource: hexagon
+                    }
+                }*/
+
         }
     }
 }

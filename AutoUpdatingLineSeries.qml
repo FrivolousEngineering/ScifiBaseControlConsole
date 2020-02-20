@@ -15,11 +15,24 @@ LineSeries
         xMin = 10000
         xMax = 0
     }
+
+    axisY: ValueAxis
+    {
+        tickType: ValueAxis.TicksDynamic
+        tickInterval: 10
+        tickAnchor: 0
+        gridVisible: false
+        labelsVisible: false
+        lineVisible: false
+    }
     axisX: ValueAxis
     {
         tickType: ValueAxis.TicksDynamic
-        tickInterval: 1
+        tickInterval: 10
         tickAnchor: 0
+        //gridVisible: false
+        labelsVisible: false
+        //lineVisible: false
     }
 
     onPointAdded:
