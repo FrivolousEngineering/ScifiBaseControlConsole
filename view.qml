@@ -11,13 +11,14 @@ Rectangle
 
 
     property var highlightedNode: null
-    property var activeNode: null
+    property var activeNode: backend.nodeData[0]
     property int object_width: 450
     property int object_height: 350
     property int activeNodeIndex: 0
 
     property string activeProperty: "temperature"
-    property variant activeNodeGraphData: backend.nodeData[activeNodeIndex].historyData[activeProperty]
+
+    property variant activeNodeGraphData: activeNode.historyData[activeProperty]
     onHighlightedNodeChanged: mycanvas.requestPaint()
     onActiveNodeGraphDataChanged:
     {
@@ -27,7 +28,7 @@ Rectangle
         for(var i in activeNodeGraphData)
         {
             historyGraph.append(i, activeNodeGraphData[i])
-            maxTemperatureGraph.append(i, backend.nodeData[activeNodeIndex].max_safe_temperature)
+            maxTemperatureGraph.append(i, activeNode.max_safe_temperature)
         }
     }
     ScrollView
@@ -123,12 +124,12 @@ Rectangle
                     }
                 }
 
-                ctx.stroke();
+                ctx.stroke()
             }
         }
 
 
-        Grid
+        /*Grid
         {
             id: grid
             spacing: 25
@@ -176,7 +177,7 @@ Rectangle
                     height: object_height
                 }
             }
-        }
+        }*/
         Grid
         {
             spacing: 12
@@ -190,9 +191,8 @@ Rectangle
                 HexagonNodeWidget
                 {
                     title: modelData.id
-                    onClicked: activeNodeIndex = index
-                    highlighted: activeNodeIndex == index
-                    indexx: index
+                    onClicked: activeNode = modelData
+                    highlighted: activeNode == modelData
                 }
             }
         }
@@ -287,7 +287,7 @@ Rectangle
             contents: Text
             {
                 color: "white"
-                text: backend.nodeData[activeNodeIndex].description
+                text: activeNode.description
                 wrapMode: Text.Wrap
             }
             title: "INFO"
@@ -305,32 +305,32 @@ Rectangle
                 Text
                 {
                     color: "white"
-                    text: "Temp: " + backend.nodeData[activeNodeIndex].temperature
+                    text: "Temp: " + activeNode.temperature
                 }
                 Text
                 {
                    color: "white"
-                   text: "Enabled: " + backend.nodeData[activeNodeIndex].enabled
+                   text: "Enabled: " + activeNode.enabled
                 }
                 Text
                 {
                    color: "white"
-                   text: "Surf area: " + backend.nodeData[activeNodeIndex].surface_area + " m²"
+                   text: "Surf area: " + activeNode.surface_area + " m²"
                 }
                 Text
                 {
                    color: "white"
-                   text: "Max tmp: " + backend.nodeData[activeNodeIndex].max_safe_temperature + " K"
+                   text: "Max tmp: " + activeNode.max_safe_temperature + " K"
                 }
                 Text
                 {
                    color: "white"
-                   text: "Con coef: " + backend.nodeData[activeNodeIndex].heat_convection + " W/m K"
+                   text: "Con coef: " + activeNode.heat_convection + " W/m K"
                 }
                 Text
                 {
                    color: "white"
-                   text: "H Emissivity: " + backend.nodeData[activeNodeIndex].heat_emissivity
+                   text: "H Emissivity: " + activeNode.heat_emissivity
                 }
             }
 
