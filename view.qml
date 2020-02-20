@@ -12,14 +12,16 @@ Rectangle
 
     property var highlightedNode: null
     property var activeNode: backend.nodeData[0]
-    property int object_width: 450
-    property int object_height: 350
+    property int object_width: 240
+    property int object_height: 95
     property int activeNodeIndex: 0
 
     property string activeProperty: "temperature"
 
     property variant activeNodeGraphData: activeNode.historyData[activeProperty]
     onHighlightedNodeChanged: mycanvas.requestPaint()
+
+    onActiveNodeChanged: mycanvas.requestPaint()
     onActiveNodeGraphDataChanged:
     {
         historyGraph.clear()
@@ -37,6 +39,71 @@ Rectangle
         Canvas {
             id: mycanvas
             anchors.fill: parent
+            property var spacing: 12
+            function drawOutgoingConnection(origin_x, origin_y, target_x, target_y)
+            {
+                var ctx = getContext("2d");
+                ctx.moveTo(origin_x + 0.5 * object_width, origin_y + object_height)
+
+                var inbetween_x = origin_x + 0.5 * object_width
+                var inbetween_y = origin_y + 0.5 * spacing + object_height
+                ctx.lineTo(inbetween_x, inbetween_y)
+
+                // We either move to the left or we move to the right
+                if(target_x < origin_x)
+                {
+                    inbetween_x = origin_x - 0.5 * spacing
+                }
+                else
+                {
+                    inbetween_x = origin_x + object_width + 0.5 * spacing
+                }
+                ctx.lineTo(inbetween_x, inbetween_y)
+
+                // Move up / down (if needed)
+                inbetween_y = target_y + object_height + 0.5 * spacing
+                ctx.lineTo(inbetween_x, inbetween_y)
+
+                // Move to below center of the target.
+                inbetween_x = target_x + 0.5 * object_width
+                ctx.lineTo(inbetween_x, inbetween_y)
+
+                // Move to target
+                inbetween_y = target_y + object_height
+                ctx.lineTo(inbetween_x, inbetween_y)
+            }
+
+            function drawIncommingConnection(origin_x, origin_y, target_x, target_y)
+            {
+                var ctx = getContext("2d");
+                ctx.moveTo(origin_x + object_width, origin_y + 0.5 * object_height)
+
+                var inbetween_x = origin_x + object_width + 0.5 * spacing
+                var inbetween_y = origin_y + 0.5 * object_height
+                ctx.lineTo(inbetween_x, inbetween_y)
+
+                // We either move to the left or we move to the right
+
+                if(target_y < origin_y)
+                {
+                    inbetween_y = origin_y - 0.5 * spacing
+                }
+                else
+                {
+                    inbetween_y = origin_y + 0.5 * spacing + object_height
+                }
+                ctx.lineTo(inbetween_x, inbetween_y)
+
+                inbetween_x = target_x + 0.5 * spacing + object_width
+                ctx.lineTo(inbetween_x, inbetween_y)
+
+                inbetween_y = target_y + 0.5 * object_height
+                ctx.lineTo(inbetween_x, inbetween_y)
+
+                inbetween_x = target_x + object_width
+                ctx.lineTo(inbetween_x, inbetween_y)
+            }
+
             onPaint: {
                 var ctx = getContext("2d");
                 ctx.reset();
@@ -46,11 +113,67 @@ Rectangle
                 }
                 var ctx = getContext("2d");
                 ctx.strokeStyle = "red"
-                ctx.lineWidth = 3
+                ctx.lineWidth = 2
                 ctx.fillStyle = Qt.rgba(0, 0, 0, 1);
                 ctx.beginPath();
 
-                var origin_x = activeNode.x
+
+                var origin_x = 0
+                var origin_y = 0
+
+                for(var idx in grid.children)
+                {
+                    if(grid.children[idx].title == activeNode.id)
+                    {
+                        origin_x = grid.children[idx].x + spacing
+                        origin_y =  grid.children[idx].y + spacing
+                    }
+                }
+
+                var outgoing = []
+                for(var idx in grid.children)
+                {
+                    for(var connected_node in activeNode.outgoingConnections)
+                    {
+                        if(activeNode.outgoingConnections[connected_node]["target"] == grid.children[idx].title)
+                        {
+                            outgoing.push(idx)
+                        }
+                    }
+                }
+                var incomming = []
+                for(var idx in grid.children)
+                {
+                    for(var connected_node in activeNode.incomingConnections)
+                    {
+                        if(activeNode.incomingConnections[connected_node]["origin"] == grid.children[idx].title)
+                        {
+                            incomming.push(idx)
+                        }
+                    }
+                }
+
+                for(var entry in outgoing)
+                {
+                    // Start position!
+                    var target_x = grid.children[outgoing[entry]].x + spacing
+                    var target_y = grid.children[outgoing[entry]].y + spacing
+                    drawOutgoingConnection(origin_x, origin_y, target_x, target_y)
+                }
+                ctx.stroke()
+                ctx.beginPath()
+                ctx.strokeStyle = "blue"
+                for(var entry in incomming)
+                {
+                    // Start position!
+                    var target_x = grid.children[incomming[entry]].x + spacing
+                    var target_y = grid.children[incomming[entry]].y + spacing
+                    drawIncommingConnection(target_x, target_y, origin_x, origin_y)
+                }
+
+                ctx.stroke()
+                // Draw all outgoing connections.
+                /*var origin_x = activeNode.x
                 var origin_y = activeNode.y;
 
                 var spacing = 25
@@ -124,7 +247,7 @@ Rectangle
                     }
                 }
 
-                ctx.stroke()
+                ctx.stroke()*/
             }
         }
 
@@ -180,12 +303,14 @@ Rectangle
         }*/
         Grid
         {
+            id: grid
             spacing: 12
             anchors.left: parent.left
             anchors.leftMargin: 12
-            anchors.top:parent.top
+            anchors.top: parent.top
             anchors.topMargin: 12
             columns: 3
+            opacity: 0.5
             Repeater {
                 model: backend.nodeData
                 HexagonNodeWidget

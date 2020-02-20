@@ -8,12 +8,11 @@ Item
     property alias title: titleText.text
     property bool highlighted: false
     property double angleSize: 15
-    property int indexx
 
     property color borderColor: hovered ? "white": "#BA6300"
     property bool hovered: false
 
-    signal clicked(int indexx)
+    signal clicked()
 
     MouseArea
     {
@@ -21,7 +20,7 @@ Item
         hoverEnabled: true
         onEntered: hovered = true
         onExited: hovered = false
-        onClicked: base.clicked(indexx)
+        onClicked: base.clicked()
     }
 
     Item
