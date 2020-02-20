@@ -19,6 +19,7 @@ Item
     {
         width: parent.width
         border.width: 5
+        color: "#666666"
     }
 
     Text

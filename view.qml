@@ -222,8 +222,9 @@ Rectangle
                     id: chartView
 
                     antialiasing: true
-                    theme: ChartView.ChartThemeDark
+                    //theme: ChartView.ChartThemeDark
                     anchors.fill: parent
+                    backgroundColor: "#B2B2B2"
 
                     opacity: 0
 
@@ -266,10 +267,7 @@ Rectangle
                     horizontalAlignment: Text.AlignHCenter
                     visible: !chartButton.collapsed
                 }
-
             }
-
-
 
             onClicked:
             {
@@ -278,6 +276,7 @@ Rectangle
 
             background:Hexagon {
                 border.width: 0
+                color: "#666666"
             }
         }
 
