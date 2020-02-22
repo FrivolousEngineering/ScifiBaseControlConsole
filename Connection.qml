@@ -10,7 +10,8 @@ Item {
     property int object_width: 240
     property int object_height: 95
     property int spacing: 12
-
+    property int offset_x: spacing
+    property int offset_y: spacing
 
     function start() {
         if(origin != null && end != null)
@@ -71,7 +72,8 @@ Item {
             }
         }
         function addPoint(x, y) {
-            path.push(Qt.point(x,y));
+
+            path.push(Qt.point(x + connection.offset_x, y + connection.offset_y));
             canvas.requestPaint();
         }
     }
@@ -84,21 +86,16 @@ Item {
             startX: connection.origin.x + 0.5 * object_width
             startY: connection.origin.y + object_height + 0.5 * spacing
 
-            PathLine
-            {
-                relativeX: connection.end.x < connection.origin.x ? -0.5 * object_width - 0.5 * spacing: 0.5 * object_width + 0.5 * spacing
-                relativeY: 0
-            }
 
             PathLine
             {
-                y: connection.end.y + object_height + 0.5 * spacing
-                relativeX: 0
+                x: connection.end.x - 0.5 * spacing
+                relativeY: 0
             }
             PathLine
             {
-                relativeY: 0
-                x: connection.end.x + 0.5 * object_width
+                relativeX: 0
+                y: connection.end.y + 0.5 * object_height
             }
         }
         NumberAnimation on progress {
@@ -109,8 +106,8 @@ Item {
             duration: 1000
             onStopped:
             {
-                canvas.addPoint( connection.end.x + 0.5 * object_width, connection.end.y + object_height + 0.5 * spacing)
-                canvas.addPoint( connection.end.x + 0.5 * object_width, connection.end.y + object_height - 0.5 * spacing)
+                canvas.addPoint( connection.end.x - 0.5 * spacing, connection.end.y + 0.5 * object_height)
+                canvas.addPoint( connection.end.x + 0.5 * spacing, connection.end.y + 0.5 * object_height)
             }
         }
 

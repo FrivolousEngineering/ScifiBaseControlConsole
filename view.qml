@@ -35,7 +35,18 @@ Rectangle
     }
     ScrollView
     {
+        id: scrollview
         anchors.fill: parent
+        function getConnectionColor(color)
+        {
+            switch(color)
+                    {
+                        case "energy": return "yellow"
+                        case "fuel": return "red"
+                        case "water": return "blue"
+                        default: return "white"
+                    }
+        }
         Repeater
         {
             model: activeNode.outgoingConnections
@@ -43,12 +54,10 @@ Rectangle
             {
                 width: 1024
                 height: 768
-                x: 12
-                y: 12
 
-
+                color: scrollview.getConnectionColor(modelData.resource_type)
                 end: {
-                for(var idx in grid.children)
+                    for(var idx in grid.children)
                     {
                         if(grid.children[idx].title == modelData.target)
                         {
@@ -56,8 +65,7 @@ Rectangle
                         }
                     }
                 }
-                origin:
-                {
+                origin: {
                    for(var idx in grid.children)
                     {
                         if(grid.children[idx].title == modelData.origin)
@@ -66,11 +74,38 @@ Rectangle
                         }
                     }
                 }
-                Component.onCompleted: {
-                    start();
-                }
+                Component.onCompleted: { start() }
             }
+        }
+        Repeater
+        {
+            model: activeNode.incomingConnections
+            Connection
+            {
+                width: 1024
+                height: 768
 
+                color: scrollview.getConnectionColor(modelData.resource_type)
+                end: {
+                    for(var idx in grid.children)
+                    {
+                        if(grid.children[idx].title == modelData.target)
+                        {
+                            return grid.children[idx]
+                        }
+                    }
+                }
+                origin: {
+                   for(var idx in grid.children)
+                    {
+                        if(grid.children[idx].title == modelData.origin)
+                        {
+                            return grid.children[idx]
+                        }
+                    }
+                }
+                Component.onCompleted: { start() }
+            }
         }
 
         Grid
