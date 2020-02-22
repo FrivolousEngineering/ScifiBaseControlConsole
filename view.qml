@@ -150,6 +150,7 @@ Rectangle
             contentItem: Item
             {
                 id: content
+
                 ChartView
                 {
                     id: chartView
@@ -198,6 +199,11 @@ Rectangle
                     text: ""
                     horizontalAlignment: Text.AlignHCenter
                     visible: !chartButton.collapsed
+                }
+                MouseArea
+                {
+                    anchors.fill: parent
+                    onClicked: chartButton.clicked()
                 }
             }
 
