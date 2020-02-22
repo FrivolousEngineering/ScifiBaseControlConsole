@@ -5,6 +5,7 @@ import QtGraphicalEffects 1.12
 
 Rectangle
 {
+    id: window
     width: 1024
     height: 768
     color: "black"
@@ -12,8 +13,8 @@ Rectangle
 
     property var highlightedNode: null
     property var activeNode: backend.nodeData[0]
-        property int object_width: 240
-        property int object_height: 95
+    property int object_width: 240
+    property int object_height: 95
     property int activeNodeIndex: 0
 
     property string activeProperty: "temperature"
@@ -38,12 +39,12 @@ Rectangle
         function getConnectionColor(color)
         {
             switch(color)
-                    {
-                        case "energy": return "yellow"
-                        case "fuel": return "red"
-                        case "water": return "blue"
-                        default: return "white"
-                    }
+            {
+                case "energy": return "yellow"
+                case "fuel": return "red"
+                case "water": return "blue"
+                default: return "white"
+            }
         }
         Repeater
         {
@@ -52,6 +53,8 @@ Rectangle
             {
                 width: 1024
                 height: 768
+                object_width: window.object_width
+                object_height: window.object_height
 
                 color: scrollview.getConnectionColor(modelData.resource_type)
                 end: {
@@ -152,7 +155,6 @@ Rectangle
                     id: chartView
 
                     antialiasing: true
-                    //theme: ChartView.ChartThemeDark
                     anchors.fill: parent
                     backgroundColor: "#B2B2B2"
 
@@ -199,12 +201,9 @@ Rectangle
                 }
             }
 
-            onClicked:
-            {
-                collapsed = !collapsed
-            }
+            onClicked: collapsed = !collapsed
 
-            background:Hexagon {
+            background: Hexagon {
                 border.width: 0
                 color: "#666666"
             }
