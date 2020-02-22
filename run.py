@@ -8,7 +8,7 @@ from Node import Node
 class TestObject(QObject):
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-        self._data = [ Node("generator_1"),  Node("fluid_cooler_2"), Node("battery_2"), Node("generator_2"), Node("fluid_cooler_1"),  Node("battery_1"), Node("water_storage_1"), Node("water_storage_2")]
+        self._data = [ Node("generator_1"),  Node("fluid_cooler_2"), Node("battery_2"), Node("generator_2"), Node("fluid_cooler_1"),  Node("battery_1"), Node("water_storage_1"), Node("water_storage_2"), Node("rain_collector"), Node("rain_collector_2"), Node("hydroponics_2"), Node("oxygen_storage")]
 
     @Property("QVariantList", constant=True)
     def nodeData(self):

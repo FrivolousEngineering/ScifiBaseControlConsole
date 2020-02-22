@@ -19,9 +19,7 @@ Rectangle
     property string activeProperty: "temperature"
 
     property variant activeNodeGraphData: activeNode.historyData[activeProperty]
-    onHighlightedNodeChanged: mycanvas.requestPaint()
 
-    onActiveNodeChanged: mycanvas.requestPaint()
     onActiveNodeGraphDataChanged:
     {
         historyGraph.clear()
