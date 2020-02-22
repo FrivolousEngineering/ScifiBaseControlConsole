@@ -12,8 +12,8 @@ Rectangle
 
     property var highlightedNode: null
     property var activeNode: backend.nodeData[0]
-    property int object_width: 240
-    property int object_height: 95
+        property int object_width: 240
+        property int object_height: 95
     property int activeNodeIndex: 0
 
     property string activeProperty: "temperature"
@@ -61,7 +61,7 @@ Rectangle
                 ctx.lineTo(inbetween_x, inbetween_y)
 
                 // Move up / down (if needed)
-                inbetween_y = target_y + object_height + 0.5 * spacing
+                    inbetween_y = target_y + object_height + 0.5 * spacing
                 ctx.lineTo(inbetween_x, inbetween_y)
 
                 // Move to below center of the target.
@@ -104,7 +104,7 @@ Rectangle
                 ctx.lineTo(inbetween_x, inbetween_y)
             }
 
-            onPaint: {
+            /*onPaint: {
                 var ctx = getContext("2d");
                 ctx.reset();
                 if(activeNode == null)
@@ -116,7 +116,6 @@ Rectangle
                 ctx.lineWidth = 2
                 ctx.fillStyle = Qt.rgba(0, 0, 0, 1);
                 ctx.beginPath();
-
 
                 var origin_x = 0
                 var origin_y = 0
@@ -247,60 +246,47 @@ Rectangle
                     }
                 }
 
-                ctx.stroke()*/
-            }
+                ctx.stroke()
+            }*/
         }
 
-
-        /*Grid
+        Repeater
         {
-            id: grid
-            spacing: 25
-            columns: 2
-            anchors.fill:parent
-            visible: false
-            Repeater
+            model: activeNode.outgoingConnections
+            Connection
             {
-                model: backend.nodeData
-                NodeWidget
+                width: 1024
+                height: 768
+                x: 12
+                y: 12
+
+
+                end: {
+                for(var idx in grid.children)
+                    {
+                        if(grid.children[idx].title == modelData.target)
+                        {
+                            return grid.children[idx]
+                        }
+                    }
+                }
+                origin:
                 {
-                    id: node
-                    controller: modelData
-                    nodeName: modelData.id
-                    opacity:
+                   for(var idx in grid.children)
                     {
-                        if(highlightedNode == node || activeNode == node || activeNode == null || highlightedNode == null)
+                        if(grid.children[idx].title == modelData.origin)
                         {
-                            return 1
+                            return grid.children[idx]
                         }
-                        return 0.1
                     }
-
-                    Behavior on opacity
-                    {
-                        NumberAnimation { duration: 1000}
-                    }
-                    onConnectionHovered:
-                    {
-                        for(var n in grid.children)
-                        {
-                            if(grid.children[n].nodeName == node_id)
-                            {
-                                highlightedNode = grid.children[n]
-                                break
-                            }
-                            highlightedNode = null
-                        }
-                        activeNode = node
-                        mycanvas.requestPaint()
-                    }
-
-                    highlighted: node == highlightedNode
-                    width: object_width
-                    height: object_height
+                }
+                Component.onCompleted: {
+                    start();
                 }
             }
-        }*/
+
+        }
+
         Grid
         {
             id: grid
@@ -310,7 +296,7 @@ Rectangle
             anchors.top: parent.top
             anchors.topMargin: 12
             columns: 3
-            opacity: 0.5
+
             Repeater {
                 model: backend.nodeData
                 HexagonNodeWidget
