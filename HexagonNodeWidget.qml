@@ -125,7 +125,7 @@ Item
                     enabled: from != to
 
                     onHoveredChanged: base.hovered = hovered
-
+                    Behavior on value { NumberAnimation { duration: 500} }
                     Binding
                     {
                         target: dial
