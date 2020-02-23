@@ -119,7 +119,7 @@ Item
                     anchors.left: parent.left
                     anchors.leftMargin: 3
                     width: height
-                    value: controller.performance
+
                     from: controller.min_performance
                     to: controller.max_performance
                     enabled: from != to
@@ -135,9 +135,8 @@ Item
                     }
                     onPressedChanged:
                     {
-                        if(!pressed)
+                        if(!pressed) // Released
                         {
-                            // Released
                             controller.setPerformance(value)
                         }
                     }
