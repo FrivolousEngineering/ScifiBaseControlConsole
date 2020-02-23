@@ -97,6 +97,7 @@ Item
                     value: controller.performance
                     from: controller.min_performance
                     to: controller.max_performance
+                    enabled: from != to
 
                     Binding
                     {
