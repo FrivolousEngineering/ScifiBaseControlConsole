@@ -11,8 +11,33 @@ Item
     property double angleSize: 15
     property var controller
 
-    property color borderColor: hovered ? "white": "#BA6300"
+    property color borderColor: "#BA6300"
     property bool hovered: false
+
+    states: [
+            State {
+                name: "HOVERED"
+                PropertyChanges { target: base; borderColor: "white"}
+                when: base.hovered
+            },
+            State {
+                name: "NOTHOVERED"
+                PropertyChanges { target: base; borderColor: "#BA6300"}
+                when: !base.hovered
+            }
+        ]
+        transitions: [
+            Transition {
+                from: "HOVERED"
+                to: "NOTHOVERED"
+                ColorAnimation { target: handleItem; duration: 100}
+            },
+            Transition {
+                from: "HOVERED"
+                to: "NOTHOVERED"
+                ColorAnimation { target: handleItem; duration: 100}
+            }
+        ]
 
     signal clicked()
 
