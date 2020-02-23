@@ -124,6 +124,8 @@ Item
                     to: controller.max_performance
                     enabled: from != to
 
+                    onHoveredChanged: base.hovered = hovered
+
                     Binding
                     {
                         target: dial
