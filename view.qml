@@ -157,7 +157,7 @@ Rectangle
 
                     antialiasing: true
                     anchors.fill: parent
-                    backgroundColor: "#B2B2B2"
+                    backgroundColor: "#666666"
 
                     opacity: 0
 
@@ -181,7 +181,6 @@ Rectangle
                     id: hexagon
                     width: parent.width
                     visible: false
-
                 }
                 OpacityMask
                 {
@@ -210,7 +209,15 @@ Rectangle
             onClicked: collapsed = !collapsed
 
             background: Hexagon {
-                border.width: 0
+                border
+                {
+                    width: chartButton.collapsed ? 2: 4
+                    Behavior on width
+                    {
+                        NumberAnimation { duration: 200}
+                    }
+                }
+
                 color: "#666666"
             }
         }
