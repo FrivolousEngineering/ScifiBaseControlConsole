@@ -269,7 +269,7 @@ Rectangle
                 Text
                 {
                     color: "white"
-                    text: "Temp: " + activeNode.temperature
+                    text: "Temp: " + Math.round(activeNode.temperature * 100) / 100 + " K"
                 }
                 Text
                 {
