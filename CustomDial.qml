@@ -19,6 +19,12 @@ Dial
 
         radius: width / 2
         states: [
+            State
+            {
+                name: "HOVERED"
+                PropertyChanges { target: dialBackground; border.color: "white"}
+                when: control.hovered
+            },
             State {
                 name: "PRESSED"
                 PropertyChanges { target: dialBackground; border.color: "white"}
@@ -39,6 +45,16 @@ Dial
             Transition {
                 from: "RELEASED"
                 to: "PRESSED"
+                ColorAnimation { target: dialBackground; duration: 100}
+            },
+            Transition {
+                from: "HOVERED"
+                to: "RELEASED"
+                ColorAnimation { target: dialBackground; duration: 100}
+            },
+            Transition {
+                from: "RELEASED"
+                to: "HOVERED"
                 ColorAnimation { target: dialBackground; duration: 100}
             }
         ]
