@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtGraphicalEffects 1.12
-Item {
 
+Item {
     id: connection
 
     property var origin: null
@@ -17,9 +17,10 @@ Item {
         if(origin != null && end != null)
         {
             canvas.addPoint( connection.origin.x + 0.5 * object_width, connection.origin.y + object_height)
-            pathAnimation.start();
+            pathAnimation.start()
         }
     }
+
     Glow {
         id: glow
         anchors.fill: parent
@@ -38,10 +39,7 @@ Item {
         property var path: []
 
         onPaint: {
-            if (path.length < 2)
-            {
-                return
-            }
+            if (path.length < 2) { return }
 
             var ctx = canvas.getContext('2d')
 
@@ -50,7 +48,6 @@ Item {
             ctx.lineJoin = "round"
             ctx.lineCap = "round"
 
-
             ctx.lineWidth = 2
 
             ctx.strokeStyle = connection.color
@@ -58,20 +55,18 @@ Item {
 
             var p1 = path[0]
             var p2 = path[1]
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
+            ctx.beginPath()
+            ctx.moveTo(p1.x, p1.y)
 
             for (var i = 1; i < path.length -1 ; i++)
             {
-                p1 = path[i];
+                p1 = path[i]
                 p2 = path[i+1]
-                var midPoint = midPointBtw(p1, p2);
-                ctx.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+                var midPoint = midPointBtw(p1, p2)
+                ctx.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y)
             }
             ctx.lineTo(p2)
-            ctx.stroke();
-
-
+            ctx.stroke()
         }
 
         function midPointBtw(p1, p2) {
@@ -81,9 +76,8 @@ Item {
             }
         }
         function addPoint(x, y) {
-
-            path.push(Qt.point(x + connection.offset_x, y + connection.offset_y));
-            canvas.requestPaint();
+            path.push(Qt.point(x + connection.offset_x, y + connection.offset_y))
+            canvas.requestPaint()
         }
     }
 
@@ -94,7 +88,6 @@ Item {
         path: Path {
             startX: connection.origin.x + 0.5 * object_width
             startY: connection.origin.y + object_height + 0.5 * spacing
-
 
             PathLine
             {
@@ -109,7 +102,7 @@ Item {
         }
         NumberAnimation on progress {
             id: pathAnimation
-            running:false
+            running: false
             from: 0
             to: 1
             duration: 1000
@@ -121,8 +114,6 @@ Item {
             easing.type: Easing.InOutCubic
         }
 
-        onProgressChanged: {
-            canvas.addPoint(pathInterpolate.x, pathInterpolate.y);
-        }
+        onProgressChanged: canvas.addPoint(pathInterpolate.x, pathInterpolate.y)
     }
 }
