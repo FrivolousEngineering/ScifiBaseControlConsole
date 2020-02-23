@@ -24,15 +24,15 @@ LineSeries
         gridVisible: false
         labelsVisible: false
         lineVisible: false
+        visible: false
     }
     axisX: ValueAxis
     {
         tickType: ValueAxis.TicksDynamic
         tickInterval: 10
         tickCount: 50
-        //gridVisible: false
         labelsVisible: false
-        //lineVisible: false
+        visible: false
     }
 
     onPointAdded:

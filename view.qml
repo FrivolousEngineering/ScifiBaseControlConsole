@@ -23,12 +23,10 @@ Rectangle
     onActiveNodeGraphDataChanged:
     {
         historyGraph.clear()
-        maxTemperatureGraph.clear()
         historyGraph.resetMinMax()
         for(var i in activeNodeGraphData)
         {
             historyGraph.append(i, activeNodeGraphData[i])
-            maxTemperatureGraph.append(i, activeNode.max_safe_temperature)
         }
     }
     ScrollView
@@ -150,15 +148,25 @@ Rectangle
             contentItem: Item
             {
                 id: content
+                Glow {
+                    id: glow
+                    anchors.fill: chartView
+                    radius: 15
+                    samples: 15
+                    color: "red"
+                    source: chartView
+                    visible: false
+                }
 
                 ChartView
                 {
                     id: chartView
-
+                    animationOptions: ChartView.SeriesAnimations
                     antialiasing: true
                     anchors.fill: parent
-                    backgroundColor: "#666666"
-
+                    backgroundColor: "transparent"
+                    legend.visible: false
+                    visible: false
                     opacity: 0
 
                     AutoUpdatingLineSeries
@@ -167,13 +175,6 @@ Rectangle
                         color: "red"
                         width: 3
                         onHovered: selectedPointText.text = point.y
-                    }
-
-                    LineSeries
-                    {
-                        id: maxTemperatureGraph
-                        color: "blue"
-                        width: 3
                     }
                 }
                 Hexagon
@@ -185,8 +186,28 @@ Rectangle
                 OpacityMask
                 {
                     anchors.fill: parent
-                    source: chartView
+                    source: glow
                     maskSource: hexagon
+                }
+                Text
+                {
+                    color: "white"
+                    anchors.top: parent.top
+                    text: "Highest\n" + Math.round(historyGraph.yMax * 100) / 100
+                    visible: !chartButton.collapsed
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 18
+                }
+                Text
+                {
+                    color: "white"
+                    anchors.bottom: parent.bottom
+                    text: "Lowest\n" + Math.round(historyGraph.yMin * 100) / 100
+                    visible: !chartButton.collapsed
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 18
                 }
                 Text
                 {
@@ -208,7 +229,8 @@ Rectangle
 
             onClicked: collapsed = !collapsed
 
-            background: Hexagon {
+            background: Hexagon
+            {
                 border
                 {
                     width: chartButton.collapsed ? 2: 4
@@ -217,7 +239,6 @@ Rectangle
                         NumberAnimation { duration: 200}
                     }
                 }
-
                 color: "#666666"
             }
         }
