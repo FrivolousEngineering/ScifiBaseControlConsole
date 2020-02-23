@@ -67,6 +67,39 @@ Dial
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
+        Canvas {
+            id: canvas
+            width: control.width
+            height: control.height
+
+            property real currentValue: control.value
+            property real centerWidth: width / 2
+            property real centerHeight: height / 2
+            property real radius: Math.min(canvas.width, canvas.height) / 2 - 2
+            property color penColor: dialBackground.border.color
+
+            onPenColorChanged: canvas.requestPaint()
+            onCurrentValueChanged: canvas.requestPaint()
+
+            property real angle: control.angle / 360 * 2 * Math.PI
+            onPaint: {
+                var ctx = canvas.getContext('2d')
+                ctx.reset()
+
+                ctx.lineJoin = "round"
+                ctx.lineCap= "round"
+
+                ctx.lineWidth = 2
+
+                ctx.strokeStyle = penColor
+                ctx.fillStyle = penColor
+                ctx.beginPath()
+
+                ctx.arc(canvas.centerWidth, canvas.centerHeight, canvas.radius,
+                        Math.PI / 2 + Math.PI / 4.49, Math.PI / 2 + canvas.angle - Math.PI)
+                ctx.stroke()
+            }
+        }
     }
     handle: Rectangle {
         id: handleItem
