@@ -89,7 +89,7 @@ Dial
                 ctx.lineJoin = "round"
                 ctx.lineCap= "round"
 
-                ctx.lineWidth = 2
+                ctx.lineWidth = 3
 
                 ctx.strokeStyle = penColor
                 ctx.fillStyle = penColor
