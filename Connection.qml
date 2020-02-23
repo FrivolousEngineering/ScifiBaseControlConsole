@@ -109,6 +109,7 @@ Item {
                 canvas.addPoint( connection.end.x - 0.5 * spacing, connection.end.y + 0.5 * object_height)
                 canvas.addPoint( connection.end.x + 0.5 * spacing, connection.end.y + 0.5 * object_height)
             }
+            easing.type: Easing.InOutCubic
         }
 
         onProgressChanged: {

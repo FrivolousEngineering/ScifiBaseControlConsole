@@ -125,7 +125,12 @@ Item
                     enabled: from != to
 
                     onHoveredChanged: base.hovered = hovered
-                    Behavior on value { NumberAnimation { duration: 500} }
+                    Behavior on value {
+                        NumberAnimation {
+                            duration: 1000
+                            easing.type: Easing.InOutCubic
+                        }
+                    }
                     Binding
                     {
                         target: dial
@@ -160,12 +165,19 @@ Item
                         y: parent.height / 2 - height / 2
                         radius: 13
                         color: control.checked ? "#BA6300" : "#ffffff"
-                        Behavior on color{ ColorAnimation { duration: 100}}
+                        Behavior on color {
+                            ColorAnimation { duration: 150}
+                        }
                         border.color: "#BA6300"
 
                         Rectangle {
                             x: control.checked ? parent.width - width : 0
-                            Behavior on x { NumberAnimation { duration: 150} }
+                            Behavior on x {
+                                NumberAnimation {
+                                    duration: 500
+                                    easing.type: Easing.InOutCubic
+                                }
+                            }
                             width: 26
                             height: 26
                             radius: 13
