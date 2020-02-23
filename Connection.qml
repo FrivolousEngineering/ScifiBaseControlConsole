@@ -1,5 +1,5 @@
 import QtQuick 2.0
-
+import QtGraphicalEffects 1.12
 Item {
 
     id: connection
@@ -20,6 +20,15 @@ Item {
             pathAnimation.start();
         }
     }
+    Glow {
+        id: glow
+        anchors.fill: parent
+        radius: 10
+        samples: 15
+        color: connection.color
+        spread: 0.3
+        source: canvas
+    }
 
     Canvas {
         id: canvas
@@ -39,7 +48,7 @@ Item {
             ctx.reset()
 
             ctx.lineJoin = "round"
-            ctx.lineCap="round"
+            ctx.lineCap = "round"
 
 
             ctx.lineWidth = 2
