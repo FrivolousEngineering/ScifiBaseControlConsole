@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.6
 import QtQuick.Controls 2.3
 
 Item
@@ -140,6 +140,47 @@ Item
                             // Released
                             controller.setPerformance(value)
                         }
+                    }
+                }
+                Switch {
+                    id: control
+                    anchors.left: dial.right
+
+                    Binding
+                    {
+                        target: control
+                        property: "checked"
+                        value: controller.enabled
+                    }
+                    onClicked: controller.toggleEnabled()
+
+                    indicator: Rectangle {
+                        implicitWidth: 48
+                        implicitHeight: 26
+                        x: control.leftPadding
+                        y: parent.height / 2 - height / 2
+                        radius: 13
+                        color: control.checked ? "#BA6300" : "#ffffff"
+                        Behavior on color{ ColorAnimation { duration: 100}}
+                        border.color: "#BA6300"
+
+                        Rectangle {
+                            x: control.checked ? parent.width - width : 0
+                            Behavior on x { NumberAnimation { duration: 150} }
+                            width: 26
+                            height: 26
+                            radius: 13
+                            border.color: "#BA6300"
+                        }
+                    }
+
+                    contentItem: Text {
+                        text: control.text
+                        font: control.font
+                        opacity: enabled ? 1.0 : 0.3
+                        color: "#BA6300"
+                        verticalAlignment: Text.AlignVCenter
+                        leftPadding: control.indicator.width + control.spacing
                     }
                 }
             }
