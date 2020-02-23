@@ -30,12 +30,12 @@ Item
             Transition {
                 from: "HOVERED"
                 to: "NOTHOVERED"
-                ColorAnimation { target: handleItem; duration: 100}
+                ColorAnimation { target: base; duration: 100}
             },
             Transition {
-                from: "HOVERED"
-                to: "NOTHOVERED"
-                ColorAnimation { target: handleItem; duration: 100}
+                from: "NOTHOVERED"
+                to: "HOVERED"
+                ColorAnimation { target: base; duration: 100}
             }
         ]
 
