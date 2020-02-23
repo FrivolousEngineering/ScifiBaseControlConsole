@@ -31,8 +31,6 @@ class Node(QObject):
         self._onFinishedCallbacks = {}
         self._description = ""
         self._static_properties = {}
-        self._min_performance = 0.5
-        self._max_performance = 1.5
         self._performance = 1
         self.update()
 
@@ -83,6 +81,14 @@ class Node(QObject):
     @Property(float, notify=performanceChanged)
     def performance(self):
         return self._performance
+
+    @Property(float, notify=staticPropertiesChanged)
+    def min_performance(self):
+        return self._static_properties.get("min_performance", 1)
+
+    @Property(float, notify=staticPropertiesChanged)
+    def max_performance(self):
+        return self._static_properties.get("max_performance", 1)
 
     def _onStaticPropertiesFinished(self, reply: QNetworkReply):
         # Todo: Handle errors.

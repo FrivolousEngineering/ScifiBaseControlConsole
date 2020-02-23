@@ -95,6 +95,8 @@ Item
                     anchors.leftMargin: 3
                     width: height
                     value: controller.performance
+                    from: controller.min_performance
+                    to: controller.max_performance
 
                     Binding
                     {
