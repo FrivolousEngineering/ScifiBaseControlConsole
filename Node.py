@@ -10,8 +10,8 @@ class Node(QObject):
         self._node_id = node_id
 
         self._source_url = "http://localhost:5000/%s/" % self._node_id
-        self._temperature_history_url = "http://localhost:5000/%s/temperature/history/" % self._node_id
-        self._all_chart_data_url = "http://localhost:5000/%s/all_property_chart_data" % self._node_id
+        self._temperature_history_url = "http://localhost:5000/%s/temperature/history/?showLast=50" % self._node_id
+        self._all_chart_data_url = "http://localhost:5000/%s/all_property_chart_data?showLast=50" % self._node_id
         self._incoming_connections_url = "http://localhost:5000/%s/connections/incoming" % self._node_id
         self._outgoing_connections_url = "http://localhost:5000/%s/connections/outgoing" % self._node_id
         self._performance_url = "http://localhost:5000/%s/performance/" % self._node_id

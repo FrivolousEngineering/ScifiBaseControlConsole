@@ -29,7 +29,7 @@ LineSeries
     {
         tickType: ValueAxis.TicksDynamic
         tickInterval: 10
-        tickAnchor: 0
+        tickCount: 50
         //gridVisible: false
         labelsVisible: false
         //lineVisible: false
