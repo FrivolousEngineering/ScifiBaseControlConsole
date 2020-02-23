@@ -123,6 +123,7 @@ Rectangle
                 HexagonNodeWidget
                 {
                     title: modelData.id
+                    controller: modelData
                     onClicked: activeNode = modelData
                     highlighted: activeNode == modelData
                 }

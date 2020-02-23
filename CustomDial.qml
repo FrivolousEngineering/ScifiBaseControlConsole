@@ -3,10 +3,12 @@ import QtQuick.Controls 2.3
 Dial
 {
     id: control
-
+    implicitWidth: 200
+    implicitHeight: 200
     from: 0.5
     to: 1.5
     value: 1
+
     background: Rectangle {
         id: dialBackground
         x: control.width / 2 - width / 2

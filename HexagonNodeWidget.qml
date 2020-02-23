@@ -9,6 +9,7 @@ Item
     property alias title: titleText.text
     property bool highlighted: false
     property double angleSize: 15
+    property var controller
 
     property color borderColor: hovered ? "white": "#BA6300"
     property bool hovered: false
@@ -85,6 +86,7 @@ Item
 
                 CustomDial
                 {
+                    id: dial
                     anchors.top: parent.top
                     anchors.topMargin: 3
                     anchors.bottomMargin: 3
@@ -92,6 +94,23 @@ Item
                     anchors.left: parent.left
                     anchors.leftMargin: 3
                     width: height
+                    value: controller.performance
+
+                    Binding
+                    {
+                        target: dial
+                        property: "value"
+                        value: controller.performance
+                        when: !dial.pressed
+                    }
+                    onPressedChanged:
+                    {
+                        if(!pressed)
+                        {
+                            // Released
+                            controller.setPerformance(value)
+                        }
+                    }
                 }
             }
         }

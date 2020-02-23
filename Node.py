@@ -14,7 +14,7 @@ class Node(QObject):
         self._all_chart_data_url = "http://localhost:5000/%s/all_property_chart_data" % self._node_id
         self._incoming_connections_url = "http://localhost:5000/%s/connections/incoming" % self._node_id
         self._outgoing_connections_url = "http://localhost:5000/%s/connections/outgoing" % self._node_id
-        
+        self._performance_url = "http://localhost:5000/%s/performance/" % self._node_id
         self._description_url = "http://localhost:5000/%s/description" % self._node_id
 
         self._static_properties_url = "http://localhost:5000/%s/static_properties" % self._node_id
@@ -31,6 +31,9 @@ class Node(QObject):
         self._onFinishedCallbacks = {}
         self._description = ""
         self._static_properties = {}
+        self._min_performance = 0.5
+        self._max_performance = 1.5
+        self._performance = 1
         self.update()
 
     temperatureChanged = Signal()
@@ -40,7 +43,7 @@ class Node(QObject):
     enabledChanged = Signal()
     incomingConnectionsChanged = Signal()
     outgoingConnectionsChanged = Signal()
-
+    performanceChanged = Signal()
     staticPropertiesChanged = Signal()
 
     @Slot()
@@ -59,6 +62,27 @@ class Node(QObject):
 
         reply = self._network_manager.get(QNetworkRequest(self._static_properties_url))
         self._onFinishedCallbacks[reply] = self._onStaticPropertiesFinished
+
+        reply = self._network_manager.get(QNetworkRequest(self._performance_url))
+        self._onFinishedCallbacks[reply] = self._onPerformanceChanged
+
+    def _onPerformanceChanged(self, reply: QNetworkReply):
+        result = json.loads(bytes(reply.readAll().data()))
+        self._performance = result
+        self.performanceChanged.emit()
+
+    @Slot(float)
+    def setPerformance(self, performance):
+        data = "{\"performance\": %s}" % performance
+        reply = self._network_manager.put(QNetworkRequest(self._performance_url), data.encode())
+        self._performance = performance
+        self.performanceChanged.emit()
+        #reply = self._network_manager.get(QNetworkRequest(self._performance_url))
+        self._onFinishedCallbacks[reply] = self._onPerformanceChanged
+
+    @Property(float, notify=performanceChanged)
+    def performance(self):
+        return self._performance
 
     def _onStaticPropertiesFinished(self, reply: QNetworkReply):
         # Todo: Handle errors.
