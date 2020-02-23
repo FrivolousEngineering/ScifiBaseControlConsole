@@ -151,9 +151,10 @@ Rectangle
                 Glow {
                     id: glow
                     anchors.fill: chartView
-                    radius: 15
+                    radius: 10
                     samples: 15
                     color: "red"
+                    spread: 0.1
                     source: chartView
                     visible: false
                 }
