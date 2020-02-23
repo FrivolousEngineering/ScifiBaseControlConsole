@@ -178,7 +178,7 @@ Item
                                 text: modelData
                                 onClicked:
                                 {
-                                    controller.update()
+                                    controller.partialUpdate()
                                     activeProperty = modelData
                                 }
                                 highlighted: modelData == activeProperty

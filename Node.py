@@ -1,5 +1,5 @@
 from PySide2.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
-from PySide2.QtCore import QObject, Signal, QByteArray, Slot, Property
+from PySide2.QtCore import QObject, Signal, QByteArray, Slot, Property, QTimer
 
 import json
 
@@ -32,7 +32,13 @@ class Node(QObject):
         self._description = ""
         self._static_properties = {}
         self._performance = 1
-        self.update()
+
+        self._update_timer = QTimer()
+        self._update_timer.setInterval(2000)
+        self._update_timer.setSingleShot(False)
+        self._update_timer.timeout.connect(self.partialUpdate)
+        self._update_timer.start()
+        self.fullUpdate()
 
     temperatureChanged = Signal()
     temperatureHistoryChanged = Signal()
@@ -44,13 +50,12 @@ class Node(QObject):
     performanceChanged = Signal()
     staticPropertiesChanged = Signal()
 
-    @Slot()
-    def update(self):
-        reply = self._network_manager.get(QNetworkRequest(self._source_url))
-        self._onFinishedCallbacks[reply] = self._onSourceUrlFinished
-
-        reply = self._network_manager.get(QNetworkRequest(self._all_chart_data_url))
-        self._onFinishedCallbacks[reply] = self._onChartDataFinished
+    def fullUpdate(self):
+        """
+        Request all data of this node from the server
+        :return:
+        """
+        self.partialUpdate()
 
         reply = self._network_manager.get(QNetworkRequest(self._incoming_connections_url))
         self._onFinishedCallbacks[reply] = self._onIncomingConnectionsFinished
@@ -60,6 +65,18 @@ class Node(QObject):
 
         reply = self._network_manager.get(QNetworkRequest(self._static_properties_url))
         self._onFinishedCallbacks[reply] = self._onStaticPropertiesFinished
+
+    @Slot()
+    def partialUpdate(self):
+        """
+        Request all the data that is dynamic
+        :return:
+        """
+        reply = self._network_manager.get(QNetworkRequest(self._source_url))
+        self._onFinishedCallbacks[reply] = self._onSourceUrlFinished
+
+        reply = self._network_manager.get(QNetworkRequest(self._all_chart_data_url))
+        self._onFinishedCallbacks[reply] = self._onChartDataFinished
 
         reply = self._network_manager.get(QNetworkRequest(self._performance_url))
         self._onFinishedCallbacks[reply] = self._onPerformanceChanged
@@ -93,8 +110,9 @@ class Node(QObject):
     def _onStaticPropertiesFinished(self, reply: QNetworkReply):
         # Todo: Handle errors.
         result = json.loads(bytes(reply.readAll().data()))
-        self._static_properties = result
-        self.staticPropertiesChanged.emit()
+        if self._static_properties != result:
+            self._static_properties = result
+            self.staticPropertiesChanged.emit()
 
     def _onIncomingConnectionsFinished(self, reply: QNetworkReply):
         # Todo: Handle errors.
