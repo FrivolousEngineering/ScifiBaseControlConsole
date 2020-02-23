@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.3
 
 Item
 {
@@ -81,6 +82,17 @@ Item
                 cornerSide: CutoffRectangle.Direction.Right
                 angleSize: base.angleSize - 2
                 border.color: base.borderColor
+
+                CustomDial
+                {
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    anchors.bottomMargin: 3
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.leftMargin: 3
+                    width: height
+                }
             }
         }
     }

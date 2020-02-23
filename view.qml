@@ -10,7 +10,6 @@ Rectangle
     height: 768
     color: "black"
 
-
     property var highlightedNode: null
     property var activeNode: backend.nodeData[0]
     property int object_width: 240
