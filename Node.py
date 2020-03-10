@@ -18,6 +18,7 @@ class Node(QObject):
         self._description_url = "http://localhost:5000/%s/description" % self._node_id
 
         self._static_properties_url = "http://localhost:5000/%s/static_properties" % self._node_id
+        self._modifiers_url = "http://localhost:5000/%s/modifiers" % self._node_id
         self._all_chart_data = {}
 
         self._network_manager = QNetworkAccessManager()
@@ -32,6 +33,8 @@ class Node(QObject):
         self._description = ""
         self._static_properties = {}
         self._performance = 1
+
+        self._modifiers = []
 
         self._update_timer = QTimer()
         self._update_timer.setInterval(2000)
@@ -49,6 +52,7 @@ class Node(QObject):
     outgoingConnectionsChanged = Signal()
     performanceChanged = Signal()
     staticPropertiesChanged = Signal()
+    modifiersChanged = Signal()
 
     def fullUpdate(self):
         """
@@ -66,6 +70,7 @@ class Node(QObject):
         reply = self._network_manager.get(QNetworkRequest(self._static_properties_url))
         self._onFinishedCallbacks[reply] = self._onStaticPropertiesFinished
 
+
     @Slot()
     def partialUpdate(self):
         """
@@ -80,6 +85,15 @@ class Node(QObject):
 
         reply = self._network_manager.get(QNetworkRequest(self._performance_url))
         self._onFinishedCallbacks[reply] = self._onPerformanceChanged
+
+        reply = self._network_manager.get(QNetworkRequest(self._modifiers_url))
+        self._onFinishedCallbacks[reply] = self._onModifiersChanged
+
+    def _onModifiersChanged(self, reply: QNetworkReply):
+        result = json.loads(bytes(reply.readAll().data()))
+        if self._modifiers != result:
+            self._modifiers = result
+            self.modifiersChanged.emit()
 
     def _onPerformanceChanged(self, reply: QNetworkReply):
         result = json.loads(bytes(reply.readAll().data()))
@@ -98,6 +112,10 @@ class Node(QObject):
     @Property(float, notify=performanceChanged)
     def performance(self):
         return self._performance
+
+    @Property("QVariantList", notify=modifiersChanged)
+    def modifiers(self):
+        return self._modifiers
 
     @Property(float, notify=staticPropertiesChanged)
     def min_performance(self):

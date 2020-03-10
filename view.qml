@@ -6,8 +6,8 @@ import QtGraphicalEffects 1.12
 Rectangle
 {
     id: window
-    width: 1024
-    height: 768
+    width: 1280
+    height: 720
     color: "black"
 
     property var highlightedNode: null
@@ -263,8 +263,7 @@ Rectangle
             title: "STATS"
             anchors.top: infoSidebarItem.bottom
             anchors.right: parent.right
-            contents:
-            Column
+            contents: Column
             {
                 Text
                 {
@@ -305,6 +304,19 @@ Rectangle
             title: "CONNECT"
             anchors.top: statsSideBarItem.bottom
             anchors.right: parent.right
+
+            contents: Column
+            {
+                Repeater
+                {
+                    model: activeNode.modifiers
+                    Text
+                    {
+                        text: modelData.name
+                        color: "white"
+                    }
+                }
+            }
         }
     }
 }
