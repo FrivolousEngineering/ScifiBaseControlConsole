@@ -122,7 +122,8 @@ Item
 
                     from: controller.min_performance
                     to: controller.max_performance
-                    enabled: from != to
+                    visible: from != to
+                    enabled: visible
 
                     onHoveredChanged: base.hovered = hovered
                     Behavior on value {

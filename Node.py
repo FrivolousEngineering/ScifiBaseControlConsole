@@ -17,6 +17,8 @@ class Node(QObject):
         self._performance_url = "http://localhost:5000/%s/performance/" % self._node_id
         self._description_url = "http://localhost:5000/%s/description" % self._node_id
 
+        self._additional_properties_url = "http://localhost:5000/%s/additional_properties" % self._node_id
+
         self._static_properties_url = "http://localhost:5000/%s/static_properties" % self._node_id
         self._modifiers_url = "http://localhost:5000/%s/modifiers" % self._node_id
         self._all_chart_data = {}
@@ -41,6 +43,8 @@ class Node(QObject):
         self._update_timer.setSingleShot(False)
         self._update_timer.timeout.connect(self.partialUpdate)
         self._update_timer.start()
+
+        self._additional_properties = {}
         self.fullUpdate()
 
     temperatureChanged = Signal()
@@ -53,6 +57,7 @@ class Node(QObject):
     performanceChanged = Signal()
     staticPropertiesChanged = Signal()
     modifiersChanged = Signal()
+    additionalPropertiesChanged = Signal()
 
     def fullUpdate(self):
         """
@@ -70,6 +75,8 @@ class Node(QObject):
         reply = self._network_manager.get(QNetworkRequest(self._static_properties_url))
         self._onFinishedCallbacks[reply] = self._onStaticPropertiesFinished
 
+        reply = self._network_manager.get(QNetworkRequest(self._static_properties_url))
+        self._onFinishedCallbacks[reply] = self._onStaticPropertiesFinished
 
     @Slot()
     def partialUpdate(self):
@@ -88,6 +95,15 @@ class Node(QObject):
 
         reply = self._network_manager.get(QNetworkRequest(self._modifiers_url))
         self._onFinishedCallbacks[reply] = self._onModifiersChanged
+
+        reply = self._network_manager.get(QNetworkRequest(self._additional_properties_url))
+        self._onFinishedCallbacks[reply] = self._onAdditionalPropertiesFinished
+
+    def _onAdditionalPropertiesFinished(self, reply: QNetworkReply):
+        result = json.loads(bytes(reply.readAll().data()))
+        if self._additional_properties != result:
+            self._additional_properties = result
+            self.additionalPropertiesChanged.emit()
 
     def _onModifiersChanged(self, reply: QNetworkReply):
         result = json.loads(bytes(reply.readAll().data()))
