@@ -8,11 +8,15 @@ Item
     implicitHeight: width * 0.866025404
     property var contents: []
     property string title: ""
+
+    property double contentOpacity: 1.
+
     onContentsChanged:
     {
         for(var i in contents)
         {
             contents.width = 0.5 * base.width
+            contents.opacity = Qt.binding(function() { return base.contentOpacity })
         }
     }
     Hexagon
@@ -46,6 +50,7 @@ Item
         enabled: content.contentItem.contentY - content.availableHeight >= 0
         background: Item{}
         visible: content.availableHeight < content.contentHeight
+        opacity: contentOpacity
         contentItem: Text
         {
             opacity: enabled ? 1.0 : 0.3
@@ -65,6 +70,7 @@ Item
         onClicked: content.setContentPosition(content.contentItem.contentY + content.availableHeight)
         enabled: content.contentHeight > content.contentItem.contentY + content.availableHeight
         visible: content.availableHeight < content.contentHeight
+        opacity: contentOpacity
         background: Item {}
         contentItem: Text
         {

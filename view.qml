@@ -248,11 +248,23 @@ Rectangle
         {
             id: infoSidebarItem
             anchors.right: parent.right
+
             contents: Text
             {
+                id: infoText
                 color: "white"
-                text: activeNode.description
+                property QtObject activeNodeData: activeNode
+                text: activeNodeData.description
+                Behavior on activeNodeData
+                {
+                    FadeAnimation
+                    {
+                        target: infoSidebarItem
+                        fadeProperty: "contentOpacity"
+                    }
+                }
                 wrapMode: Text.Wrap
+
             }
             title: "INFO"
         }
@@ -263,41 +275,52 @@ Rectangle
             title: "STATS"
             anchors.top: infoSidebarItem.bottom
             anchors.right: parent.right
+
             contents: Column
             {
+                property QtObject activeNodeData: activeNode
+
+                Behavior on activeNodeData
+                {
+                    FadeAnimation
+                    {
+                        target: statsSideBarItem
+                        fadeProperty: "contentOpacity"
+                    }
+                }
                 Text
                 {
                     color: "white"
-                    text: "Temp: " + Math.round(activeNode.temperature * 100) / 100 + " K"
+                    text: "Temp: " + Math.round(parent.activeNodeData.temperature * 100) / 100 + " K"
                 }
                 Text
                 {
                    color: "white"
-                   text: "Enabled: " + activeNode.enabled
+                   text: "Enabled: " + parent.activeNodeData.enabled
                 }
                 Text
                 {
                    color: "white"
-                   text: "Surf area: " + activeNode.surface_area + " m²"
+                   text: "Surf area: " + parent.activeNodeData.surface_area + " m²"
                 }
                 Text
                 {
                    color: "white"
-                   text: "Max tmp: " + activeNode.max_safe_temperature + " K"
+                   text: "Max tmp: " + parent.activeNodeData.max_safe_temperature + " K"
                 }
                 Text
                 {
                    color: "white"
-                   text: "Con coef: " + activeNode.heat_convection + " W/m K"
+                   text: "Con coef: " + parent.activeNodeData.heat_convection + " W/m K"
                 }
                 Text
                 {
                    color: "white"
-                   text: "H Emissivity: " + activeNode.heat_emissivity
+                   text: "H Emissivity: " + parent.activeNodeData.heat_emissivity
                 }
                 Repeater
                 {
-                    model: activeNode.additionalProperties
+                    model: parent.activeNodeData.additionalProperties
                     Text
                     {
                         color: "white"
