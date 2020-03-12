@@ -46,6 +46,7 @@ class Node(QObject):
         self._update_timer.start()
 
         self._additional_properties = {}
+        self._converted_additional_properties = []
         self.fullUpdate()
 
     temperatureChanged = Signal()
@@ -104,6 +105,8 @@ class Node(QObject):
         result = json.loads(bytes(reply.readAll().data()))
         if self._additional_properties != result:
             self._additional_properties = result
+            # Clear the list and convert them in a way that we can use them in a repeater.
+            self._converted_additional_properties = [{"key": key, "value": value} for key, value in result.items()]
             self.additionalPropertiesChanged.emit()
 
     def _onModifiersChanged(self, reply: QNetworkReply):
@@ -261,9 +264,9 @@ class Node(QObject):
     def historyData(self):
         return self._all_chart_data
 
-    @Property("QVariantMap", notify=additionalPropertiesChanged)
+    @Property("QVariantList", notify=additionalPropertiesChanged)
     def additionalProperties(self):
-        return self._additional_properties
+        return self._converted_additional_properties
 
     @Slot()
     def toggleEnabled(self):

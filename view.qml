@@ -295,6 +295,15 @@ Rectangle
                    color: "white"
                    text: "H Emissivity: " + activeNode.heat_emissivity
                 }
+                Repeater
+                {
+                    model: activeNode.additionalProperties
+                    Text
+                    {
+                        color: "white"
+                        text: modelData.key + ": " + modelData.value
+                    }
+                }
             }
 
         }
@@ -316,7 +325,6 @@ Rectangle
                         color: "white"
                     }
                 }
-
             }
         }
     }
