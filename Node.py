@@ -3,6 +3,7 @@ from PySide2.QtCore import QObject, Signal, QByteArray, Slot, Property, QTimer
 
 import json
 
+
 class Node(QObject):
     def __init__(self, node_id: str, parent=None):
         QObject.__init__(self, parent)
@@ -259,6 +260,10 @@ class Node(QObject):
     @Property("QVariantMap", notify=historyDataChanged)
     def historyData(self):
         return self._all_chart_data
+
+    @Property("QVariantMap", notify=additionalPropertiesChanged)
+    def additionalProperties(self):
+        return self._additional_properties
 
     @Slot()
     def toggleEnabled(self):
