@@ -10,7 +10,7 @@ Rectangle
     id: window
     width: 1280
     height: 720
-    color: "black"
+    color: "#1a1a1a"
 
     property var highlightedNode: null
     property var activeNode: backend.nodeData[0]
@@ -21,6 +21,12 @@ Rectangle
     property string activeProperty: "temperature"
 
     property variant activeNodeGraphData: activeNode.historyData[activeProperty]
+
+    Image
+    {
+        anchors.fill: parent
+        source: "background_hexes.png"
+    }
 
     onActiveNodeGraphDataChanged:
     {
@@ -126,6 +132,7 @@ Rectangle
                     controller: modelData
                     onClicked: activeNode = modelData
                     highlighted: activeNode == modelData
+                    opacity: highlighted ? 1 : 0.5
                 }
             }
         }
