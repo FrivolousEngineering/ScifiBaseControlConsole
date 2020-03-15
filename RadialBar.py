@@ -235,7 +235,7 @@ class RadialBar(QQuickPaintedItem):
             return
         self._show_text = show
 
-    @Property(str, notify=showTextChanged, fset=setShowText)
+    @Property(bool, notify=showTextChanged, fset=setShowText)
     def showText(self):
         return self._show_text
 
