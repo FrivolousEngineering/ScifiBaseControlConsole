@@ -105,7 +105,14 @@ Item {
             running: false
             from: 0
             to: 1
-            duration: 1000
+            duration:{
+                var x_difference = Math.abs(connection.origin.x - connection.end.x)
+                var y_difference = Math.abs(connection.origin.y - connection.end.y)
+                // Since we only go straight lines, this is actually true ;)
+                var distance = x_difference + y_difference
+                return Math.max(5 * distance, 1200)
+            }
+
             onStopped:
             {
                 canvas.addPoint( connection.end.x - 0.5 * spacing, connection.end.y + 0.5 * object_height)
