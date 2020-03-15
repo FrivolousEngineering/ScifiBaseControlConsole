@@ -1,8 +1,10 @@
+from PySide2.QtQml import qmlRegisterType
 from PySide2.QtWidgets import QApplication
 from PySide2.QtQuick import QQuickView
 from PySide2.QtCore import QUrl, QObject, Property
 
 from Node import Node
+from RadialBar import RadialBar
 
 
 class TestObject(QObject):
@@ -20,6 +22,7 @@ if __name__ == '__main__':
     view = QQuickView()
     url = QUrl("view.qml")
     beep = TestObject()
+    qmlRegisterType(RadialBar, "SDK", 1, 0, "RadialBar")
     view.rootContext().setContextProperty("backend", beep)
     view.setSource(url)
 

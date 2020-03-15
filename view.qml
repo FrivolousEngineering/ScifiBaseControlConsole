@@ -3,6 +3,8 @@ import QtQuick.Controls 2.2
 import QtCharts 2.3
 import QtGraphicalEffects 1.12
 
+import SDK 1.0
+
 Rectangle
 {
     id: window
