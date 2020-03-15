@@ -1,6 +1,8 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.3
 
+import SDK 1.0
+
 Item
 {
     id: base
@@ -147,7 +149,34 @@ Item
                         }
                     }
                 }
-                Switch {
+                Grid
+                {
+                    columns: 2
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    anchors.bottomMargin: 3
+                    anchors.bottom: parent.bottom
+                    anchors.left: dial.right
+                    anchors.leftMargin: 3
+                    width: height
+                    spacing: 4
+                    Repeater
+                    {
+                        model: controller.additionalProperties
+                        RadialBar
+                        {
+                            width: parent.width / 2
+                            dialWidth: 3
+                            value: modelData.value
+                            showText: false
+                            progressColor: modelData.key == "health" ? "green": "blue"
+                            maxValue: modelData.max_value
+
+                        }
+                    }
+                }
+
+                /*Switch {
                     id: control
                     anchors.left: dial.right
 
@@ -194,7 +223,7 @@ Item
                         verticalAlignment: Text.AlignVCenter
                         leftPadding: control.indicator.width + control.spacing
                     }
-                }
+                }*/
             }
         }
     }

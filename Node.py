@@ -105,8 +105,13 @@ class Node(QObject):
         result = json.loads(bytes(reply.readAll().data()))
         if self._additional_properties != result:
             self._additional_properties = result
+            self._converted_additional_properties = []
             # Clear the list and convert them in a way that we can use them in a repeater.
-            self._converted_additional_properties = [{"key": key, "value": value} for key, value in result.items()]
+            for key in result:
+                self._converted_additional_properties.append({"key": key,
+                                                              "value": result[key]["value"],
+                                                              "max_value": result[key]["max_value"]})
+            self._converted_additional_properties.reverse()
             self.additionalPropertiesChanged.emit()
 
     def _onModifiersChanged(self, reply: QNetworkReply):
