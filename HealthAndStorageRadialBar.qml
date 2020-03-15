@@ -43,11 +43,10 @@ Item
         SequentialAnimation {
             id: warningAnimation
             running: false
-            PropertyAnimation { to: "white"; duration: 1000; target: healthBar; property: "foregroundColor"}
-            PropertyAnimation { to: "#505050"; duration: 1000; target: healthBar; property: "foregroundColor"}
+            PropertyAnimation { to: "white"; duration: 750; target: healthBar; property: "foregroundColor"; easing.type: Easing.InOutCubic}
+            PropertyAnimation { to: "#505050"; duration: 750; target: healthBar; property: "foregroundColor"; easing.type: Easing.InOutCubic}
             loops: Animation.Infinite
         }
-
     }
     RadialBar
     {
