@@ -18,6 +18,36 @@ Item
         maxValue: health != undefined ? health["max_value"]: 1
         dialWidth: 3
         showText: false
+        states: [
+            State {
+                name: "HEALTHY"
+                PropertyChanges { target: healthBar; progressColor: "green"}
+                when: healthBar.value >= 80
+            },
+            State {
+                name: "DAMAGED"
+                PropertyChanges { target: healthBar; progressColor: "yellow"}
+                when: healthBar.value >= 30 && healthBar.value < 80
+            },
+            State {
+                name: "CRITICAL"
+                PropertyChanges { target: healthBar; progressColor: "red"}
+                PropertyChanges { target: warningAnimation; running: true; }
+                when: healthBar.value < 30
+            }
+        ]
+        transitions: Transition {
+            to: "*"
+            ColorAnimation { target: button; duration: 200}
+        }
+        SequentialAnimation {
+            id: warningAnimation
+            running: false
+            PropertyAnimation { to: "white"; duration: 1000; target: healthBar; property: "progressColor"}
+            PropertyAnimation { to: "red"; duration: 1000; target: healthBar; property: "progressColor"}
+            loops: Animation.Infinite
+        }
+
     }
     RadialBar
     {
