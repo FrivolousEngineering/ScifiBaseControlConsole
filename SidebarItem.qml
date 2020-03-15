@@ -11,6 +11,13 @@ Item
 
     property double contentOpacity: 1.
 
+    property font titleFont: Qt.font({
+        family: "Roboto",
+        pixelSize: 18,
+        bold: true,
+        capitalization: Font.AllUppercase
+    });
+
     onContentsChanged:
     {
         for(var i in contents)
@@ -22,7 +29,8 @@ Item
     Hexagon
     {
         width: parent.width
-        border.width: 5
+        border.width: 3
+        border.color: "#d3d3d3"
         color: "#666666"
     }
 
@@ -30,8 +38,7 @@ Item
     {
         text: base.title
         color: "white"
-        font.weight: Font.Bold
-        font.pointSize: 15
+        font: titleFont
         width: base.width / 3
         horizontalAlignment: Text.AlignRight
         transform:[

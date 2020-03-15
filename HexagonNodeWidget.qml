@@ -13,8 +13,16 @@ Item
     property double angleSize: 15
     property var controller
 
-    property color borderColor: "#BA6300"
+    property color borderColor: "#d3d3d3"
     property bool hovered: false
+
+    property font myFont:Qt.font({family: "Roboto"})
+    property font titleFont: Qt.font({
+        family: "Roboto",
+        pixelSize: 9,
+        bold: true,
+        capitalization: Font.AllUppercase
+    });
 
     states: [
             State {
@@ -24,7 +32,7 @@ Item
             },
             State {
                 name: "NOTHOVERED"
-                PropertyChanges { target: base; borderColor: "#BA6300"}
+                PropertyChanges { target: base; borderColor: "#d3d3d3"}
                 when: !base.hovered
             }
         ]
@@ -63,6 +71,7 @@ Item
             cornerSide: CutoffRectangle.Direction.UpLeft
             color: base.highlighted ? background.border.color : "#333333"
             border.color: base.borderColor
+            border.width: 2
             angleSize: base.angleSize
             CutoffRectangle
             {
@@ -70,7 +79,8 @@ Item
                 anchors.margins: 3
                 angleSize: base.angleSize - 2
                 cornerSide: CutoffRectangle.Direction.UpLeft
-                border.color: base.borderColor
+                border.color: "transparent"
+                border.width: 2
             }
         }
         Text
@@ -84,8 +94,8 @@ Item
             anchors.leftMargin: 8
             horizontalAlignment: Text.AlignHCenter
             transform: Rotation { origin.x: 50; origin.y: 50; angle: 270}
-            font.pointSize : 9
-            font.weight: Font.Bold
+            font: titleFont
+
         }
     }
     Item
@@ -94,7 +104,7 @@ Item
         height: parent.height
         anchors.right: parent.right
         anchors.left: title.right
-        anchors.leftMargin: -3
+        anchors.leftMargin: -1
         CutoffRectangle
         {
             id: background
@@ -103,13 +113,15 @@ Item
             color: base.highlighted ? background.border.color : "#333333"
             angleSize: base.angleSize
             border.color: base.borderColor
+            border.width: 2
             CutoffRectangle
             {
                 anchors.fill: parent
                 anchors.margins: 3
                 cornerSide: CutoffRectangle.Direction.Right
                 angleSize: base.angleSize - 2
-                border.color: base.borderColor
+                border.color: "transparent"
+                border.width: 2
                 HealthAndStorageRadialBar
                 {
                     id:healthAndStorage

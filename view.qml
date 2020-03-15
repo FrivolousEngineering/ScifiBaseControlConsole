@@ -22,6 +22,15 @@ Rectangle
 
     property variant activeNodeGraphData: activeNode.historyData[activeProperty]
 
+    property color border_color: "#d3d3d3"
+    property color text_color: "white"
+
+    property font myFont: Qt.font({
+        family: "Roboto",
+        pixelSize: 13
+    });
+
+
     Image
     {
         anchors.fill: parent
@@ -132,7 +141,8 @@ Rectangle
                     controller: modelData
                     onClicked: activeNode = modelData
                     highlighted: activeNode == modelData
-                    opacity: highlighted ? 1 : 0.5
+                    opacity: highlighted || hovered ? 1 : 0.5
+                    Behavior on opacity { NumberAnimation { duration: 150} }
                 }
             }
         }
@@ -141,6 +151,7 @@ Rectangle
         {
             id: chartButton
             anchors.verticalCenter: infoSidebarItem.bottom
+            anchors.verticalCenterOffset: 5
             anchors.right: infoSidebarItem.left
             anchors.rightMargin: -50
 
@@ -201,7 +212,7 @@ Rectangle
                 }
                 Text
                 {
-                    color: "white"
+                    color: window.text_color
                     anchors.top: parent.top
                     text: "Highest\n" + Math.round(historyGraph.yMax * 100) / 100
                     visible: !chartButton.collapsed
@@ -211,7 +222,7 @@ Rectangle
                 }
                 Text
                 {
-                    color: "white"
+                    color: window.text_color
                     anchors.bottom: parent.bottom
                     text: "Lowest\n" + Math.round(historyGraph.yMin * 100) / 100
                     visible: !chartButton.collapsed
@@ -225,7 +236,7 @@ Rectangle
                     anchors.bottom: parent.bottom
                     width: parent.width / 3
                     anchors.horizontalCenter: parent.horizontalCenter
-                    color: "white"
+                    color: window.text_color
                     text: ""
                     horizontalAlignment: Text.AlignHCenter
                     visible: !chartButton.collapsed
@@ -250,6 +261,7 @@ Rectangle
                     }
                 }
                 color: "#666666"
+                border.color: "#d3d3d3"
             }
         }
 
@@ -257,13 +269,17 @@ Rectangle
         {
             id: infoSidebarItem
             anchors.right: parent.right
+            anchors.rightMargin: 3
+            anchors.topMargin: 20
+            anchors.top: parent.top
 
             contents: Text
             {
                 id: infoText
-                color: "white"
+                color: window.text_color
                 property QtObject activeNodeData: activeNode
                 text: activeNodeData.description
+                font: myFont
                 Behavior on activeNodeData
                 {
                     FadeAnimation
@@ -283,7 +299,9 @@ Rectangle
             id: statsSideBarItem
             title: "STATS"
             anchors.top: infoSidebarItem.bottom
+            anchors.topMargin: 10
             anchors.right: parent.right
+            anchors.rightMargin: 3
 
             contents: Column
             {
@@ -299,41 +317,48 @@ Rectangle
                 }
                 Text
                 {
-                    color: "white"
+                    color: window.text_color
                     text: "Temp: " + Math.round(parent.activeNodeData.temperature * 100) / 100 + " K"
+                    font: myFont
                 }
                 Text
                 {
-                   color: "white"
+                   color: window.text_color
                    text: "Enabled: " + parent.activeNodeData.enabled
+                   font: myFont
                 }
                 Text
                 {
-                   color: "white"
+                   color: window.text_color
                    text: "Surf area: " + parent.activeNodeData.surface_area + " m²"
+                   font: myFont
                 }
                 Text
                 {
-                   color: "white"
+                   color: window.text_color
                    text: "Max tmp: " + parent.activeNodeData.max_safe_temperature + " K"
+                   font: myFont
                 }
                 Text
                 {
-                   color: "white"
+                   color: window.text_color
                    text: "Con coef: " + parent.activeNodeData.heat_convection + " W/m K"
+                   font: myFont
                 }
                 Text
                 {
-                   color: "white"
+                   color: window.text_color
                    text: "H Emissivity: " + parent.activeNodeData.heat_emissivity
+                   font: myFont
                 }
                 Repeater
                 {
                     model: parent.activeNodeData.additionalProperties
                     Text
                     {
-                        color: "white"
+                        color: window.text_color
                         text: modelData.key + ": " + Math.round(modelData.value * 100) / 100
+                        font: myFont
                     }
                 }
             }
@@ -344,7 +369,9 @@ Rectangle
             id: connectSideBarItem
             title: "CONNECT"
             anchors.top: statsSideBarItem.bottom
+            anchors.topMargin: 10
             anchors.right: parent.right
+            anchors.rightMargin: 3
 
             contents: Column
             {
@@ -354,7 +381,8 @@ Rectangle
                     Text
                     {
                         text: modelData.name
-                        color: "white"
+                        color: window.text_color
+                        font: myFont
                     }
                 }
             }

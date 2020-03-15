@@ -32,7 +32,7 @@ Dial
             },
             State {
                 name: "RELEASED"
-                PropertyChanges { target: dialBackground; border.color: "#BA6300"}
+                PropertyChanges { target: dialBackground; border.color: "#d3d3d3"}
                 when: !control.pressed
             }
         ]
@@ -107,7 +107,7 @@ Dial
         y: control.background.y + control.background.height / 2 - height / 2
         width: 12
         height: 12
-        color: control.pressed ? "white": "#BA6300"
+        color: control.pressed ? "white": "#d3d3d3"
         radius: 6
         antialiasing: true
         opacity: control.enabled ? 1 : 0.3
@@ -120,7 +120,7 @@ Dial
             },
             State {
                 name: "RELEASED"
-                PropertyChanges { target: handleItem; border.color: "#BA6300"}
+                PropertyChanges { target: handleItem; border.color: "#d3d3d3"}
                 when: !control.pressed
             }
         ]
