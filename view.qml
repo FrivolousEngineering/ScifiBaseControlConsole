@@ -326,7 +326,7 @@ Rectangle
                     Text
                     {
                         color: "white"
-                        text: modelData.key + ": " + modelData.value
+                        text: modelData.key + ": " + Math.round(modelData.value * 100) / 100
                     }
                 }
             }
