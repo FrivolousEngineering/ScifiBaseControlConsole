@@ -111,6 +111,7 @@ class RadialBar(QQuickPaintedItem):
         painter.setPen(pen)
         painter.drawArc(rect.adjusted(offset, offset, -offset, -offset), startAngle * 16, valueAngle * 16)
         painter.restore()
+        painter.restore()
 
     @Property(str, notify=sizeChanged)
     def size(self):
