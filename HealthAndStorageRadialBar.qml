@@ -38,13 +38,13 @@ Item
         ]
         transitions: Transition {
             to: "*"
-            ColorAnimation { target: button; duration: 200}
+            ColorAnimation { target: healthBar; duration: 200}
         }
         SequentialAnimation {
             id: warningAnimation
             running: false
-            PropertyAnimation { to: "white"; duration: 1000; target: healthBar; property: "progressColor"}
-            PropertyAnimation { to: "red"; duration: 1000; target: healthBar; property: "progressColor"}
+            PropertyAnimation { to: "white"; duration: 1000; target: healthBar; property: "foregroundColor"}
+            PropertyAnimation { to: "#505050"; duration: 1000; target: healthBar; property: "foregroundColor"}
             loops: Animation.Infinite
         }
 

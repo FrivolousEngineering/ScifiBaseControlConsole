@@ -53,6 +53,7 @@ class RadialBar(QQuickPaintedItem):
         self._text_font = QFont()
         self.valueChanged.connect(self.update)
         self.progressColorChanged.connect(self.update)
+        self.foregroundColorChanged.connect(self.update)
 
     def paint(self, painter):
         painter.save()
@@ -200,7 +201,7 @@ class RadialBar(QQuickPaintedItem):
 
     @Property(QColor, notify=foregroundColorChanged, fset=setForegroundColor)
     def foregroundColor(self):
-        return self._ForegrounColor
+        return self._dial_color
 
     def setProgressColor(self, color):
         if self._progress_color == color:
