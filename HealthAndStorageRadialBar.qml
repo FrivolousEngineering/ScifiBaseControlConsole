@@ -43,7 +43,7 @@ Item
         SequentialAnimation {
             id: warningAnimation
             running: false
-            PropertyAnimation { to: "white"; duration: 750; target: healthBar; property: "foregroundColor"; easing.type: Easing.InOutCubic}
+            PropertyAnimation { to: "red"; duration: 750; target: healthBar; property: "foregroundColor"; easing.type: Easing.InOutCubic}
             PropertyAnimation { to: "#505050"; duration: 750; target: healthBar; property: "foregroundColor"; easing.type: Easing.InOutCubic}
             loops: Animation.Infinite
         }
