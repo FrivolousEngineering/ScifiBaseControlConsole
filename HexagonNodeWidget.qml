@@ -110,7 +110,18 @@ Item
                 cornerSide: CutoffRectangle.Direction.Right
                 angleSize: base.angleSize - 2
                 border.color: base.borderColor
-
+                HealthAndStorageRadialBar
+                {
+                    id:healthAndStorage
+                    anchors.top: parent.top
+                    anchors.topMargin: 3
+                    anchors.bottomMargin: 3
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.leftMargin: 3
+                    width: height
+                    model: controller.additionalProperties
+                }
                 CustomDial
                 {
                     id: dial
@@ -118,7 +129,7 @@ Item
                     anchors.topMargin: 3
                     anchors.bottomMargin: 3
                     anchors.bottom: parent.bottom
-                    anchors.left: parent.left
+                    anchors.left: healthAndStorage.right
                     anchors.leftMargin: 3
                     width: height
 
@@ -149,7 +160,8 @@ Item
                         }
                     }
                 }
-                Grid
+
+                /*Grid
                 {
                     columns: 2
                     anchors.top: parent.top
@@ -174,7 +186,7 @@ Item
 
                         }
                     }
-                }
+                }*/
 
                 /*Switch {
                     id: control

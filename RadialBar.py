@@ -51,6 +51,7 @@ class RadialBar(QQuickPaintedItem):
         self._pen_style = Qt.FlatCap
         self._dial_type = RadialBar.DialType.MinToMax
         self._text_font = QFont()
+        self.valueChanged.connect(self.update)
 
     def paint(self, painter):
         painter.save()
