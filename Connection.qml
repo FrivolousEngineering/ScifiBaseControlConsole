@@ -13,10 +13,12 @@ Item {
     property int offset_x: spacing
     property int offset_y: spacing
 
+    property bool _is_valid: connection.origin != undefined
+
     function start() {
         if(origin != null && end != null)
         {
-            canvas.addPoint( connection.origin.x + 0.5 * object_width, connection.origin.y + object_height)
+            canvas.addPoint(connection.origin.x + 0.5 * object_width, connection.origin.y + object_height)
             pathAnimation.start()
         }
     }
@@ -81,37 +83,73 @@ Item {
         }
     }
 
+    Path
+    {
+        id: connectionPath
+
+        startX: connection.origin.x + 0.5 * object_width
+        startY: connection.origin.y + object_height + 0.5 * spacing
+
+        PathLine
+        {
+            x: connection.end.x - 0.5 * spacing
+            relativeY: 0
+        }
+        PathLine
+        {
+            relativeX: 0
+            y: connection.end.y + 0.5 * object_height
+        }
+    }
+
+    PathInterpolator
+    {
+        id: motionPath
+        path: connectionPath
+
+        NumberAnimation on progress {
+            id: particleAnimation
+            from: 0; to: 1;
+            duration: 2 * animationDuration;
+            running: !pathAnimation.running
+            loops: Animation.Infinite
+        }
+    }
+    Rectangle
+    {
+        width: 4;
+        height: 4
+        color: "white"
+        radius: 2
+
+        //bind our attributes to follow the path as progress changes
+        x: motionPath.x + connection.offset_x - 0.5 * width
+        y: motionPath.y + connection.offset_y - 0.5 * height
+        rotation: motionPath.angle
+        visible: connection._is_valid && particleAnimation.running
+    }
+
+    property int animationDuration:
+    {
+        var x_difference = Math.abs(connection.origin.x - connection.end.x)
+        var y_difference = Math.abs(connection.origin.y - connection.end.y)
+        // Since we only go straight lines, this is actually true ;)
+        var distance = x_difference + y_difference
+        return Math.max(5 * distance, 1200)
+    }
+
     PathInterpolator
     {
         id: pathInterpolate
 
-        path: Path {
-            startX: connection.origin.x + 0.5 * object_width
-            startY: connection.origin.y + object_height + 0.5 * spacing
+        path: connectionPath
 
-            PathLine
-            {
-                x: connection.end.x - 0.5 * spacing
-                relativeY: 0
-            }
-            PathLine
-            {
-                relativeX: 0
-                y: connection.end.y + 0.5 * object_height
-            }
-        }
         NumberAnimation on progress {
             id: pathAnimation
             running: false
             from: 0
             to: 1
-            duration:{
-                var x_difference = Math.abs(connection.origin.x - connection.end.x)
-                var y_difference = Math.abs(connection.origin.y - connection.end.y)
-                // Since we only go straight lines, this is actually true ;)
-                var distance = x_difference + y_difference
-                return Math.max(5 * distance, 1200)
-            }
+            duration: animationDuration
 
             onStopped:
             {
