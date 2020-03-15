@@ -110,177 +110,161 @@ class RadialBar(QQuickPaintedItem):
         painter.restore()
         painter.restore()
 
-    @Property(str, notify=sizeChanged)
-    def size(self):
-        return self._size
-
-    @size.setter
-    def size(self, size):
+    def setSize(self, size):
         if self._size == size:
             return
         self._size = size
         self.sizeChanged.emit()
 
-    @Property(int, notify=startAngleChanged)
-    def startAngle(self):
-        return self._start_angle
+    @Property(str, notify=sizeChanged, fset=setSize)
+    def size(self):
+        return self._size
 
-    @startAngle.setter
-    def startAngle(self, angle):
+    def setStartAngle(self, angle):
         if self._start_angle == angle:
             return
         self._start_angle = angle
         self.startAngleChanged.emit()
 
-    @Property(int, notify=spanAngleChanged)
-    def spanAngle(self):
-        return self._span_angle
+    @Property(int, notify=startAngleChanged, fset=setStartAngle)
+    def startAngle(self):
+        return self._start_angle
 
-    @spanAngle.setter
-    def spanAngle(self, angle):
+    def setSpanAngle(self, angle):
         if self._span_angle == angle:
             return
         self._span_angle = angle
         self.spanAngleChanged.emit()
 
-    @Property(int, notify=minValueChanged)
-    def minValue(self):
-        return self._min_value
+    @Property(int, notify=spanAngleChanged, fset=setSpanAngle)
+    def spanAngle(self):
+        return self._span_angle
 
-    @minValue.setter
-    def minValue(self, value):
+    def setMinValue(self, value):
         if self._min_value == value:
             return
         self._min_value = value
         self.minValueChanged.emit()
 
-    @Property(int, notify=maxValueChanged)
-    def maxValue(self):
-        return self._max_value
+    @Property(int, notify=minValueChanged, fset=setMinValue)
+    def minValue(self):
+        return self._min_value
 
-    @maxValue.setter
-    def maxValue(self, value):
+    def setMaxValue(self, value):
         if self._max_value == value:
             return
         self._max_value = value
         self.maxValueChanged.emit()
 
-    @Property(float, notify=valueChanged)
-    def value(self):
-        return self._value
+    @Property(int, notify=maxValueChanged, fset=setMaxValue)
+    def maxValue(self):
+        return self._max_value
 
-    @value.setter
-    def value(self, value):
+    def setValue(self, value):
         if self._value == value:
             return
         self._value = value
         self.valueChanged.emit()
 
-    @Property(float, notify=dialWidthChanged)
-    def dialWidth(self):
-        return self._dial_width
+    @Property(float, notify=valueChanged, fset=setValue)
+    def value(self):
+        return self._value
 
-    @dialWidth.setter
-    def dialWidth(self, width):
+    def setDialWidth(self, width):
         if self._dial_width == width:
             return
         self._dial_width = width
         self.dialWidthChanged.emit()
 
-    @Property(QColor, notify=backgroundColorChanged)
-    def backgroundColor(self):
-        return self._background_color
+    @Property(float, notify=dialWidthChanged, fset=setDialWidth)
+    def dialWidth(self):
+        return self._dial_width
 
-    @backgroundColor.setter
-    def backgroundColor(self, color):
+    def setBackgroundColor(self, color):
         if self._background_color == color:
             return
         self._background_color = color
         self.backgroundColorChanged.emit()
 
-    @Property(QColor, notify=foregroundColorChanged)
-    def foregroundColor(self):
-        return self._ForegrounColor
+    @Property(QColor, notify=backgroundColorChanged, fset=setBackgroundColor)
+    def backgroundColor(self):
+        return self._background_color
 
-    @foregroundColor.setter
-    def foregroundColor(self, color):
+    def setForegroundColor(self, color):
         if self._dial_color == color:
             return
         self._dial_color = color
         self.foregroundColorChanged.emit()
 
-    @Property(QColor, notify=progressColorChanged)
-    def progressColor(self):
-        return self._progress_color
+    @Property(QColor, notify=foregroundColorChanged, fset=setForegroundColor)
+    def foregroundColor(self):
+        return self._ForegrounColor
 
-    @progressColor.setter
-    def progressColor(self, color):
+    def setProgressColor(self, color):
         if self._progress_color == color:
             return
         self._progress_color = color
         self.progressColorChanged.emit()
 
-    @Property(QColor, notify=textColorChanged)
-    def textColor(self):
-        return self._text_color
+    @Property(QColor, notify=progressColorChanged, fset=setProgressColor)
+    def progressColor(self):
+        return self._progress_color
 
-    @textColor.setter
-    def textColor(self, color):
+    def setTextColor(self, color):
         if self._text_color == color:
             return
         self._text_color = color
         self.textColorChanged.emit()
 
-    @Property(str, notify=suffixTextChanged)
-    def suffixText(self):
-        return self._suffix_text
+    @Property(QColor, notify=textColorChanged, fset=setTextColor)
+    def textColor(self):
+        return self._text_color
 
-    @suffixText.setter
-    def suffixText(self, text):
+    def setSuffixText(self, text):
         if self._suffix_text == text:
             return
         self._suffix_text = text
         self.suffixTextChanged.emit()
 
-    @Property(str, notify=showTextChanged)
-    def showText(self):
-        return self._show_text
+    @Property(str, notify=suffixTextChanged, fset=setSuffixText)
+    def suffixText(self):
+        return self._suffix_text
 
-    @showText.setter
-    def showText(self, show):
+    def setShowText(self, show):
         if self._show_text == show:
             return
         self._show_text = show
 
-    @Property(Qt.PenCapStyle, notify=penStyleChanged)
-    def penStyle(self):
-        return self._pen_style
+    @Property(str, notify=showTextChanged, fset=setShowText)
+    def showText(self):
+        return self._show_text
 
-    @penStyle.setter
-    def penStyle(self, style):
+    def setPenStyle(self, style):
         if self._pen_style == style:
             return
         self._pen_style = style
         self.penStyleChanged.emit()
 
-    @Property(int, notify=dialTypeChanged)
-    def dialType(self):
-        return self._dial_type
+    @Property(Qt.PenCapStyle, notify=penStyleChanged, fset=setPenStyle)
+    def penStyle(self):
+        return self._pen_style
 
-    @dialType.setter
-    def dialType(self, type):
+    def setDialType(self, type):
         if self._dial_type == type:
             return
         self._dial_type = type
         self.dialTypeChanged.emit()
 
-    @Property(QFont, notify=textFontChanged)
-    def textFont(self):
-        return self._text_font
+    @Property(int, notify=dialTypeChanged, fset=setDialType)
+    def dialType(self):
+        return self._dial_type
 
-    @textFont.setter
-    def textFont(self, font):
+    def setTextFont(self, font):
         if self._text_font == font:
             return
         self._text_font = font
         self.textFontChanged.emit()
+
+    @Property(QFont, notify=textFontChanged)
+    def textFont(self):
+        return self._text_font
