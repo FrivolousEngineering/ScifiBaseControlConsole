@@ -388,4 +388,27 @@ Rectangle
             }
         }
     }
+
+
+    Item
+    {
+        id: connectionIssuesOverlay
+        anchors.fill: parent
+        Rectangle
+        {
+            anchors.fill: parent
+            opacity: 0.5
+            color: "black"
+        }
+
+
+        Text
+        {
+            text: "WAITING FOR SERVER"
+            color: "white"
+            anchors.centerIn: parent
+            font.pixelSize: 50
+        }
+        visible: !backend.serverReachable
+    }
 }

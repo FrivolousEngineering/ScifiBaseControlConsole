@@ -59,7 +59,7 @@ class Node(QObject):
 
         self._additional_properties = {}
         self._converted_additional_properties = []
-        self._network_reachable = False
+        self.server_reachable = False
         self.fullUpdate()
 
     temperatureChanged = Signal()
@@ -78,6 +78,7 @@ class Node(QObject):
     maxSafeTemperatureChanged = Signal()
     heatConvectionChanged = Signal()
     heatEmissivityChanged = Signal()
+    serverReachableChanged = Signal()
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
         reply = self._network_manager.get(QNetworkRequest(url))
@@ -112,9 +113,11 @@ class Node(QObject):
         if not data:
             self._failed_update_timer.start()
             self._update_timer.stop()
-            self._network_reachable = False
+            self.server_reachable = False
+            self.serverReachableChanged.emit()
             return None
-        self._network_reachable = True
+        self.server_reachable = True
+        self.serverReachableChanged.emit()
         return json.loads(data)
 
     def _onAdditionalPropertiesFinished(self, reply: QNetworkReply) -> None:
