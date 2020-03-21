@@ -1,3 +1,5 @@
+from typing import Callable, Dict
+
 from PySide2.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 from PySide2.QtCore import QObject, Signal, QByteArray, Slot, Property, QTimer
 
@@ -32,11 +34,15 @@ class Node(QObject):
         self._enabled = True
         self._incoming_connections = []
         self._outgoing_connections = []
-        self._onFinishedCallbacks = {}
+        self._onFinishedCallbacks = {}  # type: Dict[QNetworkReply, Callable[[QNetworkReply], None]]
         self._description = ""
         self._static_properties = {}
         self._performance = 1
-
+        self._min_performance = 0.5
+        self._max_performance = 1
+        self._max_safe_temperature = 500
+        self._heat_convection = 1.0
+        self._heat_emissivity = 1.0
         self._modifiers = []
 
         self._update_timer = QTimer()
@@ -60,48 +66,38 @@ class Node(QObject):
     staticPropertiesChanged = Signal()
     modifiersChanged = Signal()
     additionalPropertiesChanged = Signal()
+    minPerformanceChanged = Signal()
+    maxPerformanceChanged = Signal()
+    maxSafeTemperatureChanged = Signal()
+    heatConvectionChanged = Signal()
+    heatEmissivityChanged = Signal()
 
-    def fullUpdate(self):
+    def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
+        reply = self._network_manager.get(QNetworkRequest(url))
+        self._onFinishedCallbacks[reply] = callback
+
+    def fullUpdate(self) -> None:
         """
         Request all data of this node from the server
         :return:
         """
         self.partialUpdate()
-
-        reply = self._network_manager.get(QNetworkRequest(self._incoming_connections_url))
-        self._onFinishedCallbacks[reply] = self._onIncomingConnectionsFinished
-
-        reply = self._network_manager.get(QNetworkRequest(self._outgoing_connections_url))
-        self._onFinishedCallbacks[reply] = self._onOutgoingConnectionsFinished
-
-        reply = self._network_manager.get(QNetworkRequest(self._static_properties_url))
-        self._onFinishedCallbacks[reply] = self._onStaticPropertiesFinished
-
-        reply = self._network_manager.get(QNetworkRequest(self._static_properties_url))
-        self._onFinishedCallbacks[reply] = self._onStaticPropertiesFinished
+        self.get(self._incoming_connections_url, self._onIncomingConnectionsFinished)
+        self.get(self._outgoing_connections_url, self._onOutgoingConnectionsFinished)
+        self.get(self._static_properties_url, self._onStaticPropertiesFinished)
 
     @Slot()
-    def partialUpdate(self):
+    def partialUpdate(self) -> None:
         """
         Request all the data that is dynamic
         :return:
         """
-        reply = self._network_manager.get(QNetworkRequest(self._source_url))
-        self._onFinishedCallbacks[reply] = self._onSourceUrlFinished
+        self.get(self._source_url, self._onSourceUrlFinished)
+        self.get(self._all_chart_data_url, self._onChartDataFinished)
+        self.get(self._modifiers_url, self._onModifiersChanged)
+        self.get(self._additional_properties_url, self._onAdditionalPropertiesFinished)
 
-        reply = self._network_manager.get(QNetworkRequest(self._all_chart_data_url))
-        self._onFinishedCallbacks[reply] = self._onChartDataFinished
-
-        reply = self._network_manager.get(QNetworkRequest(self._performance_url))
-        self._onFinishedCallbacks[reply] = self._onPerformanceChanged
-
-        reply = self._network_manager.get(QNetworkRequest(self._modifiers_url))
-        self._onFinishedCallbacks[reply] = self._onModifiersChanged
-
-        reply = self._network_manager.get(QNetworkRequest(self._additional_properties_url))
-        self._onFinishedCallbacks[reply] = self._onAdditionalPropertiesFinished
-
-    def _onAdditionalPropertiesFinished(self, reply: QNetworkReply):
+    def _onAdditionalPropertiesFinished(self, reply: QNetworkReply) -> None:
         result = json.loads(bytes(reply.readAll().data()))
         if self._additional_properties != result:
             self._additional_properties = result
@@ -131,7 +127,6 @@ class Node(QObject):
         reply = self._network_manager.put(QNetworkRequest(self._performance_url), data.encode())
         self._performance = performance
         self.performanceChanged.emit()
-        #reply = self._network_manager.get(QNetworkRequest(self._performance_url))
         self._onFinishedCallbacks[reply] = self._onPerformanceChanged
 
     @Property(float, notify=performanceChanged)
@@ -142,13 +137,13 @@ class Node(QObject):
     def modifiers(self):
         return self._modifiers
 
-    @Property(float, notify=staticPropertiesChanged)
+    @Property(float, notify=minPerformanceChanged)
     def min_performance(self):
-        return self._static_properties.get("min_performance", 1)
+        return self._min_performance
 
-    @Property(float, notify=staticPropertiesChanged)
+    @Property(float, notify=maxPerformanceChanged)
     def max_performance(self):
-        return self._static_properties.get("max_performance", 1)
+        return self._max_performance
 
     def _onStaticPropertiesFinished(self, reply: QNetworkReply):
         # Todo: Handle errors.
@@ -179,17 +174,17 @@ class Node(QObject):
     def surface_area(self):
         return self._static_properties.get("surface_area", 0)
 
-    @Property(float, notify=staticPropertiesChanged)
+    @Property(float, notify=maxSafeTemperatureChanged)
     def max_safe_temperature(self):
-        return self._static_properties.get("max_safe_temperature", 0)
+        return self._max_safe_temperature
 
-    @Property(float, notify=staticPropertiesChanged)
+    @Property(float, notify=heatConvectionChanged)
     def heat_convection(self):
-        return self._static_properties.get("heat_convection", 0)
+        return self._heat_convection
 
-    @Property(float, notify=staticPropertiesChanged)
+    @Property(float, notify=heatEmissivityChanged)
     def heat_emissivity(self):
-        return self._static_properties.get("heat_emissivity", 0)
+        return self._heat_emissivity
 
     @Property("QVariantList", notify=outgoingConnectionsChanged)
     def outgoingConnections(self):
@@ -202,6 +197,11 @@ class Node(QObject):
         self._updateProperty("temperature", data["temperature"])
         self._updateProperty("enabled", bool(data["enabled"]))
         self._updateProperty("performance", data["performance"])
+        self._updateProperty("min_performance", data["min_performance"])
+        self._updateProperty("max_performance", data["max_performance"])
+        self._updateProperty("max_safe_temperature", data["max_safe_temperature"])
+        self._updateProperty("heat_convection", data["heat_convection"])
+        self._updateProperty("heat_emissivity", data["heat_emissivity"])
 
     def _updateProperty(self, property_name, property_value):
         if getattr(self, "_" + property_name) != property_value:
