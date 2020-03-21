@@ -49,10 +49,17 @@ class Node(QObject):
         self._update_timer.setInterval(2000)
         self._update_timer.setSingleShot(False)
         self._update_timer.timeout.connect(self.partialUpdate)
-        self._update_timer.start()
+        #self._update_timer.start()
+
+        # Timer that is used when the server could not be reached.
+        self._failed_update_timer = QTimer()
+        self._failed_update_timer.setInterval(10000)
+        self._failed_update_timer.setSingleShot(True)
+        self._failed_update_timer.timeout.connect(self.fullUpdate)
 
         self._additional_properties = {}
         self._converted_additional_properties = []
+        self._network_reachable = False
         self.fullUpdate()
 
     temperatureChanged = Signal()
@@ -81,10 +88,11 @@ class Node(QObject):
         Request all data of this node from the server
         :return:
         """
-        self.partialUpdate()
         self.get(self._incoming_connections_url, self._onIncomingConnectionsFinished)
         self.get(self._outgoing_connections_url, self._onOutgoingConnectionsFinished)
         self.get(self._static_properties_url, self._onStaticPropertiesFinished)
+
+        self._update_timer.start()
 
     @Slot()
     def partialUpdate(self) -> None:
@@ -97,8 +105,23 @@ class Node(QObject):
         self.get(self._modifiers_url, self._onModifiersChanged)
         self.get(self._additional_properties_url, self._onAdditionalPropertiesFinished)
 
+    def _readData(self, reply: QNetworkReply):
+        # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.
+        # So, yes, the extra .data() is needed.
+        data = bytes(reply.readAll().data())
+        if not data:
+            self._failed_update_timer.start()
+            self._update_timer.stop()
+            self._network_reachable = False
+            return None
+        self._network_reachable = True
+        return json.loads(data)
+
     def _onAdditionalPropertiesFinished(self, reply: QNetworkReply) -> None:
-        result = json.loads(bytes(reply.readAll().data()))
+        result = self._readData(reply)
+        if not result:
+            return
+
         if self._additional_properties != result:
             self._additional_properties = result
             self._converted_additional_properties = []
@@ -111,15 +134,20 @@ class Node(QObject):
             self.additionalPropertiesChanged.emit()
 
     def _onModifiersChanged(self, reply: QNetworkReply):
-        result = json.loads(bytes(reply.readAll().data()))
+        result = self._readData(reply)
+        if not result:
+            return
         if self._modifiers != result:
             self._modifiers = result
             self.modifiersChanged.emit()
 
     def _onPerformanceChanged(self, reply: QNetworkReply):
-        result = json.loads(bytes(reply.readAll().data()))
-        self._performance = result
-        self.performanceChanged.emit()
+        result = self._readData(reply)
+        if not result:
+            return
+        if self._performance != result:
+            self._performance = result
+            self.performanceChanged.emit()
 
     @Slot(float)
     def setPerformance(self, performance):
@@ -145,21 +173,26 @@ class Node(QObject):
     def max_performance(self):
         return self._max_performance
 
-    def _onStaticPropertiesFinished(self, reply: QNetworkReply):
-        # Todo: Handle errors.
-        result = json.loads(bytes(reply.readAll().data()))
+    def _onStaticPropertiesFinished(self, reply: QNetworkReply) -> None:
+        result = self._readData(reply)
+        if not result:
+            return
         if self._static_properties != result:
             self._static_properties = result
             self.staticPropertiesChanged.emit()
 
     def _onIncomingConnectionsFinished(self, reply: QNetworkReply):
-        # Todo: Handle errors.
-        self._incoming_connections = json.loads(bytes(reply.readAll().data()))
+        result = self._readData(reply)
+        if not result:
+            return
+        self._incoming_connections = result
         self.incomingConnectionsChanged.emit()
 
     def _onOutgoingConnectionsFinished(self, reply: QNetworkReply):
-        # Todo: Handle errors.
-        self._outgoing_connections =json.loads(bytes(reply.readAll().data()))
+        result = self._readData(reply)
+        if not result:
+            return
+        self._outgoing_connections = result
         self.outgoingConnectionsChanged.emit()
 
     @Property("QVariantList", notify=incomingConnectionsChanged)
@@ -191,9 +224,9 @@ class Node(QObject):
         return self._outgoing_connections
 
     def _onSourceUrlFinished(self, reply: QNetworkReply):
-        # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.
-        # So, yes, the extra .data() is needed.
-        data = json.loads(bytes(reply.readAll().data()))
+        data = self._readData(reply)
+        if not data:
+            return
         self._updateProperty("temperature", data["temperature"])
         self._updateProperty("enabled", bool(data["enabled"]))
         self._updateProperty("performance", data["performance"])
@@ -214,9 +247,10 @@ class Node(QObject):
         pass
 
     def _onChartDataFinished(self, reply: QNetworkReply):
-        # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.
-        # So, yes, the extra .data() is needed.
-        data = json.loads(bytes(reply.readAll().data()))
+        data = self._readData(reply)
+        if not data:
+            return
+
         all_keys = set(data.keys())
         keys_changed = False
         data_changed = False
