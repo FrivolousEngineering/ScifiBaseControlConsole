@@ -401,6 +401,12 @@ Rectangle
             color: "black"
         }
 
+        // Prevent actions from being taken when the server can't be reached.
+        MouseArea
+        {
+            hoverEnabled: true
+            anchors.fill: parent
+        }
 
         Text
         {
