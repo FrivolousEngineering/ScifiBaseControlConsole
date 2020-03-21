@@ -199,8 +199,16 @@ class Node(QObject):
         # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.
         # So, yes, the extra .data() is needed.
         data = json.loads(bytes(reply.readAll().data()))
-        self._updateTemperature(data["temperature"])
-        self._updateEnabled(data["enabled"])
+        self._updateProperty("temperature", data["temperature"])
+        self._updateProperty("enabled", bool(data["enabled"]))
+        self._updateProperty("performance", data["performance"])
+
+    def _updateProperty(self, property_name, property_value):
+        if getattr(self, "_" + property_name) != property_value:
+            setattr(self, "_" + property_name, property_value)
+            signal_name = "".join(x.capitalize() for x in property_name.split("_"))
+            signal_name = signal_name[0].lower() + signal_name[1:] + "Changed"
+            getattr(self, signal_name).emit()
 
     def _onPutUpdateFinished(self, reply: QNetworkReply):
         pass
@@ -229,21 +237,6 @@ class Node(QObject):
             del self._onFinishedCallbacks[reply]
         else:
             print("GOT A RESPONSE WITH NO CALLBACK!", reply.readAll())
-
-    def _updateEnabled(self, enabled):
-        if self._enabled != bool(enabled):
-            self._enabled = bool(enabled)
-            self.enabledChanged.emit()
-
-    def _handleTemperatureHistoryUpdate(self, data):
-        if self._temperature_history != data:
-            self._temperature_history = data
-            self.temperatureHistoryChanged.emit()
-
-    def _updateTemperature(self, temperature):
-        if self._temperature != temperature:
-            self._temperature = temperature
-            self.temperatureChanged.emit()
 
     @Property(str, constant=True)
     def id(self):
