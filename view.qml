@@ -389,7 +389,6 @@ Rectangle
         }
     }
 
-
     Item
     {
         id: connectionIssuesOverlay
