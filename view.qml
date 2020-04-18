@@ -153,7 +153,7 @@ Rectangle
             anchors.verticalCenter: infoSidebarItem.bottom
             anchors.verticalCenterOffset: 5
             anchors.right: infoSidebarItem.left
-            anchors.rightMargin: -50
+            anchors.rightMargin: -10
 
             property bool collapsed: true
 
@@ -272,6 +272,7 @@ Rectangle
             anchors.rightMargin: 3
             anchors.topMargin: 20
             anchors.top: parent.top
+            cornerSide: CutoffRectangle.Direction.ExcludeBottomRight
 
             contents: Text
             {
@@ -302,6 +303,7 @@ Rectangle
             anchors.topMargin: 10
             anchors.right: parent.right
             anchors.rightMargin: 3
+            cornerSide: CutoffRectangle.Direction.Left
 
             contents: Column
             {
@@ -372,7 +374,7 @@ Rectangle
             anchors.topMargin: 10
             anchors.right: parent.right
             anchors.rightMargin: 3
-
+            cornerSide: CutoffRectangle.Direction.ExcludeTopRight
             contents: Column
             {
                 Repeater
