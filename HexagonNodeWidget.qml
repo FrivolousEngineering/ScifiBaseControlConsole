@@ -91,7 +91,7 @@ Item
             width: parent.height
             height: 50
             anchors.left: parent.left
-            anchors.leftMargin: 8
+            anchors.leftMargin: 18
             horizontalAlignment: Text.AlignHCenter
             transform: Rotation { origin.x: 50; origin.y: 50; angle: 270}
             font: titleFont
@@ -116,12 +116,42 @@ Item
             border.width: 2
             CutoffRectangle
             {
+                id: backgroundFill
                 anchors.fill: parent
-                anchors.margins: 3
+                anchors.margins: 2
                 cornerSide: CutoffRectangle.Direction.Right
-                angleSize: base.angleSize - 2
+                angleSize: base.angleSize - 1
                 border.color: "transparent"
-                border.width: 2
+                border.width: 1
+                layer.enabled: true
+                CutoffRectangle
+                {
+                    color: "#666666"
+                    border.color: "transparent"
+                    border.width: -1
+                    anchors.top: parent.top
+                    anchors.topMargin: 0
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    width: parent.angleSize
+                    angleSize: width
+                    cornerSide: CutoffRectangle.Direction.Right
+                    anchors.right: parent.right
+                    anchors.rightMargin: 0
+
+                    CutoffRectangle
+                    {
+                        color: backgroundFill.color
+                        border.width: -1
+                        height: background.height / 2
+                        width: parent.width / 3 * 2
+                        anchors.left: parent.left
+                        cornerSide: CutoffRectangle.Direction.Right
+                        anchors.verticalCenter: parent.verticalCenter
+                        angleSize: width
+                    }
+                }
+
                 HealthAndStorageRadialBar
                 {
                     id:healthAndStorage
@@ -172,82 +202,6 @@ Item
                         }
                     }
                 }
-
-                /*Grid
-                {
-                    columns: 2
-                    anchors.top: parent.top
-                    anchors.topMargin: 3
-                    anchors.bottomMargin: 3
-                    anchors.bottom: parent.bottom
-                    anchors.left: dial.right
-                    anchors.leftMargin: 3
-                    width: height
-                    spacing: 4
-                    Repeater
-                    {
-                        model: controller.additionalProperties
-                        RadialBar
-                        {
-                            width: parent.width / 2
-                            dialWidth: 3
-                            value: modelData.value
-                            showText: false
-                            progressColor: modelData.key == "health" ? "green": "blue"
-                            maxValue: modelData.max_value
-
-                        }
-                    }
-                }*/
-
-                /*Switch {
-                    id: control
-                    anchors.left: dial.right
-
-                    Binding
-                    {
-                        target: control
-                        property: "checked"
-                        value: controller.enabled
-                    }
-                    onClicked: controller.toggleEnabled()
-
-                    indicator: Rectangle {
-                        implicitWidth: 48
-                        implicitHeight: 26
-                        x: control.leftPadding
-                        y: parent.height / 2 - height / 2
-                        radius: 13
-                        color: control.checked ? "#BA6300" : "#ffffff"
-                        Behavior on color {
-                            ColorAnimation { duration: 150}
-                        }
-                        border.color: "#BA6300"
-
-                        Rectangle {
-                            x: control.checked ? parent.width - width : 0
-                            Behavior on x {
-                                NumberAnimation {
-                                    duration: 500
-                                    easing.type: Easing.InOutCubic
-                                }
-                            }
-                            width: 26
-                            height: 26
-                            radius: 13
-                            border.color: "#BA6300"
-                        }
-                    }
-
-                    contentItem: Text {
-                        text: control.text
-                        font: control.font
-                        opacity: enabled ? 1.0 : 0.3
-                        color: "#BA6300"
-                        verticalAlignment: Text.AlignVCenter
-                        leftPadding: control.indicator.width + control.spacing
-                    }
-                }*/
             }
         }
     }
