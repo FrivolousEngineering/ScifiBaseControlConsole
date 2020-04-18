@@ -79,8 +79,8 @@ Item
             anchors.topMargin: background.border.width + 2
             visible: background.cornerSide != CutoffRectangle.Direction.ExcludeBottomRight
             border.color: "#d3d3d3"
-            width: 25 - 2 - 3
-            height: 25 - 2 - 3
+            width: 25 - 2 - 3 - 1
+            height: width
         }
 
         CutoffRectangle
@@ -95,8 +95,8 @@ Item
             anchors.bottomMargin: background.border.width + 2
             visible: background.cornerSide != CutoffRectangle.Direction.ExcludeTopRight
             border.color: "#d3d3d3"
-            width: 25 - 2 - 3
-            height: 25 - 2 - 3
+            width: 25 - 2 - 3 - 1
+            height: width
         }
 
         CutoffRectangle
