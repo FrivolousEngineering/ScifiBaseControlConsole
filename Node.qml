@@ -3,7 +3,7 @@ import QtQuick 2.0
 Item
 {
     id: base
-    property double angleSize: 20
+    property double angleSize: 15
     property double sideBarWidth: 25
     property double sideBarAngle: angleSize / 3
     property int borderSize: 2
@@ -13,7 +13,7 @@ Item
 
     property font titleFont: Qt.font({
             family: "Roboto",
-            pixelSize: 14,
+            pixelSize: angleSize - 3 * barSpacing,
             bold: true,
             capitalization: Font.AllUppercase
         });
