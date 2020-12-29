@@ -14,6 +14,11 @@ Item
     property alias currentTemperature: temperature.currentTemperature
     property alias previousTemperature: temperature.previousTemperature
     property alias historyTemperature: temperature.historyTemperature
+    property alias maxTemperature: temperature.maxTemperature
+    property alias minTemperature: temperature.minTemperature
+    property alias optimalTemperature: temperature.optimalTemperature
+    property alias isTemperatureDependant: temperature.hasOptimalTemperature
+    property alias maxSafeTemperature: temperature.maxSafeTemperature
 
     property font titleFont: Qt.font({
             family: "Roboto",

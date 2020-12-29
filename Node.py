@@ -66,6 +66,8 @@ class Node(QObject):
         self._additional_properties = {}
         self._converted_additional_properties = []
         self.server_reachable = False
+        self._optimal_temperature = 200
+        self._is_temperature_dependant = False
         self.fullUpdate()
 
     temperatureChanged = Signal()
@@ -85,6 +87,8 @@ class Node(QObject):
     heatConvectionChanged = Signal()
     heatEmissivityChanged = Signal()
     serverReachableChanged = Signal()
+    isTemperatureDependantChanged = Signal()
+    optimalTemperatureChanged = Signal()
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
         reply = self._network_manager.get(QNetworkRequest(QUrl(url)))
@@ -223,6 +227,14 @@ class Node(QObject):
     def surface_area(self):
         return self._static_properties.get("surface_area", 0)
 
+    @Property(float, notify=isTemperatureDependantChanged)
+    def isTemperatureDependant(self):
+        return self._is_temperature_dependant
+
+    @Property(float, notify=optimalTemperatureChanged)
+    def optimalTemperature(self):
+        return self._optimal_temperature
+
     @Property(float, notify=maxSafeTemperatureChanged)
     def max_safe_temperature(self):
         return self._max_safe_temperature
@@ -251,6 +263,8 @@ class Node(QObject):
         self._updateProperty("max_safe_temperature", data["max_safe_temperature"])
         self._updateProperty("heat_convection", data["heat_convection"])
         self._updateProperty("heat_emissivity", data["heat_emissivity"])
+        self._updateProperty("is_temperature_dependant", data["is_temperature_dependant"])
+        self._updateProperty("optimal_temperature", data["optimal_temperature"])
 
     def _updateProperty(self, property_name, property_value):
         if getattr(self, "_" + property_name) != property_value:

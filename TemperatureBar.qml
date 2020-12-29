@@ -10,10 +10,15 @@ Item
     implicitWidth: 50
 
     property double maxTemperature: 500
-    property double minTemperature: 200
+    property double maxSafeTemperature: 500
+    property double minTemperature: 280
+    property bool hasOptimalTemperature: true
+
+    property double optimalTemperature: 375
     property double currentTemperature: 300
     property double previousTemperature: 200
     property double historyTemperature: 200
+
 
     readonly property int boxCount: 7
     property int boxSpacing: 2
@@ -75,9 +80,22 @@ Item
         anchors.rightMargin: boxBorderSize + arrowMargin
         gradient: Gradient
         {
-            GradientStop { position: 1.0; color: "blue" }
             GradientStop { position: 0.0; color: "red" }
-            GradientStop { position: 0.5; color: "green" }
+
+            GradientStop { position: 1.0; color: "blue" }
+
+            GradientStop
+            {
+                position: {
+                    if(hasOptimalTemperature)
+                    {
+                        return (maxTemperature - optimalTemperature) / (maxTemperature - minTemperature)
+                    }
+                    return 200
+                }
+
+                color: "green"
+            }
         }
         source: Column
         {
@@ -138,7 +156,7 @@ Item
         Behavior on y {
             NumberAnimation { duration: 200 }
         }
-        y: calculateArrowPosition(previousTemperature) * base.height - 0.5 * boxBorderSize
+        y: Math.min(Math.max(0, calculateArrowPosition(previousTemperature) * base.height - 0.5 * boxBorderSize), base.height)
         opacity: 0.75
     }
 
@@ -158,7 +176,7 @@ Item
         Behavior on y {
             NumberAnimation { duration: 200 }
         }
-        y: calculateArrowPosition(historyTemperature) * base.height - 0.5 * boxBorderSize
+        y: Math.min(Math.max(0, calculateArrowPosition(historyTemperature) * base.height - 0.5 * boxBorderSize), base.height)
         opacity: 0.75
     }
 }
