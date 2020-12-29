@@ -13,6 +13,7 @@ Item
     property alias titleText: title_text.text
     property alias currentTemperature: temperature.currentTemperature
     property alias previousTemperature: temperature.previousTemperature
+    property alias historyTemperature: temperature.historyTemperature
 
     property font titleFont: Qt.font({
             family: "Roboto",

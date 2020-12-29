@@ -53,7 +53,8 @@ Rectangle
             {
                 titleText: modelData.id
                 currentTemperature: modelData.temperature
-                previousTemperature: modelData.temperatureHistory[1]
+                previousTemperature: modelData.historyData["temperature"][Math.max(modelData.historyData["temperature"].length -1, 0)]
+                historyTemperature: modelData.historyData["temperature"][Math.max(modelData.historyData["temperature"].length -5, 0)]
             }
         }
     }
