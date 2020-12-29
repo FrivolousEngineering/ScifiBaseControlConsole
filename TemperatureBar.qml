@@ -16,11 +16,18 @@ Item
     property double historyTemperature: 200
 
     readonly property int boxCount: 7
-    property int boxSpacing: 5
+    property int boxSpacing: 2
     property int boxBorderSize: 2
     property int arrowMargin: 4
 
     readonly property int boxHeight: (height - boxSpacing * boxCount - 1) / boxCount
+
+    property font temperatureFont: Qt.font({
+            family: "Roboto",
+            pixelSize: 10,
+            bold: true,
+            capitalization: Font.AllUppercase
+        });
 
     function calculateBoxIndex(temperature)
     {
@@ -60,6 +67,7 @@ Item
 
     LinearGradient
     {
+        id: linearGradient
         anchors.fill: parent
         anchors.topMargin:boxBorderSize
         anchors.bottomMargin: boxBorderSize
@@ -79,8 +87,9 @@ Item
                 model: boxCount
                 Rectangle
                 {
-                    width: 1// Just not 0. Everything else gives the right effect?
+                    width: linearGradient.width // Just not 0. Everything else gives the right effect?
                     height: boxHeight
+                    radius: 5
                 }
             }
         }
@@ -93,6 +102,7 @@ Item
         border.color: "white"
         color: "transparent"
         y: activeBoxIndex * boxHeight + activeBoxIndex * boxSpacing + activeBoxIndex
+        radius: 5
         Behavior on y
         {
             NumberAnimation { duration: 200 }
@@ -109,6 +119,7 @@ Item
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             anchors.fill: parent
+            font: temperatureFont
         }
     }
 
