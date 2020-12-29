@@ -69,6 +69,13 @@ Item
     }
 
     property int activeBoxIndex: calculateBoxIndex(currentTemperature)
+    Rectangle
+    {
+        width: parent.width
+        height: boxBorderSize
+        color: white
+        y: Math.min(Math.max(0, calculateArrowPosition(currentTemperature) * base.height - boxBorderSize), base.height)
+    }
 
     LinearGradient
     {
@@ -113,11 +120,13 @@ Item
         }
     }
 
+
+
     Rectangle
     {
         // The selection rectangle
         border.width: boxBorderSize
-        border.color: "white"
+        border.color: "transparent"
         color: "transparent"
         y: activeBoxIndex * boxHeight + activeBoxIndex * boxSpacing + activeBoxIndex
         radius: 5
@@ -157,7 +166,7 @@ Item
             NumberAnimation { duration: 200 }
         }
         y: Math.min(Math.max(0, calculateArrowPosition(previousTemperature) * base.height - 0.5 * boxBorderSize), base.height)
-        opacity: 0.75
+        opacity: 0.50
     }
 
     Shape
@@ -177,6 +186,6 @@ Item
             NumberAnimation { duration: 200 }
         }
         y: Math.min(Math.max(0, calculateArrowPosition(historyTemperature) * base.height - 0.5 * boxBorderSize), base.height)
-        opacity: 0.75
+        opacity: 0.50
     }
 }
