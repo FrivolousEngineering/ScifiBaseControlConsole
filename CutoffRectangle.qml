@@ -33,8 +33,6 @@ Shape
         None = 11
     }
 
-
-
     function recalculatePoints()
     {
         shapePath.pathElements = [] // Clear the previous path
@@ -50,7 +48,15 @@ Shape
         {
             shapePath.pathElements.push(createPathLine(base.width, 0))
         }
-        shapePath.pathElements.push(createPathLine(base.width, angleSize))
+        // Fix weird line drawn on the side.
+        if(base.height < 2 * angleSize)
+        {
+            shapePath.pathElements.push(createPathLine(base.width,  base.height - angleSize))
+        }
+        else
+        {
+            shapePath.pathElements.push(createPathLine(base.width, angleSize))
+        }
 
         // Lower right corner
         if( cornerSide === CutoffRectangle.Direction.Right ||
