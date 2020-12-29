@@ -15,7 +15,7 @@ Shape
     property int cornerSide: CutoffRectangle.Direction.All
 
     // Simple object to ensure that border.width and border.color work
-    property BorderGroup border: BorderGroup { color: "#BA6300"; width: 1}
+    property BorderGroup border: BorderGroup { color: "white"; width: 1}
 
     enum Direction
     {
@@ -39,7 +39,11 @@ Shape
     {
         shapePath.pathElements = [] // Clear the previous path
         // Upper right Corner
-        if(cornerSide == CutoffRectangle.Direction.Right || cornerSide == CutoffRectangle.Direction.Up || cornerSide == CutoffRectangle.Direction.All || cornerSide == CutoffRectangle.Direction.UpRight || cornerSide == CutoffRectangle.Direction.ExcludeBottomRight)
+        if( cornerSide === CutoffRectangle.Direction.Right ||
+            cornerSide === CutoffRectangle.Direction.Up ||
+            cornerSide === CutoffRectangle.Direction.All ||
+            cornerSide === CutoffRectangle.Direction.UpRight ||
+            cornerSide === CutoffRectangle.Direction.ExcludeBottomRight)
         {
             shapePath.pathElements.push(createPathLine(base.width - angleSize, 0))
         } else
@@ -49,7 +53,11 @@ Shape
         shapePath.pathElements.push(createPathLine(base.width, angleSize))
 
         // Lower right corner
-        if(cornerSide == CutoffRectangle.Direction.Right || cornerSide == CutoffRectangle.Direction.Down || cornerSide == CutoffRectangle.Direction.All || cornerSide == CutoffRectangle.Direction.DownRight || cornerSide == CutoffRectangle.Direction.ExcludeTopRight )
+        if( cornerSide === CutoffRectangle.Direction.Right ||
+            cornerSide === CutoffRectangle.Direction.Down ||
+            cornerSide === CutoffRectangle.Direction.All ||
+            cornerSide === CutoffRectangle.Direction.DownRight ||
+            cornerSide === CutoffRectangle.Direction.ExcludeTopRight )
         {
             shapePath.pathElements.push(createPathLine(base.width, base.height - angleSize))
         }
@@ -60,7 +68,12 @@ Shape
         shapePath.pathElements.push(createPathLine(base.width - angleSize, base.height))
 
         // Lower left corner
-        if(cornerSide == CutoffRectangle.Direction.Left || cornerSide == CutoffRectangle.Direction.Down || cornerSide == CutoffRectangle.Direction.All || cornerSide == CutoffRectangle.Direction.DownLeft || cornerSide == CutoffRectangle.Direction.ExcludeBottomRight || cornerSide == CutoffRectangle.Direction.ExcludeTopRight)
+        if( cornerSide === CutoffRectangle.Direction.Left ||
+            cornerSide === CutoffRectangle.Direction.Down ||
+            cornerSide === CutoffRectangle.Direction.All ||
+            cornerSide === CutoffRectangle.Direction.DownLeft ||
+            cornerSide === CutoffRectangle.Direction.ExcludeBottomRight ||
+            cornerSide === CutoffRectangle.Direction.ExcludeTopRight)
         {
             shapePath.pathElements.push(createPathLine(angleSize, base.height))
         }
@@ -71,7 +84,12 @@ Shape
         shapePath.pathElements.push(createPathLine(0, base.height - angleSize))
 
         // Upper left corner
-        if(cornerSide == CutoffRectangle.Direction.Left || cornerSide == CutoffRectangle.Direction.Up || cornerSide == CutoffRectangle.Direction.All || cornerSide == CutoffRectangle.Direction.UpLeft || cornerSide == CutoffRectangle.Direction.ExcludeBottomRight || cornerSide == CutoffRectangle.Direction.ExcludeTopRight)
+        if( cornerSide === CutoffRectangle.Direction.Left ||
+            cornerSide === CutoffRectangle.Direction.Up ||
+            cornerSide === CutoffRectangle.Direction.All ||
+            cornerSide === CutoffRectangle.Direction.UpLeft ||
+            cornerSide === CutoffRectangle.Direction.ExcludeBottomRight ||
+            cornerSide === CutoffRectangle.Direction.ExcludeTopRight)
         {
             shapePath.pathElements.push(createPathLine(0, base.angleSize))
         }
