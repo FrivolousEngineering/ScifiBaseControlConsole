@@ -1,5 +1,5 @@
-import QtQuick.Shapes 1.13
-import QtQuick 2.13
+import QtQuick.Shapes 1.0
+import QtQuick 2.0
 
 
 // The Cutoff rectangle works mostly like a regular rectangle, but provides the option to have Cutoff corners
@@ -84,7 +84,7 @@ Shape
 
     function createPathLine(x, y)
     {
-        var pathcurve = Qt.createQmlObject('import QtQuick 2.12; PathLine {}', shapePath);
+        var pathcurve = Qt.createQmlObject('import QtQuick 2.11; PathLine {}', shapePath);
         pathcurve.x = x
         pathcurve.y = y
         return pathcurve

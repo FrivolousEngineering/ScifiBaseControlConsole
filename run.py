@@ -1,12 +1,16 @@
-from PySide2.QtQml import qmlRegisterType
-from PySide2.QtWidgets import QApplication
-from PySide2.QtQuick import QQuickView
-from PySide2.QtCore import QUrl, QObject, Property, Signal
+from PyQt5.QtQml import qmlRegisterType
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtQuick import QQuickView
+from PyQt5.QtCore import QUrl, QObject, QRect
+from PyQt5.QtCore import pyqtSignal as Signal
+from PyQt5.QtCore import pyqtProperty as Property
+
+from PyQt5.QtQml import QQmlApplicationEngine,QQmlEngine, QQmlComponent
 
 from Node import Node
 from RadialBar import RadialBar
 
-
+import sys
 class TestObject(QObject):
     serverReachableChanged = Signal()
 
@@ -27,14 +31,51 @@ class TestObject(QObject):
         return all([node.server_reachable for node in self._data])
 
 
-if __name__ == '__main__':
-    app = QApplication([])
-    view = QQuickView()
-    url = QUrl("view.qml")
-    beep = TestObject()
-    qmlRegisterType(RadialBar, "SDK", 1, 0, "RadialBar")
-    view.rootContext().setContextProperty("backend", beep)
-    view.setSource(url)
 
-    view.show()
-    app.exec_()
+
+
+class MyQmlApplication(QApplication):
+    _application_name = "UNDEFINED"
+    _qquickview = None
+    _engine = None
+    _settings = None
+
+    def __init__(self, title, args):
+        QApplication.__init__(self, args)
+        qmlRegisterType(RadialBar, "SDK", 1, 0, "RadialBar")
+        self._qquickview = QQuickView()
+        self._qquickview.setTitle(title)
+
+        self._engine = self._qquickview.engine()
+
+    def showAndExec(self, qml_url):
+        self._qquickview.setSource(qml_url)
+        beep = TestObject()
+        self._qquickview.rootContext().setContextProperty("backend", beep)
+        self._qquickview.show()
+        return self.exec_()
+
+if __name__ == '__main__':
+    app = MyQmlApplication('Test',sys.argv)
+    app.showAndExec(QUrl("view.qml"))
+
+
+
+'''if __name__ == '__main__':
+    app = QApplication([])
+
+    view = QQuickView()
+    engine = QQmlApplicationEngine()
+    ctx = engine.rootContext()
+    beep = TestObject()
+    ctx.setContextProperty("backend", beep)
+    engine.load("view.qml")
+
+    #qmlRegisterType(RadialBar, "SDK", 1, 0, "RadialBar")
+    #url = QUrl("view.qml")
+    win = engine.rootObjects()[0].show()
+    #view.rootContext().setContextProperty("backend", beep)
+    #view.setSource(url)
+
+    #view.show()
+    app.exec_()'''

@@ -1,7 +1,14 @@
 from typing import Callable, Dict
 
-from PySide2.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
-from PySide2.QtCore import QObject, Signal, QByteArray, Slot, Property, QTimer
+#from PySide2.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
+#from PySide2.QtCore import QObject, Signal, QByteArray, Slot, Property, QTimer
+
+from PyQt5.QtCore import QObject, QTimer, QByteArray, QUrl
+from PyQt5.QtCore import pyqtSignal as Signal
+from PyQt5.QtCore import pyqtSlot as Slot
+from PyQt5.QtCore import pyqtProperty as Property
+
+from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 
 import json
 
@@ -80,7 +87,7 @@ class Node(QObject):
     serverReachableChanged = Signal()
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
-        reply = self._network_manager.get(QNetworkRequest(url))
+        reply = self._network_manager.get(QNetworkRequest(QUrl(url)))
         self._onFinishedCallbacks[reply] = callback
 
     def fullUpdate(self) -> None:
@@ -106,6 +113,10 @@ class Node(QObject):
         self.get(self._additional_properties_url, self._onAdditionalPropertiesFinished)
 
     def _readData(self, reply: QNetworkReply):
+        status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
+        if status_code == 404:
+            print("Node was not found!")
+            return
         # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.
         # So, yes, the extra .data() is needed.
         data = bytes(reply.readAll().data())
@@ -117,7 +128,10 @@ class Node(QObject):
             return None
         self.server_reachable = True
         self.serverReachableChanged.emit()
-        return json.loads(data)
+        try:
+            return json.loads(data)
+        except json.decoder.JSONDecodeError:
+            return None
 
     def _onAdditionalPropertiesFinished(self, reply: QNetworkReply) -> None:
         result = self._readData(reply)

@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtGraphicalEffects 1.12
+import QtGraphicalEffects 1.0
 
 Item {
     id: connection
@@ -37,6 +37,8 @@ Item {
         id: canvas
         anchors.fill: parent
         antialiasing: true
+        renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Cooperative
 
         property var path: []
 

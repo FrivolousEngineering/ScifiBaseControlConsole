@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
-import QtCharts 2.3
-import QtGraphicalEffects 1.12
+import QtCharts 2.0
+import QtGraphicalEffects 1.0
 
 import SDK 1.0
 

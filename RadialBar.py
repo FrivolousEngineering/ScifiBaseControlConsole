@@ -1,6 +1,9 @@
-from PySide2.QtCore import Signal, Qt, QRectF, Property
-from PySide2.QtGui import QColor, QFont, QPainter
-from PySide2.QtQuick import QQuickPaintedItem
+from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtCore import pyqtSignal as Signal
+from PyQt5.QtCore import pyqtProperty as Property
+
+from PyQt5.QtGui import QColor, QFont, QPainter
+from PyQt5.QtQuick import QQuickPaintedItem
 
 
 class RadialBar(QQuickPaintedItem):

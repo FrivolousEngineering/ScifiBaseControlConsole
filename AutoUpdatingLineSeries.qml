@@ -1,4 +1,4 @@
-import QtCharts 2.3
+import QtCharts 2.0
 LineSeries
 {
     id: splineSeries
@@ -18,9 +18,6 @@ LineSeries
 
     axisY: ValueAxis
     {
-        tickType: ValueAxis.TicksDynamic
-        tickInterval: 10
-        tickAnchor: 0
         gridVisible: false
         labelsVisible: false
         lineVisible: false
@@ -28,8 +25,6 @@ LineSeries
     }
     axisX: ValueAxis
     {
-        tickType: ValueAxis.TicksDynamic
-        tickInterval: 10
         tickCount: 50
         labelsVisible: false
         visible: false
