@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import SDK 1.0
 
 Item
 {
@@ -10,6 +11,8 @@ Item
     property int barSpacing: 2
 
     property alias titleText: title_text.text
+    property alias currentTemperature: temperature.currentTemperature
+    property alias previousTemperature: temperature.previousTemperature
 
     property font titleFont: Qt.font({
             family: "Roboto",
@@ -18,8 +21,8 @@ Item
             capitalization: Font.AllUppercase
         });
 
-    implicitWidth: 200
-    implicitHeight: 150
+    implicitWidth: 250
+    implicitHeight: 200
 
     CutoffRectangle
     {
@@ -49,6 +52,40 @@ Item
         }
         angleSize: parent.angleSize
         border.width: borderSize
+
+        Item
+        {
+            id: contentItem
+            anchors
+            {
+                top: parent.top
+                topMargin: angleSize
+                left: parent.left
+                bottom: parent.bottom
+                right: parent.right
+                bottomMargin: angleSize
+
+            }
+
+            TemperatureBar
+            {
+                id: temperature
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                anchors.margins: 2
+            }
+
+            RadialBar
+            {
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                anchors.right: temperature.left
+                anchors.top: parent.top
+                anchors.topMargin: 5
+            }
+
+        }
 
         CutoffRectangle
         {

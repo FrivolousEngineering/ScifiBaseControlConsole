@@ -37,7 +37,29 @@ Rectangle
         source: "background_hexes.png"
     }
 
-    onActiveNodeGraphDataChanged:
+    Grid
+    {
+        id: grid
+        spacing: 12
+        anchors.left: parent.left
+        anchors.leftMargin: 12
+        anchors.top: parent.top
+        anchors.topMargin: 12
+        columns: 4
+
+        Repeater {
+            model: backend.nodeData
+            Node
+            {
+                titleText: modelData.id
+                currentTemperature: modelData.temperature
+                previousTemperature: modelData.temperatureHistory[1]
+            }
+        }
+    }
+
+
+    /*onActiveNodeGraphDataChanged:
     {
         historyGraph.clear()
         historyGraph.resetMinMax()
@@ -417,5 +439,5 @@ Rectangle
             font.pixelSize: 50
         }
         visible: !backend.serverReachable
-    }
+    }*/
 }
