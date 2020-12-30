@@ -20,6 +20,8 @@ Item
     property alias isTemperatureDependant: temperature.hasOptimalTemperature
     property alias maxSafeTemperature: temperature.maxSafeTemperature
 
+    property var controller
+
     property font titleFont: Qt.font({
             family: "Roboto",
             pixelSize: angleSize - 3 * barSpacing,
@@ -82,13 +84,41 @@ Item
                 anchors.margins: 2
             }
 
-            RadialBar
+            CustomDial
             {
+                id: performanceDial
                 anchors.left: parent.left
                 anchors.leftMargin: 5
                 anchors.right: temperature.left
                 anchors.top: parent.top
                 anchors.topMargin: 5
+                height: width
+
+                from: controller.min_performance
+                to: controller.max_performance
+                visible: from != to
+                enabled: visible
+                onHoveredChanged: base.hovered = hovered
+                Behavior on value {
+                    NumberAnimation {
+                        duration: 1000
+                        easing.type: Easing.InOutCubic
+                    }
+                }
+                Binding
+                {
+                    target: dial
+                    property: "value"
+                    value: controller.performance
+                    when: !dial.pressed
+                }
+                onPressedChanged:
+                {
+                    if(!pressed) // Released
+                    {
+                        controller.setPerformance(value)
+                    }
+                }
             }
 
         }

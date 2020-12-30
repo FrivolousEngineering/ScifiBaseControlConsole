@@ -60,6 +60,8 @@ Rectangle
                 optimalTemperature: modelData.optimalTemperature
                 isTemperatureDependant: modelData.isTemperatureDependant
                 minTemperature: 288.15 // 15 degrees kelvin
+
+                controller: modelData
             }
         }
     }
