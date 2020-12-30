@@ -172,7 +172,7 @@ class Node(QObject):
     @Slot(float)
     def setPerformance(self, performance):
         data = "{\"performance\": %s}" % performance
-        reply = self._network_manager.put(QNetworkRequest(self._performance_url), data.encode())
+        reply = self._network_manager.put(QNetworkRequest(QUrl(self._performance_url)), data.encode())
         self._performance = performance
         self.performanceChanged.emit()
         self._onFinishedCallbacks[reply] = self._onPerformanceChanged
