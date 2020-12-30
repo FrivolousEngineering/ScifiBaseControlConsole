@@ -8,6 +8,8 @@ Dial
     from: 0.5
     to: 1.5
     value: 1
+    onFromChanged: canvas.requestPaint()
+    onToChanged: canvas.requestPaint()
 
     background: Rectangle {
         id: dialBackground
