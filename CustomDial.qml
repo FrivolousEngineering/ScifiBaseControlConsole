@@ -5,13 +5,44 @@ Dial
     id: control
     implicitWidth: 200
     implicitHeight: 200
-    from: 0.5
-    to: 1.5
     value: 1
-    onFromChanged: canvas.requestPaint()
-    onToChanged: canvas.requestPaint()
+
+    // Due to the currentDial not accepting values outside of the to/from (and not being able to control the order)
+    // We have to be a bit hackish about it
+    onFromChanged:
+    {
+        currentDial.from = control.from
+        currentDial.value = currentValue
+        canvas.requestPaint()
+    }
+
+    // Due to the currentDial not accepting values outside of the to/from (and not being able to control the order)
+    // We have to be a bit hackish about it
+    onToChanged:
+    {
+        currentDial.to = control.to
+        currentDial.value = currentValue
+        canvas.requestPaint()
+    }
+
     hoverEnabled: true
-    property double targetValue: value
+
+    property alias targetValue: control.value
+    property double currentValue
+
+    onCurrentValueChanged:
+    {
+        currentDial.value = currentValue
+    }
+
+    Dial
+    {
+        id: currentDial
+        visible: false
+        value: currentValue
+        to: control.to
+        from: control.from
+    }
 
     background: Rectangle {
         id: dialBackground
@@ -65,7 +96,7 @@ Dial
         opacity: control.enabled ? 1 : 0.3
         Text
         {
-            text: Math.round(control.value * 100) / 100
+            text: Math.round(currentDial.value * 100) / 100 + " / " + Math.round(control.value * 100) / 100
             color: "white"
             anchors.centerIn: parent
             horizontalAlignment: Text.AlignHCenter
@@ -76,16 +107,19 @@ Dial
             width: control.width
             height: control.height
 
-            property real currentValue: control.value
+            property real currentValue: control.currentValue
             property real centerWidth: width / 2
             property real centerHeight: height / 2
             property real radius: Math.min(canvas.width, canvas.height) / 2 - 2
             property color penColor: dialBackground.border.color
 
             onPenColorChanged: canvas.requestPaint()
-            onCurrentValueChanged: canvas.requestPaint()
+            onCurrentValueChanged:
+            {
+                canvas.requestPaint()
+            }
 
-            property real angle: control.angle / 360 * 2 * Math.PI
+            property real angle: currentDial.angle / 360 * 2 * Math.PI
             onPaint: {
                 var ctx = canvas.getContext('2d')
                 ctx.reset()

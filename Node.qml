@@ -105,13 +105,17 @@ Item
                         easing.type: Easing.InOutCubic
                     }
                 }
+
                 Binding
                 {
                     target: performanceDial
-                    property: "value"
-                    value: controller.performance
+                    property: "targetValue"
+                    value: controller.targetPerformance
                     when: !performanceDial.pressed
                 }
+
+                currentValue: controller.performance
+
                 onPressedChanged:
                 {
                     if(!pressed) // Released

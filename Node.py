@@ -44,6 +44,7 @@ class Node(QObject):
         self._description = ""
         self._static_properties = {}
         self._performance = 1
+        self._target_performance = 1
         self._min_performance = 0.5
         self._max_performance = 1
         self._max_safe_temperature = 500
@@ -89,6 +90,7 @@ class Node(QObject):
     serverReachableChanged = Signal()
     isTemperatureDependantChanged = Signal()
     optimalTemperatureChanged = Signal()
+    targetPerformanceChanged = Signal()
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
         reply = self._network_manager.get(QNetworkRequest(QUrl(url)))
@@ -173,13 +175,17 @@ class Node(QObject):
     def setPerformance(self, performance):
         data = "{\"performance\": %s}" % performance
         reply = self._network_manager.put(QNetworkRequest(QUrl(self._performance_url)), data.encode())
-        self._performance = performance
-        self.performanceChanged.emit()
+        self._target_performance = performance
+        self.targetPerformanceChanged.emit()
         self._onFinishedCallbacks[reply] = self._onPerformanceChanged
 
     @Property(float, notify=performanceChanged)
     def performance(self):
         return self._performance
+
+    @Property(float, notify=targetPerformanceChanged)
+    def targetPerformance(self):
+        return self._target_performance
 
     @Property("QVariantList", notify=modifiersChanged)
     def modifiers(self):
@@ -265,6 +271,7 @@ class Node(QObject):
         self._updateProperty("heat_emissivity", data["heat_emissivity"])
         self._updateProperty("is_temperature_dependant", data["is_temperature_dependant"])
         self._updateProperty("optimal_temperature", data["optimal_temperature"])
+        self._updateProperty("target_performance", data["target_performance"])
 
     def _updateProperty(self, property_name, property_value):
         if getattr(self, "_" + property_name) != property_value:
