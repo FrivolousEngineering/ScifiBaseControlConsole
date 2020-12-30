@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.3
+import QtQuick.Shapes 1.0
 Dial
 {
     id: control
@@ -139,26 +140,32 @@ Dial
             }
         }
     }
-    handle: Rectangle {
+    handle: Shape
+    {
         id: handleItem
         x: control.background.x + control.background.width / 2 - width / 2
         y: control.background.y + control.background.height / 2 - height / 2
         width: 12
         height: 12
-        color: control.pressed ? "white": "#d3d3d3"
-        radius: 6
         antialiasing: true
-        opacity: control.enabled ? 1 : 0.3
-
+        property alias color: shapePath.fillColor
+        ShapePath {
+            id: shapePath
+            strokeColor: "transparent"
+            PathLine { x: 0.5 * handleItem.width; y: -0.5 * handleItem.height}
+            PathLine { x: 0; y: 0.5 * handleItem.height}
+            PathLine { x: handleItem.width; y: 0.5 * handleItem.height }
+            PathLine { x: 0.5 * handleItem.width; y: -0.5 * handleItem.height}
+        }
         states: [
             State {
                 name: "PRESSED"
-                PropertyChanges { target: handleItem; border.color: "white"}
+                PropertyChanges { target: handleItem; color: "white"}
                 when: control.pressed
             },
             State {
                 name: "RELEASED"
-                PropertyChanges { target: handleItem; border.color: "#d3d3d3"}
+                PropertyChanges { target: handleItem; color: "#d3d3d3"}
                 when: !control.pressed
             }
         ]
