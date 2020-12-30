@@ -98,7 +98,7 @@ Item
                 to: controller.max_performance
                 visible: from != to
                 enabled: visible
-                onHoveredChanged: base.hovered = hovered
+
                 Behavior on value {
                     NumberAnimation {
                         duration: 1000

@@ -10,6 +10,8 @@ Dial
     value: 1
     onFromChanged: canvas.requestPaint()
     onToChanged: canvas.requestPaint()
+    hoverEnabled: true
+    property double targetValue: value
 
     background: Rectangle {
         id: dialBackground
