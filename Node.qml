@@ -107,10 +107,10 @@ Item
                 }
                 Binding
                 {
-                    target: dial
+                    target: performanceDial
                     property: "value"
                     value: controller.performance
-                    when: !dial.pressed
+                    when: !performanceDial.pressed
                 }
                 onPressedChanged:
                 {
