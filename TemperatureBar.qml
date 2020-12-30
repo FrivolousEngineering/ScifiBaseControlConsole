@@ -73,7 +73,7 @@ Item
     {
         width: parent.width
         height: boxBorderSize
-        color: white
+        color: "white"
         y: Math.min(Math.max(0, calculateArrowPosition(currentTemperature) * base.height - boxBorderSize), base.height)
     }
 
