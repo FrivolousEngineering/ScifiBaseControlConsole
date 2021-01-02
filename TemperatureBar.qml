@@ -19,7 +19,7 @@ Item
     property double previousTemperature: 200
     property double historyTemperature: 200
 
-
+    readonly property int animationDuration: 2000
     readonly property int boxCount: 7
     property int boxSpacing: 2
     property int boxBorderSize: 2
@@ -132,7 +132,7 @@ Item
         radius: 5
         Behavior on y
         {
-            NumberAnimation { duration: 200 }
+            NumberAnimation { duration: animationDuration }
         }
         anchors.left: parent.left
         anchors.right: parent.right
@@ -140,8 +140,13 @@ Item
         anchors.leftMargin: arrowMargin
         height: boxHeight + border.width
 
-        Text {
-            text: currentTemperature.toFixed(1)
+        // Animate changes of temperature
+        property double temperature: currentTemperature
+        Behavior on temperature { NumberAnimation { duration: animationDuration } }
+
+        Text
+        {
+            text: parent.temperature.toFixed(1)
             color: "white"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -163,7 +168,7 @@ Item
             PathLine { x: 0; y: - 0.5 * leftTriangle.height }
         }
         Behavior on y {
-            NumberAnimation { duration: 200 }
+            NumberAnimation { duration: animationDuration }
         }
         y: Math.min(Math.max(0, calculateArrowPosition(previousTemperature) * base.height - 0.5 * boxBorderSize), base.height)
         opacity: 0.50
@@ -183,7 +188,7 @@ Item
             PathLine { x: rightTriangle.width; y: - 0.5 * rightTriangle.height }
         }
         Behavior on y {
-            NumberAnimation { duration: 200 }
+            NumberAnimation { duration: animationDuration }
         }
         y: Math.min(Math.max(0, calculateArrowPosition(historyTemperature) * base.height - 0.5 * boxBorderSize), base.height)
         opacity: 0.50
