@@ -95,15 +95,40 @@ Dial
             }
         ]
         opacity: control.enabled ? 1 : 0.3
+
         Text
         {
-            text: Math.round(currentDial.value * 100) / 100 + " / " + Math.round(control.value * 100) / 100
+            text: Math.round(currentDial.value * 100) / 100
             color: "white"
+            font: Qt.font({
+                family: "Roboto",
+                pixelSize: 20,
+                bold: true,
+                capitalization: Font.AllUppercase
+            });
             anchors.centerIn: parent
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
-        Canvas {
+        Text
+        {
+            text: "Target<br>" + Math.round(control.value * 100) / 100
+            color: "white"
+            font: Qt.font({
+                family: "Roboto",
+                pixelSize: 9,
+                bold: true,
+                capitalization: Font.AllUppercase
+            });
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 4
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        Canvas
+        {
             id: canvas
             width: control.width
             height: control.height
