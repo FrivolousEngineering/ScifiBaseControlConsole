@@ -113,6 +113,7 @@ Dial
             property real centerHeight: height / 2
             property real radius: Math.min(canvas.width, canvas.height) / 2 - 2
             property color penColor: dialBackground.border.color
+            property color backgroundPenColor: "#505050"
 
             onPenColorChanged: canvas.requestPaint()
             onCurrentValueChanged:
@@ -125,18 +126,34 @@ Dial
                 var ctx = canvas.getContext('2d')
                 ctx.reset()
 
-                ctx.lineJoin = "round"
-                ctx.lineCap= "round"
-
-                ctx.lineWidth = 3
-
+                // Draw inner circle
+                ctx.beginPath()
+                ctx.lineWidth = 1.1
                 ctx.strokeStyle = penColor
                 ctx.fillStyle = penColor
-                ctx.beginPath()
+                ctx.arc(canvas.centerWidth, canvas.centerHeight, canvas.radius - 22 ,
+                        Math.PI / 2 + Math.PI / 4.49, Math.PI / 2 - Math.PI / 4.49)
+                ctx.stroke()
 
-                ctx.arc(canvas.centerWidth, canvas.centerHeight, canvas.radius,
+                ctx.setLineDash([0.3, 0.12]);
+                // Draw background caps
+                ctx.lineWidth = 20
+                ctx.beginPath()
+                ctx.strokeStyle = backgroundPenColor
+                ctx.fillStyle = backgroundPenColor
+                ctx.arc(canvas.centerWidth, canvas.centerHeight, canvas.radius - 10 ,
+                        Math.PI / 2 + Math.PI / 4.49, Math.PI / 2 - Math.PI / 4.49)
+                ctx.stroke()
+
+                // Draw current value lines
+                ctx.beginPath()
+                ctx.strokeStyle = penColor
+                ctx.fillStyle = penColor
+
+                ctx.arc(canvas.centerWidth, canvas.centerHeight, canvas.radius - 10 ,
                         Math.PI / 2 + Math.PI / 4.49, Math.PI / 2 + canvas.angle - Math.PI)
                 ctx.stroke()
+
             }
         }
     }
@@ -183,7 +200,7 @@ Dial
         ]
         transform: [
             Translate {
-                y: -Math.min(control.background.width, control.background.height) * 0.4 + handleItem.height / 2
+                y: -Math.min(control.background.width, control.background.height) * 0.27 + handleItem.height / 2
             },
             Rotation {
                 angle: control.angle
