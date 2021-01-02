@@ -72,7 +72,6 @@ Item
                 bottom: parent.bottom
                 right: parent.right
                 bottomMargin: angleSize
-
             }
 
             TemperatureBar

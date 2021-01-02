@@ -120,19 +120,40 @@ Item
         }
     }
 
-
-
     Rectangle
     {
         // The selection rectangle
+        id: selectionItem
         border.width: boxBorderSize
-        border.color: "transparent"
+        border.color: "white"
         color: "transparent"
         y: activeBoxIndex * boxHeight + activeBoxIndex * boxSpacing + activeBoxIndex
         radius: 5
         Behavior on y
         {
             NumberAnimation { duration: animationDuration }
+        }
+
+        states: [
+            State {
+                name: "REGULAR"
+                PropertyChanges { target:  selectionItem.border; color: "white"}
+                when: activeBoxIndex !== 0
+            },
+            State {
+                name: "CRITICAL"
+                PropertyChanges { target: warningAnimation; running: true; }
+                when: activeBoxIndex === 0
+            }
+        ]
+
+        SequentialAnimation
+        {
+            id: warningAnimation
+            running: false
+            PropertyAnimation { to: "red"; duration: 750; target: selectionItem.border; property: "color"; easing.type: Easing.InOutCubic}
+            PropertyAnimation { to: "white"; duration: 750; target: selectionItem.border; property: "color"; easing.type: Easing.InOutCubic}
+            loops: Animation.Infinite
         }
         anchors.left: parent.left
         anchors.right: parent.right
