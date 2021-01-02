@@ -89,8 +89,8 @@ Item
             anchors.fill: parent
             spacing: 2
             anchors.topMargin: 2
-            anchors.bottomMargin: sidebarAngle
-            anchors.leftMargin: 2
+            anchors.bottomMargin: requiredResourcesBar.angleSize
+            anchors.leftMargin: 3
             anchors.rightMargin: 2
             Text
             {
@@ -106,12 +106,12 @@ Item
                 anchors.left: parent.left
                 anchors.right: parent.right
             }
-
             Rectangle
             {
                 height: 1
                 color: "white"
-                width: parent.width
+                x: -2
+                width: parent.width + 4
             }
             Repeater
             {
@@ -133,13 +133,7 @@ Item
                 anchors.right: parent.right
                 visible: controller.optionalResourcesRequired.length > 0
             }
-            Rectangle
-            {
-                height: 1
-                color: "white"
-                width: parent.width
-                visible: controller.optionalResourcesRequired.length > 0
-            }
+
 
             Repeater
             {
@@ -317,8 +311,8 @@ Item
             anchors.fill: parent
             spacing: 2
             anchors.topMargin: 2
-            anchors.bottomMargin: sidebarAngle
-            anchors.leftMargin: 2
+            anchors.bottomMargin: receivedResourcesBar.angleSize
+            anchors.leftMargin: 3
             anchors.rightMargin: 2
             Text
             {
@@ -338,7 +332,8 @@ Item
             {
                 height: 1
                 color: "white"
-                width: parent.width
+                width: parent.width + 4
+                x: -2
             }
             Repeater
             {
@@ -352,11 +347,12 @@ Item
     {
         id: resourceIndicator
 
-        Rectangle
+        CutoffRectangle
         {
             width: parent.width
             height: width
             color: getResourceColor(modelData.resource_type)
+            angleSize: 4
 
             Text
             {
