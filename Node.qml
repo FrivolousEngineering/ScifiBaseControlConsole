@@ -351,13 +351,16 @@ Item
         {
             width: parent.width
             height: width
-            color: getResourceColor(modelData.resource_type)
+            color: getResourceColor(modelData.type)
             angleSize: 4
+            property double value: modelData.value
+
+            Behavior on value { NumberAnimation { duration: 1000 } }
 
             Text
             {
                 id: resourceTypeText
-                text: getResourceAbbreviation(modelData.resource_type)
+                text: getResourceAbbreviation(modelData.type)
                 font.pixelSize: 10
                 font.bold: true
                 font.family: "Roboto"
@@ -367,13 +370,13 @@ Item
                 anchors.top: parent.top
                 anchors.topMargin: 2
                 // TODO: properly fix this.
-                color: getResourceColor(modelData.resource_type) != "yellow" ? "white": "black"
+                color: getResourceColor(modelData.type) != "yellow" ? "white": "black"
                 horizontalAlignment: Text.AlignHCenter
                 height: contentHeight
             }
             Text
             {
-                text: Math.round(modelData.value)
+                text: Math.round(value)
                 font.pixelSize: 10
                 font.bold: true
                 font.family: "Roboto"
@@ -382,7 +385,7 @@ Item
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 2
                 // TODO: properly fix this.
-                color: getResourceColor(modelData.resource_type) != "yellow" ? "white": "black"
+                color: getResourceColor(modelData.type) != "yellow" ? "white": "black"
                 horizontalAlignment: Text.AlignHCenter
             }
         }

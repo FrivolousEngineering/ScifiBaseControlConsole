@@ -12,6 +12,8 @@ from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkReques
 
 import json
 
+from NodeResource import NodeResource
+
 
 class Node(QObject):
     def __init__(self, node_id: str, parent=None):
@@ -291,9 +293,34 @@ class Node(QObject):
         self._updateProperty("is_temperature_dependant", data["is_temperature_dependant"])
         self._updateProperty("optimal_temperature", data["optimal_temperature"])
         self._updateProperty("target_performance", data["target_performance"])
-        self._updateProperty("resources_required", data["resources_required"])
-        self._updateProperty("optional_resources_required", data["optional_resources_required"])
-        self._updateProperty("resources_received", data["resources_received"])
+
+        # We need to update the resources a bit different to prevent recreation of QML items.
+        # As such we use tiny QObjects with their own getters and setters.
+        # If an object is already in the list with the right type, don't recreate it (just update it's value)
+        self.updateResourceList("optional_resources_required", data["optional_resources_required"])
+        self.updateResourceList("resources_received", data["resources_received"])
+        self.updateResourceList("resources_required", data["resources_required"])
+
+    def updateResourceList(self, property_name, data):
+        list_to_check = getattr(self, "_" + property_name)
+        list_updated = False
+
+        for item in data:
+            item_found = False
+            for resource in list_to_check:
+                if item["resource_type"] == resource.type:
+                    item_found = True
+                    resource.value = item["value"]
+                    break
+
+            if not item_found:
+                list_updated = True
+                list_to_check.append(NodeResource(item["resource_type"], item["value"]))
+
+        if list_updated:
+            signal_name = "".join(x.capitalize() for x in property_name.split("_"))
+            signal_name = signal_name[0].lower() + signal_name[1:] + "Changed"
+            getattr(self, signal_name).emit()
 
     def _updateProperty(self, property_name, property_value):
         if getattr(self, "_" + property_name) != property_value:
