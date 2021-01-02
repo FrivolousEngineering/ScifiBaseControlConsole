@@ -69,6 +69,10 @@ class Node(QObject):
         self.server_reachable = False
         self._optimal_temperature = 200
         self._is_temperature_dependant = False
+        self._resources_required = []
+        self._optional_resources_required = []
+        self._resources_received = []
+
         self.fullUpdate()
 
     temperatureChanged = Signal()
@@ -91,6 +95,9 @@ class Node(QObject):
     isTemperatureDependantChanged = Signal()
     optimalTemperatureChanged = Signal()
     targetPerformanceChanged = Signal()
+    resourcesRequiredChanged = Signal()
+    optionalResourcesRequiredChanged = Signal()
+    resourcesReceivedChanged = Signal()
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
         reply = self._network_manager.get(QNetworkRequest(QUrl(url)))
@@ -187,6 +194,18 @@ class Node(QObject):
     def targetPerformance(self):
         return self._target_performance
 
+    @Property("QVariantList", notify=resourcesRequiredChanged)
+    def resourcesRequired(self):
+        return self._resources_required
+
+    @Property("QVariantList", notify=resourcesReceivedChanged)
+    def resourcesReceived(self):
+        return self._resources_received
+
+    @Property("QVariantList", notify=optionalResourcesRequiredChanged)
+    def optionalResourcesRequired(self):
+        return self._optional_resources_required
+
     @Property("QVariantList", notify=modifiersChanged)
     def modifiers(self):
         return self._modifiers
@@ -272,6 +291,9 @@ class Node(QObject):
         self._updateProperty("is_temperature_dependant", data["is_temperature_dependant"])
         self._updateProperty("optimal_temperature", data["optimal_temperature"])
         self._updateProperty("target_performance", data["target_performance"])
+        self._updateProperty("resources_required", data["resources_required"])
+        self._updateProperty("optional_resources_required", data["optional_resources_required"])
+        self._updateProperty("resources_received", data["resources_received"])
 
     def _updateProperty(self, property_name, property_value):
         if getattr(self, "_" + property_name) != property_value:
