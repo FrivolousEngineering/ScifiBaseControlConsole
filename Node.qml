@@ -99,7 +99,15 @@ Item
                 visible: from != to
                 enabled: visible
 
-                Behavior on value {
+                Behavior on currentValue {
+                    NumberAnimation {
+                        duration: 1000
+                        easing.type: Easing.InOutCubic
+                    }
+                }
+
+                Behavior on targetValue
+                {
                     NumberAnimation {
                         duration: 1000
                         easing.type: Easing.InOutCubic
