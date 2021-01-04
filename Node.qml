@@ -247,6 +247,7 @@ Item
                         delegate: Modifier
                         {
                             name: modelData.name
+                            abbreviation: modelData.abbreviation
                             duration: modelData.duration
                         }
                     }

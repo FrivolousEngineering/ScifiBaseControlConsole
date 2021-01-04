@@ -4,6 +4,7 @@ CutoffRectangle
 {
     property string name
     property double duration
+    property string abbreviation
     implicitWidth: height
     implicitHeight: parent.height
     color: "transparent"
@@ -14,7 +15,7 @@ CutoffRectangle
     Text
     {
         id: resourceTypeText
-        text: getModifierAbbreviation(name)
+        text: abbreviation
         font.pixelSize: 10
         font.bold: true
         font.family: "Roboto"
@@ -42,16 +43,5 @@ CutoffRectangle
         // TODO: properly fix this.
         color: "white"
         horizontalAlignment: Text.AlignHCenter
-    }
-
-    function getModifierAbbreviation(name)
-    {
-        switch(name)
-        {
-            case "Override default safety":
-                return "ODS"
-            default:
-                return "UNK"
-        }
     }
 }
