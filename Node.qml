@@ -142,7 +142,7 @@ Item
                 bottomMargin: angleSize
             }
 
-            CutoffRectangle
+            BoxWithTitle
             {
                 id: temperatureItem
                 anchors.top: parent.top
@@ -151,70 +151,45 @@ Item
                 width: 53
                 anchors.margins: 2
                 angleSize: 2
-                Text
-                {
-                    id: tempText
-                    height: contentHeight
-                    text: "TEMP"
-                    font: Qt.font({
-                        family: "Roboto",
-                        pixelSize: 8,
-                        bold: true,
-                        capitalization: Font.AllUppercase
-                    });
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                }
+                titleText: "TEMP"
                 TemperatureBar
                 {
                     id: temperature
-                    anchors.top: tempText.bottom
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                    anchors.margins: 2
-                    anchors.topMargin: 0
-                    anchors.bottomMargin: 6
+                    anchors.fill: parent
+                    anchors.bottomMargin: 5
                 }
             }
-            CutoffRectangle
+            BoxWithTitle
             {
                 id: performanceDialItem
-                anchors.top: parent.top
-                anchors.right: temperatureItem.left
-                anchors.rightMargin: 3
-                anchors.left: parent.left
-                anchors.leftMargin: 4
-                anchors.margins: 2
+                anchors
+                {
+                    top: parent.top
+                    right: temperatureItem.left
+                    rightMargin: 3
+                    left: parent.left
+                    leftMargin: 4
+                    margins: 2
+                }
+
                 angleSize: 2
                 height: 125
                 visible: performanceDial.from != performanceDial.to
-                Text
-                {
-                    id: performanceText
-                    height: contentHeight
-                    text: "PERFORMANCE"
-                    font: Qt.font({
-                        family: "Roboto",
-                        pixelSize: 8,
-                        bold: true,
-                        capitalization: Font.AllUppercase
-                    });
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                }
+
+                titleText: "PERFORMANCE"
                 CustomDial
                 {
                     id: performanceDial
-                    anchors.left: parent.left
-                    anchors.leftMargin: 5
-                    anchors.right: parent.right
-                    anchors.rightMargin: 4
-                    anchors.top: performanceText.bottom
-                    anchors.topMargin: 1
+                    anchors
+                    {
+                        left: parent.left
+                        leftMargin: 5
+                        right: parent.right
+                        rightMargin: 4
+                        top: performanceText.bottom
+                        topMargin: 1
+                    }
+
                     height: width
 
                     from: controller.min_performance
@@ -256,45 +231,20 @@ Item
                     }
                 }
             }
-            CutoffRectangle
+            BoxWithTitle
             {
                 anchors.left: performanceDialItem.left
                 anchors.right: performanceDialItem.right
                 anchors.top: performanceDialItem.bottom
                 anchors.topMargin: 3
                 anchors.bottom: temperatureItem.bottom
-                angleSize: 2
 
-                Text
-                {
-                    id: modifierText
-                    height: contentHeight
-                    text: "MODIFIERS"
-                    font: Qt.font({
-                        family: "Roboto",
-                        pixelSize: 8,
-                        bold: true,
-                        capitalization: Font.AllUppercase
-                    });
-                    color: "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                }
+                titleText: "modifiers"
 
                 Row
                 {
                     spacing: 2
-                    anchors
-                    {
-                        bottom: parent.bottom
-                        left: parent.left
-                        right: parent.right
-                        rightMargin: 2
-                        leftMargin: 2
-                        top: modifierText.bottom
-                        bottomMargin: parent.angleSize + 1
-                    }
+                    anchors.fill: parent
                     Repeater
                     {
                         model: controller.modifiers
@@ -306,7 +256,6 @@ Item
                     }
                 }
             }
-
         }
 
         CutoffRectangle
