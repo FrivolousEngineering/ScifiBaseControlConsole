@@ -244,10 +244,10 @@ Item
                     Repeater
                     {
                         model: controller.modifiers
-                        delegate: Rectangle
+                        delegate: Modifier
                         {
-                            height: parent.height
-                            width: height
+                            name: modelData.name
+                            duration: modelData.duration
                         }
                     }
                 }
