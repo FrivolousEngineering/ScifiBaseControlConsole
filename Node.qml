@@ -189,60 +189,117 @@ Item
                 bottomMargin: angleSize
             }
 
-            TemperatureBar
+            CutoffRectangle
             {
-                id: temperature
+                id: temperatureItem
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
+                width: 53
                 anchors.margins: 2
+                angleSize: 2
+                Text
+                {
+                    id: tempText
+                    height: contentHeight
+                    text: "TEMP"
+                    font: Qt.font({
+                        family: "Roboto",
+                        pixelSize: 8,
+                        bold: true,
+                        capitalization: Font.AllUppercase
+                    });
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+                TemperatureBar
+                {
+                    id: temperature
+                    anchors.top: tempText.bottom
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    anchors.margins: 2
+                    anchors.topMargin: 0
+                    anchors.bottomMargin: 6
+                }
             }
-
-            CustomDial
+            CutoffRectangle
             {
-                id: performanceDial
-                anchors.left: parent.left
-                anchors.leftMargin: 5
-                anchors.right: temperature.left
+                id: performanceDialItem
                 anchors.top: parent.top
-                anchors.topMargin: 5
-                height: width
+                anchors.right: temperatureItem.left
+                anchors.rightMargin: 3
+                anchors.left: parent.left
+                anchors.leftMargin: 3
+                anchors.margins: 2
+                angleSize: 2
+                height: 125
+                visible: performanceDial.from != performanceDial.to
+                Text
+                {
+                    id: performanceText
+                    height: contentHeight
+                    text: "PERFORMANCE"
+                    font: Qt.font({
+                        family: "Roboto",
+                        pixelSize: 8,
+                        bold: true,
+                        capitalization: Font.AllUppercase
+                    });
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+                CustomDial
+                {
+                    id: performanceDial
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
+                    anchors.right: parent.right
+                    anchors.rightMargin: 4
+                    anchors.top: performanceText.bottom
+                    anchors.topMargin: 1
+                    height: width
 
-                from: controller.min_performance
-                to: controller.max_performance
-                visible: from != to
-                enabled: visible
+                    from: controller.min_performance
+                    to: controller.max_performance
+                    visible: from != to
+                    enabled: visible
 
-                Behavior on currentValue {
-                    NumberAnimation {
-                        duration: 1000
-                        easing.type: Easing.InOutCubic
+                    Behavior on currentValue {
+                        NumberAnimation {
+                            duration: 1000
+                            easing.type: Easing.InOutCubic
+                        }
                     }
-                }
 
-                Behavior on targetValue
-                {
-                    NumberAnimation {
-                        duration: 1000
-                        easing.type: Easing.InOutCubic
-                    }
-                }
-
-                Binding
-                {
-                    target: performanceDial
-                    property: "targetValue"
-                    value: controller.targetPerformance
-                    when: !performanceDial.pressed
-                }
-
-                currentValue: controller.performance
-
-                onPressedChanged:
-                {
-                    if(!pressed) // Released
+                    Behavior on targetValue
                     {
-                        controller.setPerformance(value)
+                        NumberAnimation {
+                            duration: 1000
+                            easing.type: Easing.InOutCubic
+                        }
+                    }
+
+                    Binding
+                    {
+                        target: performanceDial
+                        property: "targetValue"
+                        value: controller.targetPerformance
+                        when: !performanceDial.pressed
+                    }
+
+                    currentValue: controller.performance
+
+                    onPressedChanged:
+                    {
+                        if(!pressed) // Released
+                        {
+                            controller.setPerformance(value)
+                        }
                     }
                 }
             }

@@ -127,7 +127,7 @@ Item
         border.width: boxBorderSize
         border.color: "white"
         color: "transparent"
-        y: activeBoxIndex * boxHeight + activeBoxIndex * boxSpacing + activeBoxIndex
+        y: activeBoxIndex * boxHeight + activeBoxIndex * boxSpacing + 1
         radius: 5
         Behavior on y
         {
