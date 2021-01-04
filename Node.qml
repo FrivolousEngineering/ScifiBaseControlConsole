@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.0
 import SDK 1.0
 
 Item
@@ -98,7 +99,13 @@ Item
                 anchors.right: parent.right
                 visible: controller.optionalResourcesRequired.length > 0
             }
-
+            Rectangle
+            {
+                height: 1
+                color: "white"
+                x: -2
+                width: parent.width + 4
+            }
 
             Repeater
             {
@@ -274,6 +281,53 @@ Item
 
             angleSize: height
             height: base.angleSize - 2 * borderSize - 0.5 * barSpacing
+
+            ProgressBar
+            {
+                id: healthProgressBar
+                property alias progressColor: progressItem.color
+                anchors
+                {
+                    top: parent.top
+                    bottom: parent.bottom
+                    right: parent.right
+                    left: parent.left
+                    leftMargin: 10
+                    rightMargin: 10
+                    topMargin: 2
+                    bottomMargin: 2
+                }
+                value: controller.health / 100
+                background: Rectangle
+                {
+                    implicitWidth: 200
+                    implicitHeight: 6
+                    color: "#333333"
+                }
+                contentItem: Item
+                {
+                    implicitWidth: 200
+                    implicitHeight: 4
+
+                    Rectangle
+                    {
+                        id: progressItem
+                        width: healthProgressBar.visualPosition * parent.width
+                        height: parent.height
+                        color: "#17a81a"
+                    }
+                }
+
+                SequentialAnimation
+                {
+                    id: warningAnimation
+                    running: modelData.health < 25
+                    PropertyAnimation { to: "red"; duration: 1500; target: healthProgressBar; property: "progressColor"; easing.type: Easing.InOutCubic}
+                    PropertyAnimation { to: "#17a81a"; duration: 1500; target: healthProgressBar; property: "progressColor"; easing.type: Easing.InOutCubic}
+                    loops: Animation.Infinite
+                    alwaysRunToEnd: true
+                }
+            }
         }
 
         CutoffRectangle

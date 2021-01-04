@@ -74,7 +74,7 @@ class Node(QObject):
         self._resources_required = []
         self._optional_resources_required = []
         self._resources_received = []
-
+        self._health = 100
         self.fullUpdate()
 
     temperatureChanged = Signal()
@@ -100,6 +100,7 @@ class Node(QObject):
     resourcesRequiredChanged = Signal()
     optionalResourcesRequiredChanged = Signal()
     resourcesReceivedChanged = Signal()
+    healthChanged = Signal()
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
         reply = self._network_manager.get(QNetworkRequest(QUrl(url)))
@@ -220,6 +221,10 @@ class Node(QObject):
     def max_performance(self):
         return self._max_performance
 
+    @Property(float, notify=healthChanged)
+    def health(self):
+        return self._health
+
     def _onStaticPropertiesFinished(self, reply: QNetworkReply) -> None:
         result = self._readData(reply)
         if not result:
@@ -293,6 +298,7 @@ class Node(QObject):
         self._updateProperty("is_temperature_dependant", data["is_temperature_dependant"])
         self._updateProperty("optimal_temperature", data["optimal_temperature"])
         self._updateProperty("target_performance", data["target_performance"])
+        self._updateProperty("health", data["health"])
 
         # We need to update the resources a bit different to prevent recreation of QML items.
         # As such we use tiny QObjects with their own getters and setters.
