@@ -4,6 +4,8 @@ CutoffRectangle
     angleSize: 2
     property alias titleText: title.text
     default property alias contents: placeholder.children
+    property alias font: title.font
+    property alias titleColor: title.color
     Text
     {
         id: title

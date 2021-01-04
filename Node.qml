@@ -169,7 +169,7 @@ Item
                 }
 
                 angleSize: 2
-                height: 125
+                height: 120
                 visible: performanceDial.from != performanceDial.to
 
                 titleText: "PERFORMANCE"
@@ -182,7 +182,7 @@ Item
                         leftMargin: 5
                         right: parent.right
                         rightMargin: 4
-                        top: performanceText.bottom
+                        top: parent.top
                         topMargin: 1
                     }
 
