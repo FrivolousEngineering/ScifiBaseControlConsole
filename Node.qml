@@ -232,7 +232,7 @@ Item
                 anchors.right: temperatureItem.left
                 anchors.rightMargin: 3
                 anchors.left: parent.left
-                anchors.leftMargin: 3
+                anchors.leftMargin: 4
                 anchors.margins: 2
                 angleSize: 2
                 height: 125
@@ -299,6 +299,56 @@ Item
                         if(!pressed) // Released
                         {
                             controller.setPerformance(value)
+                        }
+                    }
+                }
+            }
+            CutoffRectangle
+            {
+                anchors.left: performanceDialItem.left
+                anchors.right: performanceDialItem.right
+                anchors.top: performanceDialItem.bottom
+                anchors.topMargin: 3
+                anchors.bottom: temperatureItem.bottom
+                angleSize: 2
+
+                Text
+                {
+                    id: modifierText
+                    height: contentHeight
+                    text: "MODIFIERS"
+                    font: Qt.font({
+                        family: "Roboto",
+                        pixelSize: 8,
+                        bold: true,
+                        capitalization: Font.AllUppercase
+                    });
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+
+                Row
+                {
+                    spacing: 2
+                    anchors
+                    {
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: parent.right
+                        rightMargin: 2
+                        leftMargin: 2
+                        top: modifierText.bottom
+                        bottomMargin: parent.angleSize + 1
+                    }
+                    Repeater
+                    {
+                        model: controller.modifiers
+                        delegate: Rectangle
+                        {
+                            height: parent.height
+                            width: height
                         }
                     }
                 }
