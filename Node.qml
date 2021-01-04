@@ -29,12 +29,22 @@ Item
             case "water":
                 return "blue"
             case "fuel":
-                return "green"
+                return "red"
             case "energy":
                 return "yellow"
             case "waste":
             case "animal_waste":
                 return "brown"
+            case "dirty_water":
+                return "#533749"
+            case "oxygen":
+                return "white"
+            case "plants":
+                return "#006600"
+            case "food":
+                return "green"
+            case "plant_oil":
+                return "#405015"
             default:
                 return "pink"
         }
@@ -54,6 +64,16 @@ Item
                 return "was"
             case "animal_waste":
                 return "awa"
+            case "dirty_water":
+                return "dwt"
+            case "oxygen":
+                return "oxy"
+            case "plants":
+                return "pla"
+            case "food":
+                return "fod"
+            case "plant_oil":
+                return "plo"
             default:
                 return "unk"
         }
@@ -370,7 +390,7 @@ Item
                 anchors.top: parent.top
                 anchors.topMargin: 2
                 // TODO: properly fix this.
-                color: getResourceColor(modelData.type) != "yellow" ? "white": "black"
+                color: getResourceColor(modelData.type) != "yellow" && getResourceColor(modelData.type) != "white" ? "white": "black"
                 horizontalAlignment: Text.AlignHCenter
                 height: contentHeight
             }
@@ -385,7 +405,7 @@ Item
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 2
                 // TODO: properly fix this.
-                color: getResourceColor(modelData.type) != "yellow" ? "white": "black"
+                color: getResourceColor(modelData.type) != "yellow" && getResourceColor(modelData.type) != "white" ? "white": "black"
                 horizontalAlignment: Text.AlignHCenter
             }
         }
