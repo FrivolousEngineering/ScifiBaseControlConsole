@@ -23,13 +23,19 @@ Item
     property var controller
 
 
+    property font resourceFont: Qt.font({
+        family: "Roboto",
+        pixelSize: 10,
+        bold: true,
+        capitalization: Font.AllUppercase
+    });
 
     property font titleFont: Qt.font({
-            family: "Roboto",
-            pixelSize: angleSize - 3 * barSpacing,
-            bold: true,
-            capitalization: Font.AllUppercase
-        });
+        family: "Roboto",
+        pixelSize: angleSize - 3 * barSpacing,
+        bold: true,
+        capitalization: Font.AllUppercase
+    });
 
     implicitWidth: 250
     implicitHeight: 200
@@ -60,12 +66,7 @@ Item
             Text
             {
                 text: "req"
-                font: Qt.font({
-                    family: "Roboto",
-                    pixelSize: 10,
-                    bold: true,
-                    capitalization: Font.AllUppercase
-                });
+                font: resourceFont
                 color: "white"
                 horizontalAlignment: Text.AlignHCenter
                 anchors.left: parent.left
@@ -90,12 +91,7 @@ Item
             Text
             {
                 text: "OPT"
-                font: Qt.font({
-                    family: "Roboto",
-                    pixelSize: 10,
-                    bold: true,
-                    capitalization: Font.AllUppercase
-                });
+                font: resourceFont
                 color: "white"
                 horizontalAlignment: Text.AlignHCenter
                 anchors.left: parent.left
@@ -314,7 +310,6 @@ Item
                     rightMargin: angleSize
                 }
             }
-
         }
     }
 
@@ -346,12 +341,7 @@ Item
             Text
             {
                 text: "RECV"
-                font: Qt.font({
-                    family: "Roboto",
-                    pixelSize: 10,
-                    bold: true,
-                    capitalization: Font.AllUppercase
-                });
+                font: resourceFont
                 color: "white"
                 horizontalAlignment: Text.AlignHCenter
                 anchors.left: parent.left
