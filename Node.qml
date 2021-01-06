@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.2
 import SDK 1.0
 
 Item
@@ -234,31 +234,167 @@ Item
                     }
                 }
             }
-            BoxWithTitle
+
+            // We're not using the title box here, since we want a button that goes outside of the regular content
+            CutoffRectangle
             {
                 anchors.left: performanceDialItem.left
                 anchors.right: performanceDialItem.right
                 anchors.top: performanceDialItem.bottom
                 anchors.topMargin: 3
                 anchors.bottom: temperatureItem.bottom
-
-                titleText: "modifiers"
-
-                Row
+                angleSize: 2
+                Text
                 {
-                    spacing: 2
-                    anchors.fill: parent
-                    Repeater
+                    id: title
+                    height: contentHeight
+                    text: "MODIFIERS"
+                    font: Qt.font({
+                        family: "Roboto",
+                        pixelSize: 8,
+                        bold: true,
+                        capitalization: Font.AllUppercase
+                    });
+                    color: "white"
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+
+                ScrollView
+                {
+                    id: content
+                    // Since we have to do some manual magic to get the scroll animation working with the manual buttons
+                    // We need to do some bookkeeping ourselves.
+                    property bool animationState: false
+
+                    // Same as with the animstate, we need to manually create the animation object. We unfortunately cant use
+                    // "Behavior on", since the contentItem doesn't exist on init of the scrollview
+                    function setContentPosition(new_pos)
                     {
-                        model: controller.modifiers
-                        delegate: Modifier
+                        if(animationState)
                         {
-                            name: modelData.name
-                            abbreviation: modelData.abbreviation
-                            duration: modelData.duration
+                            return  // Previous animation is still running.
+                        }
+                        var anim = Qt.createQmlObject ('import QtQuick 2.3; PropertyAnimation { }', content);
+                        anim.target = content.contentItem
+                        anim.property = "contentX"
+                        anim.from = content.contentItem.contentX
+                        anim.to = Math.max(Math.min(content.contentWidth - content.availableWidth, new_pos), 0)
+                        anim.duration = 200
+                        animationState = Qt.binding(function() { return anim.running })
+                        anim.restart();
+                    }
+
+                    anchors
+                    {
+                        top: title.bottom
+                        left: parent.left
+                        leftMargin: 2
+                        right: addButton.left
+                        bottom: parent.bottom
+                        bottomMargin: 2
+                        rightMargin: 2
+                    }
+                    clip: true
+                    Row
+                    {
+                        spacing: 2
+                        width: parent.width - 2
+                        height: parent.height - 1
+                        x: 1
+                        y: 1
+
+                        Repeater
+                        {
+                            model: controller.modifiers
+
+                            delegate: Modifier
+                            {
+                                name: modelData.name
+                                abbreviation: modelData.abbreviation
+                                duration: modelData.duration
+                                width: 30 // Hack: For some reason the binding fails here...
+                            }
                         }
                     }
                 }
+
+
+                CutoffRectangle
+                {
+                    id: addButton
+                    anchors
+                    {
+                        top: parent.top
+                        bottom: parent.bottom
+                        right: parent.right
+                        margins: 3
+                        topMargin: 13
+                    }
+                    width: 10
+                    color: "white"
+                    angleSize: 2
+                    cornerSide: CutoffRectangle.Direction.Right
+                }
+
+                Button
+                {
+                    id: leftButton
+                    width: 10
+                    height: 10
+                    anchors
+                    {
+                        left: parent.left
+                        leftMargin: -3
+                        top: parent.top
+                    }
+                    background: Item {}
+                    contentItem: Text
+                    {
+                        opacity: enabled ? 1.0 : 0.3
+                        text: "<"
+                        Behavior on opacity { NumberAnimation { duration: 150} }
+                        color: "white"
+                        font.weight: Font.Bold
+                        font.pixelSize: 10
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    onClicked: content.setContentPosition(content.contentItem.contentX - content.availableWidth)
+                    visible: content.availableWidth < content.contentWidth
+                    enabled: content.contentItem.contentX > content.contentItem.originX
+                }
+
+                Button
+                {
+                    id: rightButton
+                    width: 10
+                    height: 10
+                    anchors
+                    {
+                        right: parent.right
+                        rightMargin: 3
+                        top: parent.top
+                    }
+                    background: Item {}
+                    contentItem: Text
+                    {
+                        opacity: enabled ? 1.0 : 0.3
+                        text: ">"
+                        Behavior on opacity { NumberAnimation { duration: 150} }
+                        color: "white"
+                        font.weight: Font.Bold
+                        font.pixelSize: 10
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    onClicked: content.setContentPosition(content.contentItem.contentX + content.availableWidth)
+                    enabled: content.contentWidth > content.contentItem.contentX + content.availableWidth
+                    visible: content.availableWidth < content.contentWidth
+                }
+
+
             }
         }
 
