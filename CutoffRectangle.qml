@@ -33,8 +33,6 @@ Shape
         None = 11
     }
 
-
-
     function recalculatePoints()
     {
         shapePath.pathElements = [] // Clear the previous path

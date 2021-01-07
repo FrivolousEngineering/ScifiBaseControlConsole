@@ -320,8 +320,7 @@ Item
                     }
                 }
 
-
-                CutoffRectangle
+                Button
                 {
                     id: addButton
                     anchors
@@ -330,12 +329,29 @@ Item
                         bottom: parent.bottom
                         right: parent.right
                         margins: 3
-                        topMargin: 13
+                        topMargin: 12
                     }
                     width: 10
-                    color: "white"
-                    angleSize: 2
-                    cornerSide: CutoffRectangle.Direction.Right
+                    background: CutoffRectangle
+                    {
+                        color: "white"
+                        angleSize: 3
+                        cornerSide: CutoffRectangle.Direction.Right
+                        Text
+                        {
+                            font: resourceFont
+                            text: "+"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            height: parent.height
+                            width: parent.width
+                        }
+                        onHeightChanged: recalculatePoints() // Hack to ensure update is called correctly
+                    }
+                    contentItem: Item{}
+
+                    onClicked: print("OMGZOMG")
+
                 }
 
                 Button
