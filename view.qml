@@ -30,11 +30,16 @@ Rectangle
         pixelSize: 13
     });
 
-
     Image
     {
         anchors.fill: parent
         source: "background_hexes.png"
+    }
+
+    function showModifierWindow(nodeId)
+    {
+        addModifierWindow.nodeId = nodeId
+        addModifierWindow.visible = true
     }
 
     Grid
@@ -63,8 +68,26 @@ Rectangle
                 minTemperature: 288.15 // 15 degrees kelvin
 
                 controller: modelData
-                onAddModifierClicked: print(nodeId)
+                onAddModifierClicked: showModifierWindow(nodeId)
             }
+        }
+    }
+
+    CutoffRectangle
+    {
+        id: addModifierWindow
+        property string nodeId: ""
+        visible: false
+        anchors.centerIn: parent
+        width: 350
+        height: 350
+        Button
+        {
+            text: "close"
+            onClicked: addModifierWindow.visible = false
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 3
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 
