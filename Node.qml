@@ -23,6 +23,7 @@ Item
 
     property var controller
 
+    signal addModifierClicked(string nodeId)
 
     property font resourceFont: Qt.font({
         family: "Roboto",
@@ -349,9 +350,7 @@ Item
                         onHeightChanged: recalculatePoints() // Hack to ensure update is called correctly
                     }
                     contentItem: Item{}
-
-                    onClicked: print("OMGZOMG")
-
+                    onClicked: base.addModifierClicked(controller.id)
                 }
 
                 Button
@@ -409,8 +408,6 @@ Item
                     enabled: content.contentWidth > content.contentItem.contentX + content.availableWidth
                     visible: content.availableWidth < content.contentWidth
                 }
-
-
             }
         }
 

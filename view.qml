@@ -47,7 +47,8 @@ Rectangle
         anchors.topMargin: 12
         columns: 4
 
-        Repeater {
+        Repeater
+        {
             model: backend.nodeData
             Node
             {
@@ -62,6 +63,7 @@ Rectangle
                 minTemperature: 288.15 // 15 degrees kelvin
 
                 controller: modelData
+                onAddModifierClicked: print(nodeId)
             }
         }
     }
