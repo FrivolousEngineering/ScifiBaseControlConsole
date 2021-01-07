@@ -181,6 +181,7 @@ Item
                 visible: performanceDial.from != performanceDial.to
 
                 titleText: "PERFORMANCE"
+
                 CustomDial
                 {
                     id: performanceDial
@@ -233,6 +234,38 @@ Item
                             controller.setPerformance(value)
                         }
                     }
+                }
+            }
+
+            BoxWithTitle
+            {
+                anchors.fill: performanceDialItem
+                visible: !performanceDialItem.visible && controller.amount_stored != -1
+                titleText: "STORAGE"
+
+                Text
+                {
+                    property double amountStored: controller.amount_stored
+
+                    Behavior on amountStored {
+                        NumberAnimation {
+                            duration: 1250
+                            easing.type: Easing.InOutCubic
+                        }
+                    }
+
+                    text: Math.round(amountStored)
+                    font: Qt.font({
+                        family: "Roboto",
+                        pixelSize: 20,
+                        bold: true,
+                        capitalization: Font.AllUppercase
+                    });
+                    color: "white"
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.verticalCenter: parent.verticalCenter
                 }
             }
 

@@ -11,7 +11,6 @@ CutoffRectangle
     angleSize: 4
     Behavior on duration { NumberAnimation { duration: 1000 } }
 
-
     Text
     {
         id: resourceTypeText
