@@ -178,7 +178,7 @@ Item
 
                 angleSize: 2
                 height: 120
-                visible: performanceDial.from != performanceDial.to
+                visible: controller.hasSettablePerformance
 
                 titleText: "PERFORMANCE"
 
@@ -199,7 +199,6 @@ Item
 
                     from: controller.min_performance
                     to: controller.max_performance
-                    visible: from != to
                     enabled: visible
 
                     Behavior on currentValue {

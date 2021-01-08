@@ -172,8 +172,8 @@ class Node(QObject):
 
     def _onModifiersChanged(self, reply: QNetworkReply):
         result = self._readData(reply)
-        if not result:
-            return
+        if result is None:
+            result = []
         if self._modifiers != result:
             self._modifiers = result
             self.modifiersChanged.emit()
@@ -202,13 +202,7 @@ class Node(QObject):
 
         reply = self._network_manager.post(request, data.encode())
 
-        self._onFinishedCallbacks[reply] = self._addModifierCallback
-
-    def _addModifierCallback(self, reply: QNetworkReply):
-        result = self._readData(reply)
-        if not result:
-            return
-        # Todo: add some extra error handling (Since this request can fail!)
+        self._onFinishedCallbacks[reply] = self._onModifiersChanged
 
     @Property(float, notify=performanceChanged)
     def performance(self):
@@ -275,6 +269,10 @@ class Node(QObject):
     @Property(str, notify=staticPropertiesChanged)
     def description(self):
         return self._static_properties.get("description", "")
+
+    @Property(bool, notify=staticPropertiesChanged)
+    def hasSettablePerformance(self):
+        return self._static_properties.get("hasSettablePerformance", False)
 
     @Property(float, notify=staticPropertiesChanged)
     def surface_area(self):
