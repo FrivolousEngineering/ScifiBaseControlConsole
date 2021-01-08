@@ -4,6 +4,7 @@ from PyQt5.QtQuick import QQuickView
 from PyQt5.QtCore import QUrl, QObject, QRect
 from PyQt5.QtCore import pyqtSignal as Signal
 from PyQt5.QtCore import pyqtProperty as Property
+from PyQt5.QtCore import pyqtSlot as Slot
 
 from PyQt5.QtQml import QQmlApplicationEngine,QQmlEngine, QQmlComponent
 
@@ -11,6 +12,7 @@ from Node import Node
 from RadialBar import RadialBar
 
 import sys
+
 class TestObject(QObject):
     serverReachableChanged = Signal()
 
@@ -29,6 +31,12 @@ class TestObject(QObject):
     @Property(bool, notify = serverReachableChanged)
     def serverReachable(self):
         return all([node.server_reachable for node in self._data])
+
+    @Slot(str, result = "QVariant")
+    def getNodeById(self, nodeId):
+        for node in self._data:
+            if node.id == nodeId:
+                return node
 
 
 
@@ -49,9 +57,9 @@ class MyQmlApplication(QApplication):
         self._engine = self._qquickview.engine()
 
     def showAndExec(self, qml_url):
-        self._qquickview.setSource(qml_url)
         beep = TestObject()
         self._qquickview.rootContext().setContextProperty("backend", beep)
+        self._qquickview.setSource(qml_url)
         self._qquickview.show()
         return self.exec_()
 

@@ -79,6 +79,10 @@ Rectangle
         anchors.centerIn: parent
         width: 350
         height: 350
+        onModifierAdded:
+        {
+            backend.getNodeById(nodeId).addModifier(type)
+        }
     }
 
 
