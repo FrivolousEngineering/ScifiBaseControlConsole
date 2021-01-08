@@ -272,7 +272,7 @@ class Node(QObject):
 
     @Property(bool, notify=staticPropertiesChanged)
     def hasSettablePerformance(self):
-        return self._static_properties.get("hasSettablePerformance", False)
+        return self._static_properties.get("has_settable_performance", False)
 
     @Property(float, notify=staticPropertiesChanged)
     def surface_area(self):
