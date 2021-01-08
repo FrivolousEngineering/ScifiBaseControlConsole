@@ -73,22 +73,12 @@ Rectangle
         }
     }
 
-    CutoffRectangle
+    AddModifierWindow
     {
         id: addModifierWindow
-        property string nodeId: ""
-        visible: false
         anchors.centerIn: parent
         width: 350
         height: 350
-        Button
-        {
-            text: "close"
-            onClicked: addModifierWindow.visible = false
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 3
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
     }
 
 
