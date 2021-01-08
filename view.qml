@@ -38,7 +38,7 @@ Rectangle
 
     function showModifierWindow(nodeId)
     {
-        addModifierWindow.nodeId = nodeId
+        addModifierWindow.nodeObject = backend.getNodeById(nodeId)
         addModifierWindow.visible = true
     }
 

@@ -270,6 +270,10 @@ class Node(QObject):
     def description(self):
         return self._static_properties.get("description", "")
 
+    @Property("QStringList", notify=staticPropertiesChanged)
+    def supported_modifiers(self):
+        return self._static_properties.get("supported_modifiers", "")
+
     @Property(bool, notify=staticPropertiesChanged)
     def hasSettablePerformance(self):
         return self._static_properties.get("has_settable_performance", False)

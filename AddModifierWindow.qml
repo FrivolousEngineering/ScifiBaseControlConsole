@@ -4,6 +4,7 @@ CutoffRectangle
 {
     id: addModifierWindow
     property string nodeId: ""
+    property var nodeObject
     visible: false
 
     signal modifierAdded(string nodeId, string type)
@@ -18,27 +19,28 @@ CutoffRectangle
 
     }
 
-    Grid
+    Column
     {
+        spacing: 2
         anchors
         {
             top: parent.top
             bottom: closeButton.top
             left: parent.left
             right: parent.right
-            margins: 3
+            margins: addModifierWindow.angleSize
+            bottomMargin: 3
         }
-        columns: 2
         Repeater
         {
-            model: modifierModel
+            model: nodeObject.supported_modifiers
 
             Button
             {
-                text: model.name
+                text: modelData
                 onClicked:
                 {
-                    addModifierWindow.modifierAdded(addModifierWindow.nodeId, model.type)
+                    addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, modelData)
                     addModifierWindow.visible = false
                 }
             }
