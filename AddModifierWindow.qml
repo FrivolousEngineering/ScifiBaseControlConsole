@@ -23,7 +23,7 @@ CutoffRectangle
         }
         Repeater
         {
-            model: nodeObject.supported_modifiers
+            model: nodeObject ? nodeObject.supported_modifiers: null
 
             Button
             {
