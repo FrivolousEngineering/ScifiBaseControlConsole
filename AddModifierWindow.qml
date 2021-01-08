@@ -9,16 +9,6 @@ CutoffRectangle
 
     signal modifierAdded(string nodeId, string type)
 
-    ListModel {
-        id: modifierModel
-
-        ListElement { name: "BOC"; type: "BoostCoolingModifier" }
-        ListElement { name: "ODS"; type: "OverrideDefaultSafetyControlsModifier"}
-        ListElement { name: "ROT"; type: "RepairOverTimeModifier" }
-        ListElement { name: "JUG"; type: "JuryRigModifier" }
-
-    }
-
     Column
     {
         spacing: 2
