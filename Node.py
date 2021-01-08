@@ -194,6 +194,22 @@ class Node(QObject):
         self.targetPerformanceChanged.emit()
         self._onFinishedCallbacks[reply] = self._onPerformanceChanged
 
+    @Slot(str)
+    def addModifier(self, modifier: str):
+        data = "{\"modifier_name\": \"%s\"}" % modifier
+        request = QNetworkRequest(QUrl(self._modifiers_url))
+        request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
+
+        reply = self._network_manager.post(request, data.encode())
+
+        self._onFinishedCallbacks[reply] = self._addModifierCallback
+
+    def _addModifierCallback(self, reply: QNetworkReply):
+        result = self._readData(reply)
+        if not result:
+            return
+        # Todo: add some extra error handling (Since this request can fail!)
+
     @Property(float, notify=performanceChanged)
     def performance(self):
         return self._performance
