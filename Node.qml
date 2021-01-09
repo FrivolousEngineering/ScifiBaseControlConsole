@@ -11,7 +11,7 @@ Item
     property int borderSize: 2
     property int barSpacing: 2
 
-    property int defaultSpacing: 2
+    property int defaultSpacing: 3
 
     property alias titleText: title_text.text
     property alias currentTemperature: temperature.currentTemperature
