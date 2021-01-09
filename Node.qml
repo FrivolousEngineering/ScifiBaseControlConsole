@@ -11,6 +11,8 @@ Item
     property int borderSize: 2
     property int barSpacing: 2
 
+    property int defaultSpacing: 2
+
     property alias titleText: title_text.text
     property alias currentTemperature: temperature.currentTemperature
     property alias previousTemperature: temperature.previousTemperature
@@ -60,11 +62,11 @@ Item
         Column
         {
             anchors.fill: parent
-            spacing: 2
-            anchors.topMargin: 2
+            spacing: defaultSpacing
+            anchors.topMargin: defaultSpacing
             anchors.bottomMargin: requiredResourcesBar.angleSize
-            anchors.leftMargin: 3
-            anchors.rightMargin: 2
+            anchors.leftMargin: defaultSpacing + 1
+            anchors.rightMargin: defaultSpacing
             Text
             {
                 text: "req"
@@ -78,8 +80,8 @@ Item
             {
                 height: 1
                 color: "white"
-                x: -2
-                width: parent.width + 4
+                x: -defaultSpacing
+                width: parent.width + 2 * defaultSpacing
             }
             Repeater
             {
@@ -104,8 +106,8 @@ Item
             {
                 height: 1
                 color: "white"
-                x: -2
-                width: parent.width + 4
+                x: -defaultSpacing
+                width: parent.width + 2 * defaultSpacing
             }
 
             Repeater
@@ -153,7 +155,7 @@ Item
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
                 width: 53
-                anchors.margins: 2
+                anchors.margins: defaultSpacing
                 angleSize: 2
                 titleText: "TEMP"
                 TemperatureBar
@@ -170,10 +172,10 @@ Item
                 {
                     top: parent.top
                     right: temperatureItem.left
-                    rightMargin: 3
+                    rightMargin: defaultSpacing + 1
                     left: parent.left
-                    leftMargin: 4
-                    margins: 2
+                    leftMargin: defaultSpacing + 2
+                    margins: defaultSpacing
                 }
 
                 angleSize: 2
@@ -332,7 +334,7 @@ Item
                     clip: true
                     Row
                     {
-                        spacing: 2
+                        spacing: defaultSpacing
                         width: parent.width - 2
                         height: parent.height - 1
                         x: 1
@@ -362,7 +364,7 @@ Item
                         top: parent.top
                         bottom: parent.bottom
                         right: parent.right
-                        margins: 3
+                        margins: defaultSpacing + 1
                         topMargin: 12
                     }
                     width: 10
@@ -394,7 +396,7 @@ Item
                     anchors
                     {
                         left: parent.left
-                        leftMargin: -3
+                        leftMargin: -defaultSpacing - 1
                         top: parent.top
                     }
                     background: Item {}
@@ -422,7 +424,7 @@ Item
                     anchors
                     {
                         right: parent.right
-                        rightMargin: 3
+                        rightMargin: defaultSpacing + 1
                         top: parent.top
                     }
                     background: Item {}
@@ -570,11 +572,11 @@ Item
         Column
         {
             anchors.fill: parent
-            spacing: 2
-            anchors.topMargin: 2
+            spacing: defaultSpacing
+            anchors.topMargin: defaultSpacing
             anchors.bottomMargin: receivedResourcesBar.angleSize
-            anchors.leftMargin: 3
-            anchors.rightMargin: 2
+            anchors.leftMargin: defaultSpacing + 1
+            anchors.rightMargin: defaultSpacing
             Text
             {
                 text: "RECV"
@@ -588,8 +590,8 @@ Item
             {
                 height: 1
                 color: "white"
-                width: parent.width + 4
-                x: -2
+                width: parent.width + 2 * defaultSpacing
+                x: -defaultSpacing
             }
             Repeater
             {
