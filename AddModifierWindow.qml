@@ -15,39 +15,75 @@ CutoffRectangle
         anchors
         {
             top: parent.top
-            bottom: closeButton.top
+            bottom: buttonBar.top
             left: parent.left
-            right: parent.right
+            right: descriptionText.left
             margins: addModifierWindow.angleSize
             bottomMargin: 3
         }
-        Column
+        ListView
         {
+            id: view
             spacing: 2
+            focus: true
 
-            Repeater
+            model: nodeObject ? nodeObject.supported_modifiers: null
+            currentIndex: 0
+            Component.onCompleted: activeModifier = currentItem.modifier
+            property var activeModifier: backend.getModifierByType(model[0])
+            delegate: Button
             {
-                model: nodeObject ? nodeObject.supported_modifiers: null
-                Button
+                property var modifier: backend.getModifierByType(modelData)
+                text: modifier.name
+                onClicked:
                 {
-                    text: backend.getModifierByType(modelData).name
-                    onClicked:
-                    {
-                        addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, modelData)
-                        addModifierWindow.visible = false
-                    }
+                    view.currentIndex = index
+                    view.activeModifier =  modifier
                 }
+                highlighted: index == view.currentIndex
             }
         }
     }
 
-    Button
+    Text
     {
-        id: closeButton
-        text: "close"
-        onClicked: addModifierWindow.visible = false
+        id: descriptionText
+        anchors.right: parent.right
+        anchors.rightMargin: 2
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 3
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        width: 125
+        color: "white"
+        text: view.activeModifier ? view.activeModifier.description: ""
+        wrapMode: Text.WordWrap
+    }
+
+    Row
+    {
+        id: buttonBar
+        spacing: 2
+        anchors
+        {
+            bottom: parent.bottom
+            bottomMargin: 3
+            horizontalCenter: parent.horizontalCenter
+        }
+        Button
+        {
+            id: closeButton
+            text: "close"
+            onClicked: addModifierWindow.visible = false
+        }
+
+        Button
+        {
+            id: apply
+            text: "Apply modifier"
+            onClicked:
+            {
+                addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, view.activeModifier.type )
+                addModifierWindow.visible = false
+            }
+        }
     }
 }
