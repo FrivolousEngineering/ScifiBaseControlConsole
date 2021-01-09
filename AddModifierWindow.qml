@@ -8,6 +8,7 @@ CutoffRectangle
     visible: false
 
     signal modifierAdded(string nodeId, string type)
+    property var activeModifier: backend.getModifierByType(view.model[0])
     ScrollView
     {
         clip: true
@@ -30,7 +31,7 @@ CutoffRectangle
             model: nodeObject ? nodeObject.supported_modifiers: null
             currentIndex: 0
             Component.onCompleted: activeModifier = currentItem.modifier
-            property var activeModifier: backend.getModifierByType(model[0])
+
             delegate: Button
             {
                 property var modifier: backend.getModifierByType(modelData)
@@ -38,7 +39,7 @@ CutoffRectangle
                 onClicked:
                 {
                     view.currentIndex = index
-                    view.activeModifier =  modifier
+                    activeModifier =  modifier
                 }
                 highlighted: index == view.currentIndex
             }
@@ -52,9 +53,10 @@ CutoffRectangle
         anchors.rightMargin: 2
         anchors.bottom: parent.bottom
         anchors.top: parent.top
+        anchors.topMargin: addModifierWindow.angleSize
         width: 125
         color: "white"
-        text: view.activeModifier ? view.activeModifier.description: ""
+        text: activeModifier ? activeModifier.description: ""
         wrapMode: Text.WordWrap
     }
 
@@ -81,7 +83,7 @@ CutoffRectangle
             text: "Apply modifier"
             onClicked:
             {
-                addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, view.activeModifier.type )
+                addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, activeModifier.type )
                 addModifierWindow.visible = false
             }
         }
