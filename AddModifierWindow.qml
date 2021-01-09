@@ -24,10 +24,9 @@ CutoffRectangle
         Repeater
         {
             model: nodeObject ? nodeObject.supported_modifiers: null
-
             Button
             {
-                text: modelData
+                text: backend.getModifierByType(modelData).name
                 onClicked:
                 {
                     addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, modelData)

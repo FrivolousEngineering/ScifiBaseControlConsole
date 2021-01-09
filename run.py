@@ -40,7 +40,7 @@ class TestObject(QObject):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         if status_code == 404:
             print("server was not found!")
-            # TODO: handle this case, since it won't retry. 
+            # TODO: handle this case, since it won't retry.
             return
         data = bytes(reply.readAll())
         self._modifiers = json.loads(data)
@@ -49,6 +49,13 @@ class TestObject(QObject):
     @Property("QVariantList", notify = modifiersChanged)
     def modifierData(self):
         return self._modifiers
+
+    @Slot(str, result = "QVariant")
+    def getModifierByType(self, modifier_type):
+        for modifier in self._modifiers:
+            if modifier["type"] == modifier_type:
+                return modifier
+
 
     @Property("QVariantList", constant=True)
     def nodeData(self):
