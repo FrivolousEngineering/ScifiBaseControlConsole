@@ -45,12 +45,11 @@ Rectangle
     Grid
     {
         id: grid
-        spacing: 12
-        anchors.left: parent.left
-        anchors.leftMargin: 12
-        anchors.top: parent.top
-        anchors.topMargin: 12
+        spacing: 40
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
         columns: 4
+        columnSpacing: 65
 
         Repeater
         {
