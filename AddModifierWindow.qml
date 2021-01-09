@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.2
 CutoffRectangle
 {
     id: addModifierWindow
@@ -8,10 +8,10 @@ CutoffRectangle
     visible: false
 
     signal modifierAdded(string nodeId, string type)
-
-    Column
+    ScrollView
     {
-        spacing: 2
+        clip: true
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
         anchors
         {
             top: parent.top
@@ -21,16 +21,21 @@ CutoffRectangle
             margins: addModifierWindow.angleSize
             bottomMargin: 3
         }
-        Repeater
+        Column
         {
-            model: nodeObject ? nodeObject.supported_modifiers: null
-            Button
+            spacing: 2
+
+            Repeater
             {
-                text: backend.getModifierByType(modelData).name
-                onClicked:
+                model: nodeObject ? nodeObject.supported_modifiers: null
+                Button
                 {
-                    addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, modelData)
-                    addModifierWindow.visible = false
+                    text: backend.getModifierByType(modelData).name
+                    onClicked:
+                    {
+                        addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, modelData)
+                        addModifierWindow.visible = false
+                    }
                 }
             }
         }
