@@ -2,7 +2,7 @@ from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkReques
 from PyQt5.QtQml import qmlRegisterType
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView
-from PyQt5.QtCore import QUrl, QObject, QRect
+from PyQt5.QtCore import QUrl, QObject, QRect, QTimer
 from PyQt5.QtCore import pyqtSignal as Signal
 from PyQt5.QtCore import pyqtProperty as Property
 from PyQt5.QtCore import pyqtSlot as Slot
@@ -30,20 +30,34 @@ class TestObject(QObject):
         for node in self._data:
             node.serverReachableChanged.connect(self.serverReachableChanged)
 
+
+        self.requestModifiersData()
+
+        self._failed_update_timer = QTimer()
+        self._failed_update_timer.setInterval(10000)
+        self._failed_update_timer.setSingleShot(True)
+        self._failed_update_timer.timeout.connect(self.requestModifiersData)
+
+        self._modifiers = []
+
+    def requestModifiersData(self):
         # This is pretty static data so we only need to request this once.
         modifier_data_url = "http://localhost:5000/modifier/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
-
-        self._modifiers = []
 
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         if status_code == 404:
             print("server was not found!")
-            # TODO: handle this case, since it won't retry.
+            self._failed_update_timer.start()
             return
         data = bytes(reply.readAll())
-        self._modifiers = json.loads(data)
+        try:
+            self._modifiers = json.loads(data)
+        except:
+            print("Failed to get modifier data")
+            self._failed_update_timer.start()
+            return
         self.modifiersChanged.emit()
 
     @Property("QVariantList", notify = modifiersChanged)
