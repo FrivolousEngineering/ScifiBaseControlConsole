@@ -103,10 +103,6 @@ class TestObject(QObject):
 
         self._createSerial()
 
-        # Handle listening to serial.
-        #self._serial_listen_thread = QThread()
-        #self._serial_listen_thread.started.connect(self._handleSerial)
-
     def onCardDetected(self, card_id):
         print("A CARD WAS DETECTED!", card_id)
 
@@ -155,33 +151,6 @@ class TestObject(QObject):
             QCoreApplication.processEvents()
             # Check again after a bit of time has passed
             threading.Timer(10, self._createSerial).start()
-
-    '''def _handleSerial(self):
-        self._serial_network_manager = QNetworkAccessManager()
-        self._serial_network_manager.finished.connect(self._onSerialNetworkFinished)
-        self._authentication_scanner_attached = True
-        self.authenticationScannerAttachedChanged.emit()
-        while self._serial is not None:
-            QCoreApplication.processEvents()
-            try:
-                line = self._serial.readline()
-                if not line:
-                    # Skip empty commands
-                    continue
-                #TODO: clean up this horrible excuse of code.
-                if line.startswith(b"start"):
-                    print("Serial started as expected")
-                else:
-                    # We got an access code
-                    card_id = line.rstrip()
-                    RFID_url = "http://localhost:5000/RFID/{card_id}/".format(card_id=card_id.decode("utf-8"))
-                    self._serial_network_manager.get(QNetworkRequest(QUrl(RFID_url)))
-            except Exception as e:
-                print("failed", e)
-                self._serial = None
-                threading.Timer(10, self._createSerial).start()
-                self._authentication_scanner_attached = False
-                self.authenticationScannerAttachedChanged.emit()'''
 
     @Property(bool, notify=authenticationRequiredChanged)
     def authenticationRequired(self):
