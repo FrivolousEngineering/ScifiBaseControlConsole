@@ -1,8 +1,5 @@
 from typing import Callable, Dict
 
-#from PySide2.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
-#from PySide2.QtCore import QObject, Signal, QByteArray, Slot, Property, QTimer
-
 from PyQt5.QtCore import QObject, QTimer, QByteArray, QUrl
 from PyQt5.QtCore import pyqtSignal as Signal
 from PyQt5.QtCore import pyqtSlot as Slot
