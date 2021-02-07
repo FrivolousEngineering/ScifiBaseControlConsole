@@ -63,12 +63,14 @@ Item
         Column
         {
             id: reqColumn
-            anchors.fill: parent
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
             spacing: defaultSpacing
             anchors.topMargin: defaultSpacing
-            anchors.bottomMargin: requiredResourcesBar.angleSize
             anchors.leftMargin: defaultSpacing + 1
             anchors.rightMargin: defaultSpacing
+
             Text
             {
                 text: "req"
@@ -85,15 +87,39 @@ Item
                 x: -defaultSpacing
                 width: parent.width + 2 * defaultSpacing
             }
-            Repeater
+            Instantiator
             {
                 model: controller.resourcesRequired
+                asynchronous: true
+                onObjectAdded:
+                {
+                    object.parent = reqColumn
+                    object.opacity = 1 // Force the animation
+                }
+                onObjectRemoved: object.parent = null
                 delegate: ResourceIndicator
                 {
                     type: modelData.type
                     value: modelData.value
+                    opacity: 0
+                    Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
+                    width: reqColumn.width
+                    height: reqColumn.width
                 }
             }
+        }
+        Column
+        {
+            id: optColumn
+            spacing: defaultSpacing
+            anchors.top: reqColumn.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.topMargin: defaultSpacing
+            anchors.bottomMargin: requiredResourcesBar.angleSize
+            anchors.leftMargin: defaultSpacing + 1
+            anchors.rightMargin: defaultSpacing
             Text
             {
                 text: "OPT"
@@ -119,7 +145,7 @@ Item
 
                 onObjectAdded:
                 {
-                    object.parent = reqColumn
+                    object.parent = optColumn
                     object.opacity = 1 // Force the animation
                 }
                 onObjectRemoved: object.parent = null
@@ -130,7 +156,8 @@ Item
                     value: modelData.value
                     opacity: 0
                     Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
-                    width: reqColumn.width
+                    width: optColumn.width
+                    height: optColumn.width
                 }
             }
         }
