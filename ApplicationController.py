@@ -10,12 +10,16 @@ from Node import Node
 from SerialWorker import SerialWorker
 
 
+INACTIVITY_TIMEOUT = 30  # Seconds
+FAILED_REQUEST_TRY_AGAIN = 10  # Seconds
+
 class ApplicationController(QObject):
     serverReachableChanged = Signal()
     modifiersChanged = Signal()
     nodesChanged = Signal()
     authenticationRequiredChanged = Signal()
     authenticationScannerAttachedChanged = Signal()
+    inactivityTimeout = Signal()
 
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
@@ -35,22 +39,42 @@ class ApplicationController(QObject):
         self._modifiers = []
 
         self._failed_update_modifier_timer = QTimer()
-        self._failed_update_modifier_timer.setInterval(10000)
+        self._failed_update_modifier_timer.setInterval(FAILED_REQUEST_TRY_AGAIN * 1000)
         self._failed_update_modifier_timer.setSingleShot(True)
         self._failed_update_modifier_timer.timeout.connect(self.requestModifiersData)
 
         self.requestModifiersData()
 
         self._failed_update_nodes_timer = QTimer()
-        self._failed_update_nodes_timer.setInterval(10000)
+        self._failed_update_nodes_timer.setInterval(FAILED_REQUEST_TRY_AGAIN * 1000)
         self._failed_update_nodes_timer.setSingleShot(True)
         self._failed_update_nodes_timer.timeout.connect(self.requestKnownNodes)
+
+        self._inactivity_timer = QTimer()
+        self._inactivity_timer.setInterval(INACTIVITY_TIMEOUT * 1000)
+        self._inactivity_timer.setSingleShot(True)
+        self._inactivity_timer.timeout.connect(self.inactivityTimeout)
 
         self.requestKnownNodes()
 
         self._serial = None
 
         self._createSerial()
+        self.inactivityTimeout.connect(self.onInactivityTimeout)
+
+    def setAuthenticationRequired(self, auth_required: bool) -> None:
+        if self._authentication_required != auth_required:
+            if not auth_required:
+                self._inactivity_timer.start()  # User just logged in, so start the logout timer.
+            self._authentication_required = auth_required
+            self.authenticationRequiredChanged.emit()
+
+    def onInactivityTimeout(self):
+        self.setAuthenticationRequired(True)
+
+    @Slot()
+    def tickleTimeout(self):
+        self._inactivity_timer.start()
 
     def onCardDetected(self, card_id):
         print("A CARD WAS DETECTED!", card_id)
@@ -119,15 +143,6 @@ class ApplicationController(QObject):
         modifier_data_url = "http://localhost:5000/node/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
-    def _onSerialNetworkFinished(self, reply: QNetworkReply):
-        status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
-        if status_code != 404:
-            self._authentication_required = False
-            self.authenticationRequiredChanged.emit()
-            self._serial.write(b"ok\n")
-        else:
-            self._serial.write(b"nok\n")
-
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         url_string = reply.url().toString()
@@ -149,12 +164,10 @@ class ApplicationController(QObject):
         elif url_string.startswith('http://localhost:5000/RFID/'):
             if status_code != 404:
                 self._serial_worker.setReadResult(True)
-                self._authentication_required = False
-                self.authenticationRequiredChanged.emit()
+                self.setAuthenticationRequired(False)
             else:
                 self._serial_worker.setReadResult(False)
-                self._authentication_required = True
-                self.authenticationRequiredChanged.emit()
+                self.setAuthenticationRequired(True)
         else:
             # Yeah it's hackish, but it's faster than building a real system. For now we don't need more
             if status_code == 404:

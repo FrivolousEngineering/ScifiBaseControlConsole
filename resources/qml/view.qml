@@ -85,6 +85,15 @@ Rectangle
         {
             backend.getNodeById(nodeId).addModifier(type)
         }
+        Connections
+        {
+            target: backend
+            onInactivityTimeout:
+            {
+                // Ensure that this window his hidden again when inactivity was triggered
+                addModifierWindow.visible = false
+            }
+        }
     }
 
     Item
