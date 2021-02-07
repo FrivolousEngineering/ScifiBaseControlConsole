@@ -279,7 +279,7 @@ class MyQmlApplication(QApplication):
 
 if __name__ == '__main__':
     app = MyQmlApplication('Test',sys.argv)
-    app.showAndExec(QUrl("view.qml"))
+    app.showAndExec(QUrl("resources/qml/view.qml"))
 
 
 
