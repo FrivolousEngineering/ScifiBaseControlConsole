@@ -15,50 +15,86 @@ from RadialBar import RadialBar
 
 import sys
 
+
 class TestObject(QObject):
     serverReachableChanged = Signal()
     modifiersChanged = Signal()
+    nodesChanged = Signal()
 
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-        self._data = [ Node("generator_1"),  Node("fluid_cooler_2"), Node("battery_2"), Node("generator_2"), Node("fluid_cooler_1"),  Node("battery_1"), Node("water_storage_1"), Node("water_storage_2"), Node("rain_collector_2"), Node("hydroponics_2"), Node("oxygen_storage"), Node("water_purifier")]
+
+        self._data = []
         self._server_reachable = False
 
         self._network_manager = QNetworkAccessManager()
         self._network_manager.finished.connect(self._onNetworkFinished)
 
-        for node in self._data:
-            node.serverReachableChanged.connect(self.serverReachableChanged)
+        self._modifiers = []
 
+        self._failed_update_modifier_timer = QTimer()
+        self._failed_update_modifier_timer.setInterval(10000)
+        self._failed_update_modifier_timer.setSingleShot(True)
+        self._failed_update_modifier_timer.timeout.connect(self.requestModifiersData)
 
         self.requestModifiersData()
 
-        self._failed_update_timer = QTimer()
-        self._failed_update_timer.setInterval(10000)
-        self._failed_update_timer.setSingleShot(True)
-        self._failed_update_timer.timeout.connect(self.requestModifiersData)
+        self._failed_update_nodes_timer = QTimer()
+        self._failed_update_nodes_timer.setInterval(10000)
+        self._failed_update_nodes_timer.setSingleShot(True)
+        self._failed_update_nodes_timer.timeout.connect(self.requestKnownNodes)
 
-        self._modifiers = []
+        self.requestKnownNodes()
+
 
     def requestModifiersData(self):
         # This is pretty static data so we only need to request this once.
         modifier_data_url = "http://localhost:5000/modifier/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
+        
+    def requestKnownNodes(self):
+        # Debug function
+        modifier_data_url = "http://localhost:5000/node/"
+        self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
-        if status_code == 404:
-            print("server was not found!")
-            self._failed_update_timer.start()
-            return
-        data = bytes(reply.readAll())
-        try:
-            self._modifiers = json.loads(data)
-        except:
-            print("Failed to get modifier data")
-            self._failed_update_timer.start()
-            return
-        self.modifiersChanged.emit()
+        if reply.url() ==QUrl('http://localhost:5000/modifier/'):
+
+            if status_code == 404:
+                print("server was not found!")
+                self._failed_update_modifier_timer.start()
+                return
+            data = bytes(reply.readAll())
+
+            try:
+                self._modifiers = json.loads(data)
+            except:
+                print("Failed to get modifier data")
+                self._failed_update_modifier_timer.start()
+                return
+            self.modifiersChanged.emit()
+        else:
+            # Yeah it's hackish, but it's faster than building a real system. For now we don't need more
+            if status_code == 404:
+                print("Server was not found!")
+                self._failed_update_nodes_timer.start()
+                return
+            print("BEEEP!")
+            data = bytes(reply.readAll())
+
+            try:
+                data = json.loads(data)
+                print(data)
+                for item in data:
+                    new_node = Node(item["node_id"])
+                    self._data.append(new_node)
+                    new_node.serverReachableChanged.connect(self.serverReachableChanged)
+                self.nodesChanged.emit()
+            except:
+                print("Failed to get modifier data")
+                self._failed_update_nodes_timer.start()
+                return
 
     @Property("QVariantList", notify = modifiersChanged)
     def modifierData(self):
@@ -71,7 +107,7 @@ class TestObject(QObject):
                 return modifier
 
 
-    @Property("QVariantList", constant=True)
+    @Property("QVariantList", notify = nodesChanged)
     def nodeData(self):
         return self._data
 
@@ -109,6 +145,7 @@ class MyQmlApplication(QApplication):
         self._qquickview.setSource(qml_url)
         self._qquickview.show()
         return self.exec_()
+
 
 if __name__ == '__main__':
     app = MyQmlApplication('Test',sys.argv)
