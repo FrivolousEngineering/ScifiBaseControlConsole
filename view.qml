@@ -40,6 +40,7 @@ Rectangle
         addModifierWindow.nodeObject = backend.getNodeById(nodeId)
         addModifierWindow.visible = true
     }
+
     ScrollView
     {
         anchors.fill: parent
@@ -85,6 +86,28 @@ Rectangle
             backend.getNodeById(nodeId).addModifier(type)
         }
     }
+
+    Item
+    {
+        anchors.fill: parent
+        visible: backend.authenticationRequired
+        Rectangle
+        {
+            opacity: 0.9
+            color: "black"
+            anchors.fill: parent
+        }
+        Text
+        {
+            text: "AUTHENTICATION REQUIRED"
+            color: "white"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.pointSize: 40
+            font.family: "Roboto"
+        }
+    }
+
 
 
     /*onActiveNodeGraphDataChanged:
