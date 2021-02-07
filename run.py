@@ -20,6 +20,47 @@ from RadialBar import RadialBar
 import sys
 
 
+class SerialWorker(QObject):
+    cardDetected = Signal(str)
+    finished = Signal()
+
+    def __init__(self, serial):
+        super().__init__()
+        self._serial = serial
+        self._read_result = None
+
+    @Slot(bool)
+    def setReadResult(self, result):
+        self._read_result = result
+
+    @Slot()
+    def run(self):
+        while True:
+            if self._read_result is not None:
+                if self._read_result is True:
+                    self._serial.write(b"ok\n")
+                else:
+
+                    self._serial.write(b"nok\n")
+                self.setReadResult(None)
+            try:
+                line = self._serial.readline()
+            except:
+                self.finished.emit()
+                return
+            if not line:
+                # Skip empty commands
+                continue
+            # TODO: clean up this horrible excuse of code.
+            if line.startswith(b"start"):
+                print("Serial started as expected")
+            else:
+                # We got an access code
+                card_id = line.rstrip()
+                self.cardDetected.emit(card_id.decode("utf-8"))
+
+
+
 class TestObject(QObject):
     serverReachableChanged = Signal()
     modifiersChanged = Signal()
@@ -59,32 +100,46 @@ class TestObject(QObject):
         self.requestKnownNodes()
 
         self._serial = None
+
         self._createSerial()
 
         # Handle listening to serial.
-        self._serial_listen_thread = QThread()
-        self._serial_listen_thread.started.connect(self._handleSerial)
+        #self._serial_listen_thread = QThread()
+        #self._serial_listen_thread.started.connect(self._handleSerial)
+
+    def onCardDetected(self, card_id):
+        print("A CARD WAS DETECTED!", card_id)
+
+        RFID_url = "http://localhost:5000/RFID/{card_id}/".format(card_id=card_id)
+        self._network_manager.get(QNetworkRequest(QUrl(RFID_url)))
 
     def _startSerialThreads(self):
         print("starting serial threads")
-        self._serial_listen_thread.quit()
-        self._serial_listen_thread = QThread()
-        self._serial_listen_thread.started.connect(self._handleSerial)
-        self._serial_listen_thread.start()
+
+        self._serial_worker = SerialWorker(self._serial)
+        self._serial_thread = QThread()
+        self._serial_thread.started.connect(self._serial_worker.run)
+        self._serial_worker.cardDetected.connect(self.onCardDetected)  # Connect your signals/slots
+        self._serial_worker.finished.connect(self._createSerial)
+        self._serial_worker.moveToThread(self._serial_thread)  # Move the Worker object to the Thread object
+        self._serial_thread.start()
 
     def _createSerial(self):
+        self._authentication_scanner_attached = False
+        self.authenticationScannerAttachedChanged.emit()
+        self._serial = None
         print("Attempting to create serial")
         for i in range(0, 10):
             try:
                 port = "/dev/ttyUSB%s" % i
-                self._serial = serial.Serial(port, 9600, timeout=1)
+                self._serial = serial.Serial(port, 9600, timeout=0.1)
                 print("Connected with serial %s" % port)
                 break
             except:
                 pass
             try:
                 port = "/dev/ttyACM%s" % i
-                self._serial = serial.Serial(port, 9600, timeout=1)
+                self._serial = serial.Serial(port, 9600, timeout=0.1)
                 print("Connected with serial %s" % port)
                 break
             except:
@@ -92,16 +147,16 @@ class TestObject(QObject):
 
         if self._serial is not None:
             # Call later
+            self._authentication_scanner_attached = True
+            self.authenticationScannerAttachedChanged.emit()
             threading.Timer(2, self._startSerialThreads).start()
         else:
             print("Unable to create serial. Attempting again in a few seconds.")
-            self._authentication_scanner_attached = False
-            self.authenticationScannerAttachedChanged.emit()
             QCoreApplication.processEvents()
             # Check again after a bit of time has passed
             threading.Timer(10, self._createSerial).start()
 
-    def _handleSerial(self):
+    '''def _handleSerial(self):
         self._serial_network_manager = QNetworkAccessManager()
         self._serial_network_manager.finished.connect(self._onSerialNetworkFinished)
         self._authentication_scanner_attached = True
@@ -126,7 +181,7 @@ class TestObject(QObject):
                 self._serial = None
                 threading.Timer(10, self._createSerial).start()
                 self._authentication_scanner_attached = False
-                self.authenticationScannerAttachedChanged.emit()
+                self.authenticationScannerAttachedChanged.emit()'''
 
     @Property(bool, notify=authenticationRequiredChanged)
     def authenticationRequired(self):
@@ -158,7 +213,8 @@ class TestObject(QObject):
 
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
-        if reply.url() == QUrl('http://localhost:5000/modifier/'):
+        url_string = reply.url().toString()
+        if url_string == 'http://localhost:5000/modifier/':
             if status_code == 404:
                 print("server was not found!")
                 self._failed_update_modifier_timer.start()
@@ -172,6 +228,16 @@ class TestObject(QObject):
                 self._failed_update_modifier_timer.start()
                 return
             self.modifiersChanged.emit()
+
+        elif url_string.startswith('http://localhost:5000/RFID/'):
+            if status_code != 404:
+                self._serial_worker.setReadResult(True)
+                self._authentication_required = False
+                self.authenticationRequiredChanged.emit()
+            else:
+                self._serial_worker.setReadResult(False)
+                self._authentication_required = True
+                self.authenticationRequiredChanged.emit()
         else:
             # Yeah it's hackish, but it's faster than building a real system. For now we don't need more
             if status_code == 404:
