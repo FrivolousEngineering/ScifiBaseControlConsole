@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 
+import QtQml 2.2
+
 import SDK 1.0
 
 Rectangle
@@ -53,9 +55,17 @@ Rectangle
             columns: 4
             columnSpacing: 65
 
-            Repeater
+            Instantiator
             {
                 model: backend.nodeData
+                asynchronous: true
+                onObjectAdded:
+                {
+                    object.parent = grid
+                    object.opacity = 1 // Force the animation
+                }
+                onObjectRemoved: object.parent = null
+
                 Node
                 {
                     titleText: modelData.id
@@ -67,9 +77,11 @@ Rectangle
                     optimalTemperature: modelData.optimalTemperature
                     isTemperatureDependant: modelData.isTemperatureDependant
                     minTemperature: 288.15 // 15 degrees kelvin
-
+                    opacity: 0
                     controller: modelData
                     onAddModifierClicked: showModifierWindow(nodeId)
+
+                    Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
                 }
             }
         }
