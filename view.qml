@@ -40,33 +40,36 @@ Rectangle
         addModifierWindow.nodeObject = backend.getNodeById(nodeId)
         addModifierWindow.visible = true
     }
-
-    Grid
+    ScrollView
     {
-        id: grid
-        spacing: 40
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        columns: 4
-        columnSpacing: 65
-
-        Repeater
+        anchors.fill: parent
+        Grid
         {
-            model: backend.nodeData
-            Node
-            {
-                titleText: modelData.id
-                currentTemperature: modelData.temperature
-                previousTemperature: modelData.historyData["temperature"][Math.max(modelData.historyData["temperature"].length -5, 0)]
-                historyTemperature: modelData.historyData["temperature"][Math.max(modelData.historyData["temperature"].length -20, 0)]
-                maxSafeTemperature: modelData.max_safe_temperature
-                maxTemperature: modelData.max_safe_temperature + 25
-                optimalTemperature: modelData.optimalTemperature
-                isTemperatureDependant: modelData.isTemperatureDependant
-                minTemperature: 288.15 // 15 degrees kelvin
+            id: grid
+            spacing: 40
+            anchors.left: parent.left
+            anchors.leftMargin: 40
+            columns: 4
+            columnSpacing: 65
 
-                controller: modelData
-                onAddModifierClicked: showModifierWindow(nodeId)
+            Repeater
+            {
+                model: backend.nodeData
+                Node
+                {
+                    titleText: modelData.id
+                    currentTemperature: modelData.temperature
+                    previousTemperature: modelData.historyData["temperature"][Math.max(modelData.historyData["temperature"].length -5, 0)]
+                    historyTemperature: modelData.historyData["temperature"][Math.max(modelData.historyData["temperature"].length -20, 0)]
+                    maxSafeTemperature: modelData.max_safe_temperature
+                    maxTemperature: modelData.max_safe_temperature + 25
+                    optimalTemperature: modelData.optimalTemperature
+                    isTemperatureDependant: modelData.isTemperatureDependant
+                    minTemperature: 288.15 // 15 degrees kelvin
+
+                    controller: modelData
+                    onAddModifierClicked: showModifierWindow(nodeId)
+                }
             }
         }
     }
