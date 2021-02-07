@@ -61,8 +61,8 @@ CutoffRectangle
 
     property string type
 
-    width: parent.width
-    height: width
+    implicitWidth: parent.width
+    implicitHeight: width
     color: getResourceColor(type)
     angleSize: 4
     property double value

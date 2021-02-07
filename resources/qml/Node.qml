@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import SDK 1.0
+import QtQml 2.2
 
 Item
 {
@@ -61,6 +62,7 @@ Item
 
         Column
         {
+            id: reqColumn
             anchors.fill: parent
             spacing: defaultSpacing
             anchors.topMargin: defaultSpacing
@@ -110,13 +112,25 @@ Item
                 width: parent.width + 2 * defaultSpacing
             }
 
-            Repeater
+            Instantiator
             {
                 model: controller.optionalResourcesRequired
+                asynchronous: true
+
+                onObjectAdded:
+                {
+                    object.parent = reqColumn
+                    object.opacity = 1 // Force the animation
+                }
+                onObjectRemoved: object.parent = null
+
                 delegate: ResourceIndicator
                 {
                     type: modelData.type
                     value: modelData.value
+                    opacity: 0
+                    Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
+                    width: reqColumn.width
                 }
             }
         }
@@ -181,6 +195,8 @@ Item
                 angleSize: 2
                 height: 120
                 visible: controller.hasSettablePerformance
+                opacity: visible? 1: 0
+                Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
 
                 titleText: "PERFORMANCE"
 
@@ -571,6 +587,7 @@ Item
 
         Column
         {
+            id: recvColumn
             anchors.fill: parent
             spacing: defaultSpacing
             anchors.topMargin: defaultSpacing
@@ -593,13 +610,23 @@ Item
                 width: parent.width + 2 * defaultSpacing
                 x: -defaultSpacing
             }
-            Repeater
+            Instantiator
             {
                 model: controller.resourcesReceived
+                onObjectAdded:
+                {
+                    object.parent = recvColumn
+                    object.opacity = 1 // Force the animation
+                }
+                onObjectRemoved: object.parent = null
+                asynchronous: true
                 delegate: ResourceIndicator
                 {
                     type: modelData.type
                     value: modelData.value
+                    opacity: 0
+                    Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
+                    width: recvColumn.width
                 }
             }
         }
