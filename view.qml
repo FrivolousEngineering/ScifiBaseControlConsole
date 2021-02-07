@@ -19,7 +19,7 @@ Rectangle
 
     property string activeProperty: "temperature"
 
-    property variant activeNodeGraphData: activeNode.historyData[activeProperty]
+    //property variant activeNodeGraphData: activeNode.historyData[activeProperty]
 
     property color border_color: "#d3d3d3"
     property color text_color: "white"
@@ -99,12 +99,22 @@ Rectangle
         }
         Text
         {
+            id: authRequiredText
             text: "AUTHENTICATION REQUIRED"
             color: "white"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.pointSize: 40
             font.family: "Roboto"
+        }
+        Text
+        {
+
+            text: "CARD READER NOT ATTACHED"
+            anchors.top: authRequiredText.bottom
+            color: "white"
+            anchors.horizontalCenter: parent.horizontalCenter
+            visible: !backend.authenticationScannerAttached
         }
     }
 

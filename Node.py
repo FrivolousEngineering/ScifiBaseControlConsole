@@ -129,7 +129,7 @@ class Node(QObject):
         :return:
         """
         self.get(self._source_url, self._onSourceUrlFinished)
-        self.get(self._all_chart_data_url, self._onChartDataFinished)
+        #self.get(self._all_chart_data_url, self._onChartDataFinished)
         self.get(self._modifiers_url, self._onModifiersChanged)
         self.get(self._additional_properties_url, self._onAdditionalPropertiesFinished)
 

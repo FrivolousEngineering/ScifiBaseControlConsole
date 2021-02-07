@@ -25,6 +25,7 @@ class TestObject(QObject):
     modifiersChanged = Signal()
     nodesChanged = Signal()
     authenticationRequiredChanged = Signal()
+    authenticationScannerAttachedChanged = Signal()
 
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
@@ -33,6 +34,7 @@ class TestObject(QObject):
         self._server_reachable = False
 
         self._authentication_required = True
+        self._authentication_scanner_attached = False
 
         self._network_manager = QNetworkAccessManager()
         self._network_manager.finished.connect(self._onNetworkFinished)
@@ -65,6 +67,9 @@ class TestObject(QObject):
 
     def _startSerialThreads(self):
         print("starting serial threads")
+        self._serial_listen_thread.quit()
+        self._serial_listen_thread = QThread()
+        self._serial_listen_thread.started.connect(self._handleSerial)
         self._serial_listen_thread.start()
 
     def _createSerial(self):
@@ -72,14 +77,14 @@ class TestObject(QObject):
         for i in range(0, 10):
             try:
                 port = "/dev/ttyUSB%s" % i
-                self._serial = serial.Serial(port, 9600, timeout=3)
+                self._serial = serial.Serial(port, 9600, timeout=1)
                 print("Connected with serial %s" % port)
                 break
             except:
                 pass
             try:
                 port = "/dev/ttyACM%s" % i
-                self._serial = serial.Serial(port, 9600, timeout=3)
+                self._serial = serial.Serial(port, 9600, timeout=1)
                 print("Connected with serial %s" % port)
                 break
             except:
@@ -90,12 +95,17 @@ class TestObject(QObject):
             threading.Timer(2, self._startSerialThreads).start()
         else:
             print("Unable to create serial. Attempting again in a few seconds.")
+            self._authentication_scanner_attached = False
+            self.authenticationScannerAttachedChanged.emit()
+            QCoreApplication.processEvents()
             # Check again after a bit of time has passed
-            threading.Timer(30, self._createSerial).start()
+            threading.Timer(10, self._createSerial).start()
 
     def _handleSerial(self):
         self._serial_network_manager = QNetworkAccessManager()
         self._serial_network_manager.finished.connect(self._onSerialNetworkFinished)
+        self._authentication_scanner_attached = True
+        self.authenticationScannerAttachedChanged.emit()
         while self._serial is not None:
             QCoreApplication.processEvents()
             try:
@@ -113,12 +123,19 @@ class TestObject(QObject):
                     self._serial_network_manager.get(QNetworkRequest(QUrl(RFID_url)))
             except Exception as e:
                 print("failed", e)
-                time.sleep(0.1)  # Prevent error spam.
-
+                self._serial = None
+                threading.Timer(10, self._createSerial).start()
+                self._authentication_scanner_attached = False
+                self.authenticationScannerAttachedChanged.emit()
 
     @Property(bool, notify=authenticationRequiredChanged)
     def authenticationRequired(self):
         return self._authentication_required
+
+    @Property(bool, notify=authenticationScannerAttachedChanged)
+    def authenticationScannerAttached(self):
+        print("AUTH SCANNER ATTACHED", self._authentication_scanner_attached)
+        return self._authentication_scanner_attached
 
     def requestModifiersData(self):
         # This is pretty static data so we only need to request this once.
