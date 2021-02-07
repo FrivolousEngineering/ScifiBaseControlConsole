@@ -103,8 +103,8 @@ Item
                     value: modelData.value
                     opacity: 0
                     Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
-                    width: reqColumn.width
-                    height: reqColumn.width
+                    width: sideBarWidth - (2 * defaultSpacing + 1)  // parent.width caused a binding issue sometimes..
+                    height: sideBarWidth - (2 * defaultSpacing + 1)
                 }
             }
         }
