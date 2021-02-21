@@ -168,7 +168,6 @@ class ApplicationController(QObject):
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         url_string = reply.url().toString()
-        print('beepboop')
         if "modifier" in url_string:
             if status_code == 404:
                 print("server was not found!")
