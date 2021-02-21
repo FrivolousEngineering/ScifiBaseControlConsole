@@ -8,10 +8,11 @@ import json
 
 from Node import Node
 from SerialWorker import SerialWorker
-
+from ZeroConfWorker import ZeroConfWorker
 
 INACTIVITY_TIMEOUT = 30  # Seconds
 FAILED_REQUEST_TRY_AGAIN = 10  # Seconds
+
 
 class ApplicationController(QObject):
     serverReachableChanged = Signal()
@@ -23,7 +24,7 @@ class ApplicationController(QObject):
 
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-
+        self._startZeroConfThreads()
         self._data = []
         self._server_reachable = False
 
@@ -55,12 +56,18 @@ class ApplicationController(QObject):
         self._inactivity_timer.setSingleShot(True)
         self._inactivity_timer.timeout.connect(self.inactivityTimeout)
 
-        self.requestKnownNodes()
+        self._failed_update_nodes_timer.start()
 
         self._serial = None
 
         self._createSerial()
         self.inactivityTimeout.connect(self.onInactivityTimeout)
+
+    def _onServerAddressChanged(self):
+        for node in self._data:
+            node.updateServerUrl(self._zeroconf_worker.server_address)
+        self._failed_update_modifier_timer.start()
+        #self.requestKnownNodes()
 
     def setAuthenticationRequired(self, auth_required: bool) -> None:
         if self._authentication_required != auth_required:
@@ -76,10 +83,13 @@ class ApplicationController(QObject):
     def tickleTimeout(self):
         self._inactivity_timer.start()
 
+    def getBaseUrl(self):
+        return "http://" + self._zeroconf_worker.server_address + ":5000"
+
     def onCardDetected(self, card_id):
         print("A CARD WAS DETECTED!", card_id)
 
-        RFID_url = "http://localhost:5000/RFID/{card_id}/".format(card_id=card_id)
+        RFID_url = self.getBaseUrl() + "/RFID/{card_id}/".format(card_id=card_id)
         self._network_manager.get(QNetworkRequest(QUrl(RFID_url)))
 
     def _startSerialThreads(self):
@@ -92,6 +102,17 @@ class ApplicationController(QObject):
         self._serial_worker.finished.connect(self._createSerial)
         self._serial_worker.moveToThread(self._serial_thread)  # Move the Worker object to the Thread object
         self._serial_thread.start()
+
+    def _startZeroConfThreads(self):
+        print("starting zeroconf")
+        self._zeroconf_worker = ZeroConfWorker()
+
+        self._zeroconf_thread = QThread()
+        self._zeroconf_thread.started.connect(self._zeroconf_worker.start)
+        self._zeroconf_worker.serverAddressChanged.connect(self._onServerAddressChanged)
+        self._zeroconf_worker.moveToThread(self._zeroconf_thread)
+
+        self._zeroconf_thread.start()
 
     def _createSerial(self):
         self._authentication_scanner_attached = False
@@ -135,18 +156,20 @@ class ApplicationController(QObject):
 
     def requestModifiersData(self):
         # This is pretty static data so we only need to request this once.
-        modifier_data_url = "http://localhost:5000/modifier/"
+        modifier_data_url = self.getBaseUrl() + "/modifier/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
     def requestKnownNodes(self):
+        print('requesting nodes')
         # Debug function
-        modifier_data_url = "http://localhost:5000/node/"
+        modifier_data_url = self.getBaseUrl() + "/node/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         url_string = reply.url().toString()
-        if url_string == 'http://localhost:5000/modifier/':
+        print('beepboop')
+        if "modifier" in url_string:
             if status_code == 404:
                 print("server was not found!")
                 self._failed_update_modifier_timer.start()
@@ -160,8 +183,7 @@ class ApplicationController(QObject):
                 self._failed_update_modifier_timer.start()
                 return
             self.modifiersChanged.emit()
-
-        elif url_string.startswith('http://localhost:5000/RFID/'):
+        elif "RFID" in url_string:
             if status_code != 404:
                 self._serial_worker.setReadResult(True)
                 self.setAuthenticationRequired(False)
@@ -180,6 +202,7 @@ class ApplicationController(QObject):
                 data = json.loads(data)
                 for item in data:
                     new_node = Node(item["node_id"])
+                    new_node.updateServerUrl(self._zeroconf_worker.server_address)
                     self._data.append(new_node)
                     new_node.serverReachableChanged.connect(self.serverReachableChanged)
                 self.nodesChanged.emit()

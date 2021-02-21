@@ -19,22 +19,17 @@ class Node(QObject):
         self._node_id = node_id
 
         self._source_url = "http://localhost:5000/node/%s/" % self._node_id
-        self._temperature_history_url = "http://localhost:5000/node/%s/temperature/history/?showLast=50" % self._node_id
-        self._all_chart_data_url = "http://localhost:5000/node/%s/all_property_chart_data/?showLast=50" % self._node_id
         self._incoming_connections_url = "http://localhost:5000/node/%s/connections/incoming/" % self._node_id
         self._outgoing_connections_url = "http://localhost:5000/node/%s/connections/outgoing/" % self._node_id
         self._performance_url = "http://localhost:5000/node/%s/performance/" % self._node_id
-
         self._additional_properties_url = "http://localhost:5000/node/%s/additional_properties/" % self._node_id
-
         self._static_properties_url = "http://localhost:5000/node/%s/static_properties/" % self._node_id
         self._modifiers_url = "http://localhost:5000/node/%s/modifiers/" % self._node_id
+
         self._all_chart_data = {}
 
         self._network_manager = QNetworkAccessManager()
         self._network_manager.finished.connect(self._onNetworkFinished)
-
-        self._temperature_history = []
         self._data = None
         self._enabled = True
         self._incoming_connections = []
@@ -78,7 +73,6 @@ class Node(QObject):
         self.fullUpdate()
 
     temperatureChanged = Signal()
-    temperatureHistoryChanged = Signal()
     historyPropertiesChanged = Signal()
     historyDataChanged = Signal()
     enabledChanged = Signal()
@@ -103,6 +97,20 @@ class Node(QObject):
     healthChanged = Signal()
     maxAmountStoredChanged = Signal()
     amountStoredChanged = Signal()
+
+    def updateServerUrl(self, server_url):
+        if server_url == "":
+            return
+
+        self._server_url = "http://" + server_url + ":5000"
+
+        self._source_url = self._server_url+ "/node/%s/" % self._node_id
+        self._incoming_connections_url = self._server_url + "/node/%s/connections/incoming/" % self._node_id
+        self._outgoing_connections_url = self._server_url + "/node/%s/connections/outgoing/" % self._node_id
+        self._performance_url = self._server_url + "/node/%s/performance/" % self._node_id
+        self._additional_properties_url = self._server_url + "/node/%s/additional_properties/" % self._node_id
+        self._static_properties_url = self._server_url + "/node/%s/static_properties/" % self._node_id
+        self._modifiers_url = self._server_url + "/node/%s/modifiers/" % self._node_id
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
         reply = self._network_manager.get(QNetworkRequest(QUrl(url)))
@@ -401,10 +409,6 @@ class Node(QObject):
     @Property(float, notify=temperatureChanged)
     def temperature(self):
         return self._temperature
-
-    @Property("QVariantList", notify=temperatureHistoryChanged)
-    def temperatureHistory(self):
-        return self._temperature_history
 
     @Property("QVariantList", notify=historyPropertiesChanged)
     def allHistoryProperties(self):
