@@ -101,8 +101,10 @@ class ZeroConfWorker(QObject):
 
         if info and info.addresses:
             if info.name == "Base-Control-Server._ScifiBase._tcp.local.":
-                self._server_address = '.'.join(map(str, info.addresses[0]))
-                self.serverAddressChanged.emit()
+                new_server_address = '.'.join(map(str, info.addresses[0]))
+                if new_server_address != self._server_address:
+                    self._server_address = new_server_address
+                    self.serverAddressChanged.emit()
         else:
             print("Could not get information about %s" % name)
             return False
