@@ -654,6 +654,7 @@ Item
                     opacity: 0
                     Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
                     width: recvColumn.width
+                    height: recvColumn.width
                 }
             }
         }
