@@ -56,8 +56,6 @@ class ApplicationController(QObject):
         self._inactivity_timer.setSingleShot(True)
         self._inactivity_timer.timeout.connect(self.inactivityTimeout)
 
-        self._failed_update_nodes_timer.start()
-
         self._serial = None
 
         self._createSerial()
