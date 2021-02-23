@@ -67,7 +67,7 @@ class ApplicationController(QObject):
         for node in self._data:
             node.updateServerUrl(self._zeroconf_worker.server_address)
         self._failed_update_modifier_timer.start()
-        #self.requestKnownNodes()
+        self.requestKnownNodes()
 
     def setAuthenticationRequired(self, auth_required: bool) -> None:
         if self._authentication_required != auth_required:
