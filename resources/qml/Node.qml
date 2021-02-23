@@ -392,8 +392,8 @@ Item
                                 name: modelData.name
                                 abbreviation: modelData.abbreviation
                                 duration: modelData.duration
-                                width: 30 // Hack: For some reason the binding fails here...
-                                height: 30
+                                width: 28 // Hack: For some reason the binding fails here...
+                                height: 28
                             }
                         }
                     }
