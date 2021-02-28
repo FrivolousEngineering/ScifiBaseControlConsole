@@ -289,8 +289,8 @@ Item
 
                 Text
                 {
-                    property double amountStored: controller.additionalProperties["amount_stored"] ? controller.additionalProperties["amount_stored"]["value"]: -1
-                    //property double maxAmoutnStored: controller.additionalProperties[max_amount_stored
+                    property double amountStored: visible ? controller.additionalProperties["amount_stored"]["value"]: -1
+                    property double maxAmountStored: visible? controller.additionalProperties["amount_stored"]["max_value"]: -1
 
                     Behavior on amountStored {
                         NumberAnimation {
@@ -299,7 +299,7 @@ Item
                         }
                     }
 
-                    text: Math.round(amountStored)
+                    text: maxAmountStored > -1 ? Math.round(amountStored) + "\n" + Math.round(maxAmountStored): Math.round(amountStored)
                     font: Qt.font({
                         family: "Roboto",
                         pixelSize: 20,
