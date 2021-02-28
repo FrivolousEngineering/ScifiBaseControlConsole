@@ -22,8 +22,11 @@ class ApplicationController(QObject):
     authenticationScannerAttachedChanged = Signal()
     inactivityTimeout = Signal()
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, rfid_card = None):
         QObject.__init__(self, parent)
+
+        self._rfid_card = rfid_card
+
         self._startZeroConfThreads()
         self._data = []
         self._server_reachable = False
@@ -57,9 +60,12 @@ class ApplicationController(QObject):
         self._inactivity_timer.timeout.connect(self.inactivityTimeout)
 
         self._serial = None
-
-        self._createSerial()
-        self.inactivityTimeout.connect(self.onInactivityTimeout)
+        if self._rfid_card:
+            self.setAuthenticationRequired(False)
+        else:
+            # Check for RFID scanner as normal
+            self._createSerial()
+            self.inactivityTimeout.connect(self.onInactivityTimeout)
 
     def _onServerAddressChanged(self):
         for node in self._data:
