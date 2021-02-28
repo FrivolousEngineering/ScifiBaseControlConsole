@@ -645,7 +645,7 @@ Item
                     object.parent = recvColumn
                     object.opacity = 1 // Force the animation
                     object.width = recvColumn.width
-                    object.height = recvColum.width
+                    object.height = recvColumn.width
                 }
                 onObjectRemoved: object.parent = null
                 asynchronous: true
