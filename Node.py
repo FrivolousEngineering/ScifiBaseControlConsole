@@ -58,8 +58,8 @@ class Node(QObject):
         self._failed_update_timer.setSingleShot(True)
         self._failed_update_timer.timeout.connect(self.fullUpdate)
 
-        self._additional_properties = {}
-        self._converted_additional_properties = []
+        self._additional_properties = []
+        self._converted_additional_properties = {}
         self.server_reachable = False
         self._optimal_temperature = 200
         self._is_temperature_dependant = False
@@ -166,13 +166,13 @@ class Node(QObject):
 
         if self._additional_properties != result:
             self._additional_properties = result
-            self._converted_additional_properties = []
+            self._converted_additional_properties = {}
             # Clear the list and convert them in a way that we can use them in a repeater.
-            for key in result:
-                self._converted_additional_properties.append({"key": key,
-                                                              "value": result[key]["value"],
-                                                              "max_value": result[key]["max_value"]})
-            self._converted_additional_properties.reverse()
+            for additional_property in result:
+                self._converted_additional_properties[additional_property["key"]] = {
+                                                              "value": additional_property["value"],
+                                                              "max_value": additional_property["max_value"]}
+            #self._converted_additional_properties.reverse()
             self.additionalPropertiesChanged.emit()
 
     def _onModifiersChanged(self, reply: QNetworkReply):
@@ -328,8 +328,6 @@ class Node(QObject):
         self._updateProperty("target_performance", data["target_performance"])
         self._updateProperty("health", data["health"])
 
-        self._updateProperty("amount_stored", data["amount"])
-
         # We need to update the resources a bit different to prevent recreation of QML items.
         # As such we use tiny QObjects with their own getters and setters.
         # If an object is already in the list with the right type, don't recreate it (just update it's value)
@@ -418,7 +416,7 @@ class Node(QObject):
     def historyData(self):
         return self._all_chart_data
 
-    @Property("QVariantList", notify=additionalPropertiesChanged)
+    @Property("QVariantMap", notify=additionalPropertiesChanged)
     def additionalProperties(self):
         return self._converted_additional_properties
 

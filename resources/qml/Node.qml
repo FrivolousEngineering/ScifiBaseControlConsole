@@ -284,12 +284,13 @@ Item
             BoxWithTitle
             {
                 anchors.fill: performanceDialItem
-                visible: !performanceDialItem.visible && controller.amount_stored != -1
+                visible: !performanceDialItem.visible && ("amount_stored" in controller.additionalProperties)
                 titleText: "STORAGE"
 
                 Text
                 {
-                    property double amountStored: controller.amount_stored
+                    property double amountStored: controller.additionalProperties["amount_stored"] ? controller.additionalProperties["amount_stored"]["value"]: -1
+                    //property double maxAmoutnStored: controller.additionalProperties[max_amount_stored
 
                     Behavior on amountStored {
                         NumberAnimation {
