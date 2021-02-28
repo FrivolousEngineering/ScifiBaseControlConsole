@@ -8,6 +8,7 @@ from RadialBar import RadialBar
 
 import argparse
 
+
 class ScifiBaseApplication(QApplication):
     def __init__(self, title, args, parser):
         QApplication.__init__(self, args)
