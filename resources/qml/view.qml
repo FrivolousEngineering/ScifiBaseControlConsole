@@ -50,10 +50,10 @@ Rectangle
         Grid
         {
             id: grid
-            spacing: 40
+            spacing: 20
             anchors.left: parent.left
-            anchors.leftMargin: 40
-            columns: 4
+            anchors.leftMargin: 30
+            columns: (window.width - 2 * 20) / (window.object_width + 65)
             columnSpacing: 65
 
             Instantiator
