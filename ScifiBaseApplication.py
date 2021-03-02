@@ -25,7 +25,9 @@ class ScifiBaseApplication(QApplication):
         self._qquickview.rootContext().setContextProperty("backend", beep)
         self._qquickview.setSource(qml_url)
         self._qquickview.mouseMoved.connect(beep.tickleTimeout)
+        self._qquickview.setResizeMode(self._qquickview.SizeRootObjectToView)
         self._qquickview.show()
+
         return self.exec_()
 
 

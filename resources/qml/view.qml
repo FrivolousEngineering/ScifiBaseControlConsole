@@ -35,6 +35,7 @@ Rectangle
     {
         anchors.fill: parent
         source: "background_hexes.png"
+        fillMode: Image.PreserveAspectFit
     }
 
     function showModifierWindow(nodeId)
