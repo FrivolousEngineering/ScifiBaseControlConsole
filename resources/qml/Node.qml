@@ -679,4 +679,70 @@ Item
             }
         }
     }
+    CutoffRectangle
+    {
+        id: producedResourcesBar
+        anchors
+        {
+            left: parent.right
+            top: parent.top
+            bottom: parent.bottom
+            bottomMargin: parent.angleSize
+            topMargin: parent.angleSize
+        }
+
+        angleSize: sideBarAngle
+        cornerSide: CutoffRectangle.Direction.Right
+        width: sideBarWidth
+        border.width: borderSize
+
+        Column
+        {
+            id: producedColumn
+            anchors.fill: parent
+            spacing: defaultSpacing
+            anchors.topMargin: defaultSpacing
+            anchors.bottomMargin: producedResourcesBar.angleSize
+            anchors.leftMargin: defaultSpacing + 1
+            anchors.rightMargin: defaultSpacing
+            Text
+            {
+                text: "PROD"
+                font: resourceFont
+                color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+            }
+            Rectangle
+            {
+                height: 1
+                color: "white"
+                width: parent.width + 2 * defaultSpacing
+                x: -defaultSpacing
+            }
+            Instantiator
+            {
+                model: controller.resourcesProduced
+                onObjectAdded:
+                {
+                    object.parent = producedColumn
+                    object.opacity = 1 // Force the animation
+                    object.width = producedColumn.width
+                    object.height = producedColumn.width
+                }
+                onObjectRemoved: object.parent = null
+                asynchronous: true
+                delegate: ResourceIndicator
+                {
+                    type: modelData.type
+                    value: modelData.value
+                    opacity: 0
+                    Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
+                    width: producedColumn.width
+                    height: producedColumn.width
+                }
+            }
+        }
+    }
 }
