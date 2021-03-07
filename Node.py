@@ -106,6 +106,7 @@ class Node(QObject):
 
         self._source_url = self._server_url+ "/node/%s/" % self._node_id
         self._incoming_connections_url = self._server_url + "/node/%s/connections/incoming/" % self._node_id
+        self._all_chart_data_url =  self._server_url + "/node/%s/all_property_chart_data/?showLast=50" % self._node_id
         self._outgoing_connections_url = self._server_url + "/node/%s/connections/outgoing/" % self._node_id
         self._performance_url = self._server_url + "/node/%s/performance/" % self._node_id
         self._additional_properties_url = self._server_url + "/node/%s/additional_properties/" % self._node_id
@@ -134,7 +135,7 @@ class Node(QObject):
         :return:
         """
         self.get(self._source_url, self._onSourceUrlFinished)
-        #self.get(self._all_chart_data_url, self._onChartDataFinished)
+        self.get(self._all_chart_data_url, self._onChartDataFinished)
         self.get(self._modifiers_url, self._onModifiersChanged)
         self.get(self._additional_properties_url, self._onAdditionalPropertiesFinished)
 
