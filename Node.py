@@ -315,16 +315,16 @@ class Node(QObject):
         data = self._readData(reply)
         if not data:
             return
-        self._updateProperty("temperature", data["temperature"])
+        self._updateProperty("temperature", data["temperature"] - 273.15 )
         self._updateProperty("enabled", bool(data["enabled"]))
         self._updateProperty("performance", data["performance"])
         self._updateProperty("min_performance", data["min_performance"])
         self._updateProperty("max_performance", data["max_performance"])
-        self._updateProperty("max_safe_temperature", data["max_safe_temperature"])
+        self._updateProperty("max_safe_temperature", data["max_safe_temperature"] - 273.15)
         self._updateProperty("heat_convection", data["heat_convection"])
         self._updateProperty("heat_emissivity", data["heat_emissivity"])
         self._updateProperty("is_temperature_dependant", data["is_temperature_dependant"])
-        self._updateProperty("optimal_temperature", data["optimal_temperature"])
+        self._updateProperty("optimal_temperature", data["optimal_temperature"] - 273.15)
         self._updateProperty("target_performance", data["target_performance"])
         self._updateProperty("health", data["health"])
 
