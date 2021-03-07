@@ -26,7 +26,7 @@ class ScifiBaseApplication(QApplication):
         self._qquickview.setSource(qml_url)
         self._qquickview.mouseMoved.connect(beep.tickleTimeout)
         self._qquickview.setResizeMode(self._qquickview.SizeRootObjectToView)
-        self._qquickview.show()
+        self._qquickview.showFullScreen()
 
         return self.exec_()
 
