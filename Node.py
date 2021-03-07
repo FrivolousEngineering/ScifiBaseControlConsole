@@ -70,6 +70,7 @@ class Node(QObject):
 
         self._max_amount_stored = 0
         self._amount_stored = 0
+        self._effectiveness_factor = 0
         self.fullUpdate()
 
     temperatureChanged = Signal()
@@ -97,6 +98,7 @@ class Node(QObject):
     healthChanged = Signal()
     maxAmountStoredChanged = Signal()
     amountStoredChanged = Signal()
+    effectivenessFactorChanged = Signal()
 
     def updateServerUrl(self, server_url):
         if server_url == "":
@@ -328,6 +330,7 @@ class Node(QObject):
         self._updateProperty("optimal_temperature", data["optimal_temperature"] - 273.15)
         self._updateProperty("target_performance", data["target_performance"])
         self._updateProperty("health", data["health"])
+        self._updateProperty("effectiveness_factor", data["effectiveness_factor"])
 
         # We need to update the resources a bit different to prevent recreation of QML items.
         # As such we use tiny QObjects with their own getters and setters.
@@ -404,6 +407,10 @@ class Node(QObject):
     @Property(float, notify=amountStoredChanged)
     def amount_stored(self):
         return self._amount_stored
+
+    @Property(float, notify=effectivenessFactorChanged)
+    def effectiveness_factor(self):
+        return self._effectiveness_factor
 
     @Property(float, notify=temperatureChanged)
     def temperature(self):

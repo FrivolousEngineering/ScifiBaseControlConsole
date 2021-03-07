@@ -189,6 +189,7 @@ Item
                 bottomMargin: angleSize
             }
 
+
             BoxWithTitle
             {
                 id: temperatureItem
@@ -226,6 +227,22 @@ Item
                 Behavior on opacity { NumberAnimation { duration: 1000; easing.type: Easing.InOutCubic } }
 
                 titleText: "PERFORMANCE"
+
+                Text
+                {
+                    id: efficiencyFactorLabel
+                    font: Qt.font({
+                            family: "Roboto",
+                            pixelSize: 15,
+                            bold: true,
+                            capitalization: Font.AllUppercase
+                        });
+                    color: "white"
+                    anchors.right: parent.right
+                    anchors.bottom:parent.bottom
+
+                    text: Math.round(controller.effectiveness_factor * 100) / 100
+                }
 
                 CustomDial
                 {
