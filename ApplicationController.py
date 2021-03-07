@@ -208,6 +208,9 @@ class ApplicationController(QObject):
                     new_node.updateServerUrl(self._zeroconf_worker.server_address)
                     self._data.append(new_node)
                     new_node.serverReachableChanged.connect(self.serverReachableChanged)
+
+                self._data = sorted(self._data, key=lambda node: node.id)  # sort by age
+                self._data.reverse()
                 self.nodesChanged.emit()
             except:
                 print("Failed to get modifier data")
