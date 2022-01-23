@@ -35,7 +35,7 @@ Rectangle
                     var connection = graph_data.connections[connection_index]
                     var gradient = ctx.createLinearGradient(connection.points[0].x,connection.points[0].y,connection.points[connection.points.length-1].x,connection.points[connection.points.length-1].y)
                     gradient.addColorStop(0, "blue")
-                    gradient.addColorStop(0.5, "lightsteelblue")
+                    gradient.addColorStop(1, "lightsteelblue")
                     ctx.strokeStyle = gradient
 
                     ctx.beginPath()
