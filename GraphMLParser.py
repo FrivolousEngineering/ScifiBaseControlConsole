@@ -1,26 +1,78 @@
+from PyQt5.QtCore import QObject
 from lxml import etree
 
 
-
-class NodeGraphic:
-    def __init__(self, id, x, y, width, height):
-        self.id = id
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+from PyQt5.QtCore import pyqtProperty as Property
 
 
-class ConnectionGraphic:
-    def __init__(self, source, target, points):
-        self.source = source
-        self.target = target
-        self.points = points
+class NodeGraphic(QObject):
+    def __init__(self, id, x, y, width, height, parent = None):
+        super().__init__(parent)
+        self._id = id
+        self._x = float(x)
+        self._y = float(y)
+        self._width = float(width)
+        self._height = float(height)
+
+    @Property(str, constant = True)
+    def id(self):
+        return self._id
+
+    @Property(float, constant = True)
+    def x(self):
+        return self._x
+
+    @Property(float, constant = True)
+    def y(self):
+        return self._y
+
+    @Property(float, constant = True)
+    def width(self):
+        return self._width
+
+    @Property(float, constant = True)
+    def height(self):
+        return self._height
 
 
-class GraphMLParser:
-    def __init__(self, file_path) -> None:
+class ConnectionGraphic(QObject):
+    def __init__(self, source, target, points, parent = None):
+        super().__init__(parent)
+        self._source = source
+        self._target = target
+        self._points = points
 
+    @Property(str)
+    def source(self):
+        return self._source
+
+    @Property(str)
+    def target(self):
+        return self._target
+
+    @Property("QVariantList")
+    def points(self):
+        return self._points
+
+
+class Point(QObject):
+    def __init__(self, x, y, parent = None):
+        super().__init__(parent)
+        self._x = float(x)
+        self._y = float(y)
+
+    @Property(float, constant=True)
+    def x(self):
+        return self._x
+
+    @Property(float, constant=True)
+    def y(self):
+        return self._y
+
+
+class GraphMLParser(QObject):
+    def __init__(self, file_path, parent=None) -> None:
+        super().__init__(parent)
         d_s = "{http://graphml.graphdrawing.org/xmlns}"
         y_s = "{http://www.yworks.com/xml/graphml}"
         tree = etree.parse(file_path)
@@ -28,8 +80,8 @@ class GraphMLParser:
 
         graph = root.find(d_s+"graph")
         self._nodes = []
+        self._nodes_by_id = {}
         self._connections = []
-        self._our_id_to_xml_id = {}
         self._xml_id_to_our = {}
         for node in graph.findall(d_s + "node"):
             for data in node.findall(d_s + "data"):
@@ -38,24 +90,38 @@ class GraphMLParser:
                 shape_node = data.find(y_s + "ShapeNode")
                 node_id = shape_node.find(y_s + "NodeLabel").text
                 geometry = shape_node.find(y_s + "Geometry")
-
-                self._nodes.append(NodeGraphic(node_id, geometry.attrib["x"], geometry.attrib["y"], geometry.attrib["width"], geometry.attrib["height"]))
+                node_graphic = NodeGraphic(node_id, geometry.attrib["x"], geometry.attrib["y"], geometry.attrib["width"], geometry.attrib["height"])
+                self._nodes.append(node_graphic)
+                self._nodes_by_id[node_id] = node_graphic
                 # Create a mapping to translate between ID's
-                self._our_id_to_xml_id[node_id] = node.attrib["id"]
                 self._xml_id_to_our[node.attrib["id"]] = node_id
 
         for edge in graph.findall(d_s + "edge"):
             source = self._xml_id_to_our[edge.attrib["source"]]
             target = self._xml_id_to_our[edge.attrib["target"]]
-
+            source_node = self._nodes_by_id[source]
+            target_node = self._nodes_by_id[target]
             points = []
+
             for data in edge.findall(d_s + "data"):
                 if data.attrib["key"] != "d9":
                     continue
                 poly_line = data.find(y_s + "PolyLineEdge")
                 path = poly_line.find(y_s + "Path")
+                points.append(Point(float(path.attrib["sx"]) + source_node.x + 0.5 * source_node.width, float(path.attrib["sy"]) + source_node.y + 0.5 * source_node.height))
+
                 for point in path:
-                    points.append((point.attrib["x"], point.attrib["y"]))
+                    points.append(Point(point.attrib["x"], point.attrib["y"]))
+                points.append(Point(float(path.attrib["tx"]) + target_node.x + 0.5 * target_node.width, float(path.attrib["ty"]) + target_node.y+ 0.5 * target_node.height))
+
             self._connections.append(ConnectionGraphic(source, target, points))
+
+    @Property("QVariantList", constant=True)
+    def nodes(self):
+        return self._nodes
+
+    @Property("QVariantList", constant=True)
+    def connections(self):
+        return self._connections
 
 
