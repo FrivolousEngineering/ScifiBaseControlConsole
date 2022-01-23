@@ -14,7 +14,6 @@ parser.add_argument("--rfid_card", type=str, nargs='?',
 
 
 if __name__ == '__main__':
-    parser = GraphMLParser("output.graphml")
-    pass
-    #app = ScifiBaseApplication("EngineeringConsole", sys.argv, parser)
+    graphmlParser = GraphMLParser("output.graphml")
+    app = ScifiBaseApplication("EngineeringConsole", sys.argv, parser)
     #app.showAndExec(QUrl("resources/qml/view.qml"))

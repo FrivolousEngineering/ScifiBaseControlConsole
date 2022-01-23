@@ -21,10 +21,10 @@ class ScifiBaseApplication(QApplication):
         self._engine = self._qquickview.engine()
 
     def showAndExec(self, qml_url):
-        beep = ApplicationController(rfid_card = self._rfid_card)
-        self._qquickview.rootContext().setContextProperty("backend", beep)
+        application_controller = ApplicationController(rfid_card = self._rfid_card)
+        self._qquickview.rootContext().setContextProperty("backend", application_controller)
         self._qquickview.setSource(qml_url)
-        self._qquickview.mouseMoved.connect(beep.tickleTimeout)
+        self._qquickview.mouseMoved.connect(application_controller.tickleTimeout)
         self._qquickview.setResizeMode(self._qquickview.SizeRootObjectToView)
         self._qquickview.showFullScreen()
 
