@@ -1,5 +1,6 @@
 from PyQt5.QtCore import QUrl
 
+from GraphMLParser import GraphMLParser
 from ScifiBaseApplication import ScifiBaseApplication
 
 import sys
@@ -13,5 +14,7 @@ parser.add_argument("--rfid_card", type=str, nargs='?',
 
 
 if __name__ == '__main__':
-    app = ScifiBaseApplication("EngineeringConsole", sys.argv, parser)
-    app.showAndExec(QUrl("resources/qml/view.qml"))
+    parser = GraphMLParser("output.graphml")
+    pass
+    #app = ScifiBaseApplication("EngineeringConsole", sys.argv, parser)
+    #app.showAndExec(QUrl("resources/qml/view.qml"))
