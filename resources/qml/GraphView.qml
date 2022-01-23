@@ -16,61 +16,121 @@ Rectangle
 
     Flickable
     {
+        id: flickable
         anchors.fill: parent
-        clip: true
-        contentWidth: 5000
-        contentHeight: 5000
-        Canvas
+        contentWidth: itemContainer.width
+        contentHeight: itemContainer.height
+        onHeightChanged: content.calculateSize()
+
+        Item
         {
-            width: 5000
-            height: 5000
-            onPaint:
+            id: itemContainer
+
+            width: Math.max(content.width * content.scale, flickable.width)
+            height: Math.max(content.height * content.scale, flickable.height)
+
+            Item
             {
-                var ctx = getContext("2d")
-                ctx.lineWidth = 4
-
-                for(var connection_index in graph_data.connections)
+                id: content
+                property real prevScale
+                anchors.centerIn: parent
+                width: 5000
+                height: 6000
+                function calculateSize()
                 {
-
-                    var connection = graph_data.connections[connection_index]
-                    var gradient = ctx.createLinearGradient(connection.points[0].x,connection.points[0].y,connection.points[connection.points.length-1].x,connection.points[connection.points.length-1].y)
-                    gradient.addColorStop(0, "blue")
-                    gradient.addColorStop(1, "lightsteelblue")
-                    ctx.strokeStyle = gradient
-
-                    ctx.beginPath()
-
-                    ctx.moveTo(connection.points[0].x, connection.points[1].y)
-
-                    for(var point_index in connection.points)
-                    {
-                        ctx.lineTo(connection.points[point_index].x, connection.points[point_index].y)
+                    scale = Math.min(flickable.width / width, flickable.height / height) * 0.98;
+                    prevScale = Math.min(scale, 1);
+                }
+                onScaleChanged:
+                {
+                    if ((width * scale) > flickable.width) {
+                        var xoff = (flickable.width / 2 + flickable.contentX) * scale / prevScale;
+                        flickable.contentX = xoff - flickable.width / 2;
                     }
-                    ctx.stroke()
+                    if ((height * scale) > flickable.height) {
+                        var yoff = (flickable.height / 2 + flickable.contentY) * scale / prevScale;
+                        flickable.contentY = yoff - flickable.height / 2;
+                    }
+
+                    prevScale = scale;
+                }
+
+                Canvas
+                {
+                    width: 5000
+                    height: 6000
+                    onPaint:
+                    {
+                        var ctx = getContext("2d")
+                        ctx.lineWidth = 4
+
+                        for(var connection_index in graph_data.connections)
+                        {
+
+                            var connection = graph_data.connections[connection_index]
+                            var gradient = ctx.createLinearGradient(connection.points[0].x,connection.points[0].y,connection.points[connection.points.length-1].x,connection.points[connection.points.length-1].y)
+                            gradient.addColorStop(0, "blue")
+                            gradient.addColorStop(1, "lightsteelblue")
+                            ctx.strokeStyle = gradient
+
+                            ctx.beginPath()
+
+                            ctx.moveTo(connection.points[0].x, connection.points[1].y)
+
+                            for(var point_index in connection.points)
+                            {
+                                ctx.lineTo(connection.points[point_index].x, connection.points[point_index].y)
+                            }
+                            ctx.stroke()
+                        }
+                    }
+                }
+                Item
+                {
+                    implicitWidth: 5000
+                    implicitHeight: 6000
+                    Repeater
+                    {
+                        model: graph_data.nodes
+
+                        Rectangle
+                        {
+                            x: modelData.x
+                            y: modelData.y
+                            width: modelData.width
+                            height: modelData.height
+                            color: "blue"
+
+                            Label
+                            {
+                                text: modelData.id
+                                color: "white"
+                            }
+                        }
+                    }
                 }
             }
         }
-        Item
+        MouseArea
         {
-            implicitWidth: 5000
-            implicitHeight: 5000
-            Repeater
-            {
-                model: graph_data.nodes
+            id: mousearea
+            anchors.fill : parent
 
-                Rectangle
+            onWheel:
+            {
+                var new_scale = content.scale + wheel.angleDelta.y / 600
+                if(new_scale < 0.2)
                 {
-                    x: modelData.x
-                    y: modelData.y
-                    width: modelData.width
-                    height: modelData.height
-                    color: "blue"
-                    Label
-                    {
-                        text: modelData.id
-                        color: "white"
-                    }
+                    new_scale = 0.2
                 }
+                if(new_scale > 5)
+                {
+                    new_scale = 5
+                }
+
+                content.scale = new_scale
+                flickable.returnToBounds()
+
             }
         }
     }
