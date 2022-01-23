@@ -38,21 +38,24 @@ Rectangle
                 height: 6000
                 function calculateSize()
                 {
-                    scale = Math.min(flickable.width / width, flickable.height / height) * 0.98;
-                    prevScale = Math.min(scale, 1);
+                    scale = Math.min(flickable.width / width, flickable.height / height) * 0.98
+                    prevScale = Math.min(scale, 1)
                 }
+
                 onScaleChanged:
                 {
-                    if ((width * scale) > flickable.width) {
-                        var xoff = (flickable.width / 2 + flickable.contentX) * scale / prevScale;
-                        flickable.contentX = xoff - flickable.width / 2;
+                    if (width * scale > flickable.width)
+                    {
+                        var xoff = (flickable.width / 2 + flickable.contentX) * scale / prevScale
+                        flickable.contentX = xoff - flickable.width / 2
                     }
-                    if ((height * scale) > flickable.height) {
-                        var yoff = (flickable.height / 2 + flickable.contentY) * scale / prevScale;
-                        flickable.contentY = yoff - flickable.height / 2;
+                    if (height * scale > flickable.height)
+                    {
+                        var yoff = (flickable.height / 2 + flickable.contentY) * scale / prevScale
+                        flickable.contentY = yoff - flickable.height / 2
                     }
 
-                    prevScale = scale;
+                    prevScale = scale
                 }
 
                 Canvas
@@ -68,7 +71,7 @@ Rectangle
                         {
 
                             var connection = graph_data.connections[connection_index]
-                            var gradient = ctx.createLinearGradient(connection.points[0].x,connection.points[0].y,connection.points[connection.points.length-1].x,connection.points[connection.points.length-1].y)
+                            var gradient = ctx.createLinearGradient(connection.points[0].x,connection.points[0].y, connection.points[connection.points.length-1].x,connection.points[connection.points.length-1].y)
                             gradient.addColorStop(0, "blue")
                             gradient.addColorStop(1, "lightsteelblue")
                             ctx.strokeStyle = gradient
@@ -119,18 +122,11 @@ Rectangle
             onWheel:
             {
                 var new_scale = content.scale + wheel.angleDelta.y / 600
-                if(new_scale < 0.2)
-                {
-                    new_scale = 0.2
-                }
-                if(new_scale > 5)
-                {
-                    new_scale = 5
-                }
+                if(new_scale < 0.2) new_scale = 0.2
+                if(new_scale > 5) new_scale = 5
 
                 content.scale = new_scale
                 flickable.returnToBounds()
-
             }
         }
     }
