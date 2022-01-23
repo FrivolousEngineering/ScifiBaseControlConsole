@@ -77,7 +77,7 @@ class GraphMLParser(QObject):
         y_s = "{http://www.yworks.com/xml/graphml}"
         tree = etree.parse(file_path)
         root = tree.getroot()
-
+        scale = 2
         graph = root.find(d_s+"graph")
         self._nodes = []
         self._nodes_by_id = {}
@@ -90,7 +90,11 @@ class GraphMLParser(QObject):
                 shape_node = data.find(y_s + "ShapeNode")
                 node_id = shape_node.find(y_s + "NodeLabel").text
                 geometry = shape_node.find(y_s + "Geometry")
-                node_graphic = NodeGraphic(node_id, geometry.attrib["x"], geometry.attrib["y"], geometry.attrib["width"], geometry.attrib["height"])
+                node_graphic = NodeGraphic(node_id,
+                                           scale * float(geometry.attrib["x"]),
+                                           scale * float(geometry.attrib["y"]),
+                                           scale * float(geometry.attrib["width"]),
+                                           scale * float(geometry.attrib["height"]))
                 self._nodes.append(node_graphic)
                 self._nodes_by_id[node_id] = node_graphic
                 # Create a mapping to translate between ID's
@@ -108,11 +112,13 @@ class GraphMLParser(QObject):
                     continue
                 poly_line = data.find(y_s + "PolyLineEdge")
                 path = poly_line.find(y_s + "Path")
-                points.append(Point(float(path.attrib["sx"]) + source_node.x + 0.5 * source_node.width, float(path.attrib["sy"]) + source_node.y + 0.5 * source_node.height))
+                points.append(Point(scale * float(path.attrib["sx"]) + source_node.x + 0.5 * source_node.width,
+                                    scale * float(path.attrib["sy"]) + source_node.y + 0.5 * source_node.height))
 
                 for point in path:
-                    points.append(Point(point.attrib["x"], point.attrib["y"]))
-                points.append(Point(float(path.attrib["tx"]) + target_node.x + 0.5 * target_node.width, float(path.attrib["ty"]) + target_node.y+ 0.5 * target_node.height))
+                    points.append(Point(scale * float(point.attrib["x"]), scale * float(point.attrib["y"])))
+                points.append(Point(scale * float(path.attrib["tx"]) + target_node.x + 0.5 * target_node.width,
+                                    scale * float(path.attrib["ty"]) + target_node.y+ 0.5 * target_node.height))
 
             self._connections.append(ConnectionGraphic(source, target, points))
 
