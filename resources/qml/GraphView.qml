@@ -94,16 +94,17 @@ Rectangle
                     implicitHeight: 6000
                     Repeater
                     {
-                        model: graph_data.nodes
+                        model: backend.nodeData//graph_data.nodes
 
                         Rectangle
                         {
-                            x: modelData.x
-                            y: modelData.y
-                            width: modelData.width
-                            height: modelData.height
+                            property var modelPosition: graph_data.getNodeById(modelData.id)
+                            x: modelPosition.x
+                            y: modelPosition.y
+                            width: modelPosition.width
+                            height: modelPosition.height
                             color: "blue"
-
+                            Component.onCompleted: print("BEEP")
                             Label
                             {
                                 text: modelData.id

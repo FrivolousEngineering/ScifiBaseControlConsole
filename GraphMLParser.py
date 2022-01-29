@@ -1,4 +1,6 @@
-from PyQt5.QtCore import QObject
+from typing import Optional
+
+from PyQt5.QtCore import QObject, pyqtSlot
 from lxml import etree
 
 
@@ -125,6 +127,11 @@ class GraphMLParser(QObject):
     @Property("QVariantList", constant=True)
     def nodes(self):
         return self._nodes
+
+    @pyqtSlot(str, result = "QVariant")
+    def getNodeById(self, node_id: str) -> Optional[NodeGraphic]:
+        print(node_id)
+        return self._nodes_by_id.get(node_id)
 
     @Property("QVariantList", constant=True)
     def connections(self):
