@@ -38,11 +38,12 @@ class NodeGraphic(QObject):
 
 
 class ConnectionGraphic(QObject):
-    def __init__(self, source, target, points, parent = None):
+    def __init__(self, source, target, points, color, parent = None):
         super().__init__(parent)
         self._source = source
         self._target = target
         self._points = points
+        self._color = color
 
     @Property(str)
     def source(self):
@@ -55,6 +56,10 @@ class ConnectionGraphic(QObject):
     @Property("QVariantList")
     def points(self):
         return self._points
+
+    @Property(str)
+    def color(self):
+        return self._color
 
 
 class Point(QObject):
@@ -108,7 +113,7 @@ class GraphMLParser(QObject):
             source_node = self._nodes_by_id[source]
             target_node = self._nodes_by_id[target]
             points = []
-
+            color = "#000000"
             for data in edge.findall(d_s + "data"):
                 if data.attrib["key"] != "d9":
                     continue
@@ -120,9 +125,10 @@ class GraphMLParser(QObject):
                 for point in path:
                     points.append(Point(scale * float(point.attrib["x"]), scale * float(point.attrib["y"])))
                 points.append(Point(scale * float(path.attrib["tx"]) + target_node.x + 0.5 * target_node.width,
-                                    scale * float(path.attrib["ty"]) + target_node.y+ 0.5 * target_node.height))
-
-            self._connections.append(ConnectionGraphic(source, target, points))
+                                    scale * float(path.attrib["ty"]) + target_node.y + 0.5 * target_node.height))
+                line_style = poly_line.find(y_s + "LineStyle")
+                color = line_style.attrib["color"]
+            self._connections.append(ConnectionGraphic(source, target, points, color))
 
     @Property("QVariantList", constant=True)
     def nodes(self):
