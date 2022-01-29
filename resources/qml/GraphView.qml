@@ -96,20 +96,18 @@ Rectangle
                     {
                         model: backend.nodeData//graph_data.nodes
 
-                        Rectangle
+                        Node
                         {
                             property var modelPosition: graph_data.getNodeById(modelData.id)
                             x: modelPosition.x
                             y: modelPosition.y
                             width: modelPosition.width
                             height: modelPosition.height
-                            color: "blue"
-                            Component.onCompleted: print("BEEP")
-                            Label
-                            {
-                                text: modelData.id
-                                color: "white"
-                            }
+
+                            titleText: modelData.id
+                            currentTemperature: modelData.temperature
+                            controller: modelData
+
                         }
                     }
                 }

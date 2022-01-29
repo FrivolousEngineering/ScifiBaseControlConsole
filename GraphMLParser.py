@@ -79,7 +79,7 @@ class GraphMLParser(QObject):
         y_s = "{http://www.yworks.com/xml/graphml}"
         tree = etree.parse(file_path)
         root = tree.getroot()
-        scale = 2
+        scale = 2.5
         graph = root.find(d_s+"graph")
         self._nodes = []
         self._nodes_by_id = {}
@@ -130,7 +130,6 @@ class GraphMLParser(QObject):
 
     @pyqtSlot(str, result = "QVariant")
     def getNodeById(self, node_id: str) -> Optional[NodeGraphic]:
-        print(node_id)
         return self._nodes_by_id.get(node_id)
 
     @Property("QVariantList", constant=True)
