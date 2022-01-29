@@ -13,7 +13,9 @@ Rectangle
     height: 720
 
     color: "black"
-    
+
+    property int content_width: 8000
+    property int content_height: 8000
     Flickable
     {
         id: flickable
@@ -34,8 +36,8 @@ Rectangle
                 id: content
                 property real prevScale
                 anchors.centerIn: parent
-                width: 5000
-                height: 6000
+                width: window.content_width
+                height: window.content_height
                 function calculateSize()
                 {
                     scale = Math.min(flickable.width / width, flickable.height / height) * 0.98
@@ -60,8 +62,8 @@ Rectangle
 
                 Canvas
                 {
-                    width: 5000
-                    height: 6000
+                    width: window.content_width
+                    height: window.content_height
                     onPaint:
                     {
                         var ctx = getContext("2d")
@@ -90,8 +92,8 @@ Rectangle
                 }
                 Item
                 {
-                    implicitWidth: 5000
-                    implicitHeight: 6000
+                    implicitWidth: window.content_width
+                    implicitHeight: window.content_height
                     Repeater
                     {
                         model: backend.nodeData//graph_data.nodes
