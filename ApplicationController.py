@@ -47,8 +47,6 @@ class ApplicationController(QObject):
         self._failed_update_modifier_timer.setSingleShot(True)
         self._failed_update_modifier_timer.timeout.connect(self.requestModifiersData)
 
-        self.requestModifiersData()
-
         self._failed_update_nodes_timer = QTimer()
         self._failed_update_nodes_timer.setInterval(FAILED_REQUEST_TRY_AGAIN * 1000)
         self._failed_update_nodes_timer.setSingleShot(True)
@@ -70,7 +68,7 @@ class ApplicationController(QObject):
     def _onServerAddressChanged(self):
         for node in self._data:
             node.updateServerUrl(self._zeroconf_worker.server_address)
-        self._failed_update_modifier_timer.start()
+        self.requestModifiersData()
         self.requestKnownNodes()
 
     def setAuthenticationRequired(self, auth_required: bool) -> None:

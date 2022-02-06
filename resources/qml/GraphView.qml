@@ -22,7 +22,7 @@ Rectangle
         addModifierWindow.nodeObject = backend.getNodeById(nodeId)
         addModifierWindow.visible = true
     }
-    
+
     Flickable
     {
         id: flickable
