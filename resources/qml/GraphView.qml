@@ -16,12 +16,20 @@ Rectangle
 
     property int content_width: 8000
     property int content_height: 8000
+
+    function showModifierWindow(nodeId)
+    {
+        addModifierWindow.nodeObject = backend.getNodeById(nodeId)
+        addModifierWindow.visible = true
+    }
+    
     Flickable
     {
         id: flickable
         anchors.fill: parent
         contentWidth: itemContainer.width
         contentHeight: itemContainer.height
+        enabled: !addModifierWindow.visible
         onHeightChanged: content.calculateSize()
 
         Item
@@ -127,11 +135,30 @@ Rectangle
                             titleText: modelData.id
                             currentTemperature: modelData.temperature
                             controller: modelData
+                            onAddModifierClicked: showModifierWindow(nodeId)
                         }
                     }
                 }
             }
         }
 
+    }
+
+    AddModifierWindow
+    {
+        id: addModifierWindow
+        anchors.centerIn: parent
+        width: 350
+        height: 350
+        onModifierAdded: backend.getNodeById(nodeId).addModifier(type)
+        Connections
+        {
+            target: backend
+            onInactivityTimeout:
+            {
+                // Ensure that this window his hidden again when inactivity was triggered
+                addModifierWindow.visible = false
+            }
+        }
     }
 }
