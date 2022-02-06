@@ -74,14 +74,14 @@ Item
         width: parent.width
         height: boxBorderSize
         color: "white"
-        y: Math.min(Math.max(0, calculateArrowPosition(currentTemperature) * base.height - boxBorderSize), base.height)
+        y: Math.min(Math.max(0, calculateArrowPosition(currentTemperature) * base.height + 2 * boxSpacing), base.height)
     }
 
     LinearGradient
     {
         id: linearGradient
         anchors.fill: parent
-        anchors.topMargin:boxBorderSize
+        anchors.topMargin: boxBorderSize
         anchors.bottomMargin: boxBorderSize
         anchors.leftMargin: boxBorderSize + arrowMargin
         anchors.rightMargin: boxBorderSize + arrowMargin
@@ -127,7 +127,7 @@ Item
         border.width: boxBorderSize
         border.color: "white"
         color: "transparent"
-        y: activeBoxIndex * boxHeight + activeBoxIndex * boxSpacing + 1
+        y: activeBoxIndex * boxHeight + activeBoxIndex * boxSpacing + 2 * boxSpacing + 1
         radius: 5
         Behavior on y
         {
@@ -191,7 +191,8 @@ Item
         Behavior on y {
             NumberAnimation { duration: animationDuration }
         }
-        y: Math.min(Math.max(0, calculateArrowPosition(previousTemperature) * base.height - 0.5 * boxBorderSize), base.height)
+
+        y: Math.min(Math.max(0, calculateArrowPosition(previousTemperature) * base.height + 2 * boxSpacing), base.height)
         opacity: 0.50
     }
 
@@ -211,7 +212,7 @@ Item
         Behavior on y {
             NumberAnimation { duration: animationDuration }
         }
-        y: Math.min(Math.max(0, calculateArrowPosition(historyTemperature) * base.height - 0.5 * boxBorderSize), base.height)
+        y: Math.min(Math.max(0, calculateArrowPosition(historyTemperature) * base.height + 2* boxSpacing), base.height)
         opacity: 0.50
     }
 }
