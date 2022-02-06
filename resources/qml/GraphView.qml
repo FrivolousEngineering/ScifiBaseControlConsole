@@ -30,7 +30,25 @@ Rectangle
 
             width: Math.max(content.width * content.scale, flickable.width)
             height: Math.max(content.height * content.scale, flickable.height)
+            MouseArea
+            {
+                id: mousearea
+                anchors.fill : parent
+                propagateComposedEvents: true
+                onClicked:
+                {
+                    mouse.accepted = false
+                }
+                onWheel:
+                {
+                    var new_scale = content.scale + wheel.angleDelta.y / 600
+                    if(new_scale < 0.2) new_scale = 0.2
+                    if(new_scale > 5) new_scale = 5
 
+                    content.scale = new_scale
+                    flickable.returnToBounds()
+                }
+            }
             Item
             {
                 id: content
@@ -114,20 +132,6 @@ Rectangle
                 }
             }
         }
-        MouseArea
-        {
-            id: mousearea
-            anchors.fill : parent
 
-            onWheel:
-            {
-                var new_scale = content.scale + wheel.angleDelta.y / 600
-                if(new_scale < 0.2) new_scale = 0.2
-                if(new_scale > 5) new_scale = 5
-
-                content.scale = new_scale
-                flickable.returnToBounds()
-            }
-        }
     }
 }
