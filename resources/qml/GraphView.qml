@@ -134,6 +134,13 @@ Rectangle
 
                             titleText: modelData.id
                             currentTemperature: modelData.temperature
+                            previousTemperature: modelData.historyData["temperature"][Math.max(modelData.historyData["temperature"].length -5, 0)] - 273.15
+                            historyTemperature: modelData.historyData["temperature"][Math.max(modelData.historyData["temperature"].length -20, 0)] - 273.15
+                            maxSafeTemperature: modelData.max_safe_temperature
+                            maxTemperature: modelData.max_safe_temperature + 25
+                            optimalTemperature: modelData.optimalTemperature
+                            isTemperatureDependant: modelData.isTemperatureDependant
+                            minTemperature: 15
                             controller: modelData
                             onAddModifierClicked: showModifierWindow(nodeId)
                         }
