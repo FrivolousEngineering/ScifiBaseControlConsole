@@ -9,8 +9,8 @@ Control
     id: base
 
     property alias titleText: titleTextLabel.text
-    implicitWidth: 200
-    implicitHeight: 200
+    implicitWidth: 140
+    implicitHeight: 180
     property int titleBarHeight: 32
     property int cornerRadius: 10
     property int borderSize: 2

@@ -90,6 +90,31 @@ Rectangle
                 {
                     width: window.content_width
                     height: window.content_height
+                    antialiasing: true
+                    function drawArrowRightAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    {
+                        ctx.beginPath()
+                        ctx.lineWidth = 1
+
+                        ctx.moveTo(x + 0.5 * arrowWidth, y)
+                        ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * arrowWidth, y)
+
+                        ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
+                        ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
+
+                        ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
+                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+
+                        //ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
+                        //ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
+                        //ctx.lineTo(x + 0.5 * arrowWidth, y)
+                        //ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
+
+                        //ctx.stroke()
+                        ctx.fill()
+                    }
 
                     function drawArrowRight(ctx, x, y, lineWidth) {
                         ctx.beginPath()
@@ -139,7 +164,7 @@ Rectangle
                         var horizontalDifference = 0
                         var verticalDifference = 0
                         var connectionLineWidth = 10
-                        var arrowSpacing = 20
+                        var arrowSpacing = 15
                         for(var connection_index in graph_data.connections)
                         {
                             ctx.lineWidth = connectionLineWidth
@@ -184,7 +209,7 @@ Rectangle
                                     // Draw right facing arrows
                                     for(var i = 0; i < horizontalDifference; i+= arrowSpacing)
                                     {
-                                        drawArrowRight(ctx, prev_x - i, prev_y, 10)
+                                        drawArrowRightAdvanced(ctx, prev_x - i, prev_y, 10)
                                     }
                                 } else if (horizontalDifference < 0 )
                                 {
