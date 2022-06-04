@@ -90,19 +90,65 @@ Rectangle
                 {
                     width: window.content_width
                     height: window.content_height
+
+                    function drawArrowRight(ctx, x, y, lineWidth) {
+                        ctx.beginPath()
+                        ctx.lineWidth = 3
+                        ctx.strokeStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+                        ctx.moveTo(x, y - lineWidth / 2 + 2)
+                        ctx.lineTo(x - lineWidth / 2, y)
+                        ctx.lineTo(x, y + lineWidth / 2 - 2)
+                        ctx.stroke()
+                    }
+
+                    function drawArrowLeft(ctx, x, y, lineWidth) {
+                        ctx.beginPath()
+                        ctx.lineWidth = 3
+                        ctx.strokeStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+                        ctx.moveTo(x, y - lineWidth / 2 + 2)
+                        ctx.lineTo(x + lineWidth / 2, y )
+                        ctx.lineTo(x, y + lineWidth / 2 - 2)
+                        ctx.stroke()
+                    }
+
+                    function drawArrowDown(ctx, x, y, lineWidth) {
+                        ctx.beginPath()
+                        ctx.lineWidth = 3
+                        ctx.strokeStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+                        ctx.moveTo(x - lineWidth / 2 + 2, y )
+                        ctx.lineTo(x, y + lineWidth / 2)
+                        ctx.lineTo(x+ lineWidth / 2 - 2, y)
+                        ctx.stroke()
+                    }
+
+                    function drawArrowUp(ctx, x, y, lineWidth) {
+                        ctx.beginPath()
+                        ctx.lineWidth = 3
+                        ctx.strokeStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+                        ctx.moveTo(x - lineWidth / 2 + 2, y )
+                        ctx.lineTo(x, y - lineWidth / 2)
+                        ctx.lineTo(x + lineWidth / 2 - 2, y)
+                        ctx.stroke()
+                    }
+
                     onPaint:
                     {
                         var ctx = getContext("2d")
-                        ctx.lineWidth = 4
 
+                        print("OMGZOMG")
+                        var horizontalDifference = 0
+                        var verticalDifference = 0
+                        var connectionLineWidth = 10
+                        var arrowSpacing = 20
                         for(var connection_index in graph_data.connections)
                         {
-
+                            ctx.lineWidth = connectionLineWidth
                             var connection = graph_data.connections[connection_index]
-                            var gradient = ctx.createLinearGradient(connection.points[0].x, connection.points[0].y, connection.points[connection.points.length-1].x, connection.points[connection.points.length-1].y)
-                            gradient.addColorStop(0, connection.color)
-                            gradient.addColorStop(1, "lightsteelblue")
-                            ctx.strokeStyle = gradient
+                            //var gradient = ctx.createLinearGradient(connection.points[0].x, connection.points[0].y, connection.points[connection.points.length-1].x, connection.points[connection.points.length-1].y)
+                            //gradient.addColorStop(0, connection.color)
+                            //gradient.addColorStop(1, "lightsteelblue")
+                            //ctx.strokeStyle = gradient
+                            ctx.strokeStyle = Qt.rgba(0, 0.819, 1, 1);
 
                             ctx.beginPath()
 
@@ -113,6 +159,59 @@ Rectangle
                                 ctx.lineTo(connection.points[point_index].x, connection.points[point_index].y)
                             }
                             ctx.stroke()
+
+                            var prev_x = 0
+                            var prev_y = 0
+
+                            for(var point_index in connection.points)
+                            {
+                                if(point_index == 0)
+                                    continue
+                                prev_x = connection.points[point_index - 1].x
+                                prev_y = connection.points[point_index - 1].y
+                                // Draw the arrows
+                                ctx.moveTo(prev_x, prev_y)
+                                // Figure out the distance
+                                horizontalDifference = prev_x - connection.points[point_index].x
+                                verticalDifference = prev_y - connection.points[point_index].y
+                                if(horizontalDifference < arrowSpacing && horizontalDifference > -arrowSpacing && verticalDifference < arrowSpacing && verticalDifference > -arrowSpacing)
+                                {
+                                    continue
+                                }
+
+                                if(horizontalDifference > 0)
+                                {
+                                    // Draw right facing arrows
+                                    for(var i = 0; i < horizontalDifference; i+= arrowSpacing)
+                                    {
+                                        drawArrowRight(ctx, prev_x - i, prev_y, 10)
+                                    }
+                                } else if (horizontalDifference < 0 )
+                                {
+                                    // Draw left facint arrow
+                                    // Draw right facing arrows
+                                    for(var i = horizontalDifference + arrowSpacing; i < arrowSpacing; i += arrowSpacing)
+                                    {
+                                        drawArrowLeft(ctx, prev_x - i, prev_y, 10)
+                                    }
+                                } else if (verticalDifference < 0)
+                                {
+                                    // Draw down arrow
+                                    for(var i = verticalDifference + arrowSpacing; i < arrowSpacing; i += arrowSpacing)
+                                    {
+                                        drawArrowDown(ctx, prev_x, prev_y - i, 10)
+                                    }
+
+                                } else
+                                {
+                                    // Draw up arrow
+                                    for(var i = 0; i < verticalDifference; i+= arrowSpacing)
+                                    {
+                                        drawArrowUp(ctx, prev_x, prev_y - i, 10)
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }
