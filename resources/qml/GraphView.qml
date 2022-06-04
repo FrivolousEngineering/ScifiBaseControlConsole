@@ -124,7 +124,16 @@ Rectangle
                     {
                         model: backend.nodeData//graph_data.nodes
 
-                        Node
+                        NodeItem
+                        {
+                            property var modelPosition: graph_data.getNodeById(modelData.id)
+                            x: modelPosition.x
+                            y: modelPosition.y
+                            width: modelPosition.width
+                            height: modelPosition.height
+                        }
+
+                        /*Node
                         {
                             property var modelPosition: graph_data.getNodeById(modelData.id)
                             x: modelPosition.x
@@ -143,7 +152,7 @@ Rectangle
                             minTemperature: 15
                             controller: modelData
                             onAddModifierClicked: showModifierWindow(nodeId)
-                        }
+                        }*/
                     }
                 }
             }
