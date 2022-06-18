@@ -79,7 +79,7 @@ Rectangle
         Label
         {
             font.family: "Futura Md BT"
-            font.pixelSize: 32
+            font.pixelSize: 18
             text: "Resources received"
             color: "white"
         }
@@ -106,7 +106,7 @@ Rectangle
         Label
         {
             font.family: "Futura Md BT"
-            font.pixelSize: 32
+            font.pixelSize: 18
             text: "Resources required"
             color: "white"
         }
@@ -131,7 +131,7 @@ Rectangle
         Label
         {
             font.family: "Futura Md BT"
-            font.pixelSize: 32
+            font.pixelSize: 18
             text: "Resources produced"
             color: "white"
         }
