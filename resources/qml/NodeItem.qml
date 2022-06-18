@@ -237,9 +237,7 @@ Control
             anchors
             {
                 left: parent.left
-                leftMargin: 5
                 right: parent.right
-                rightMargin: 4
                 verticalCenter: parent.verticalCenter
             }
 
