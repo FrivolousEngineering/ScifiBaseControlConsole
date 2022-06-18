@@ -20,19 +20,23 @@ Control
     property color textColor: backgroundColor
     property color iconColor: textColor
 
+    property alias content: contentHolder.children
+
     // Since we've placed the title bar in the background, the content item needs to leave that open
     topPadding: titleBarHeight + padding
     padding: borderSize + defaultMargin
 
-    contentItem: Rectangle
+    contentItem: Item
     {
-        color: "transparent"
-
         StatusIcon
         {
             anchors.right: parent.right
         }
-
+        Item
+        {
+            id: contentHolder
+            anchors.fill: parent
+        }
     }
 
     background: Rectangle
