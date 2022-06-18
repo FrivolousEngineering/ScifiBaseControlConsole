@@ -12,6 +12,7 @@ Rectangle
     height: parent.height
     visible: width != 0
     property int defaultFontSize: 16
+    property int largeFontSize: 24
 
 
     Item
@@ -78,6 +79,33 @@ Rectangle
             right: parent.right
             rightMargin: base.defaultMargin
         }
+
+        Item
+        {
+            width: parent.width
+            height: base.largeFontSize
+            Label
+            {
+                font.family: "Futura Md BT"
+                font.pixelSize: base.largeFontSize
+                text: "Health"
+                color: "#56CCF2"
+            }
+            Label
+            {
+                font.family: "Futura Md BT"
+                font.pixelSize: base.largeFontSize
+                text: activeNode.health
+                anchors.right: parent.right
+                color: "white"
+            }
+        }
+        Item
+        {
+            width: 1
+            height: base.defaultMargin
+        }
+
         Label
         {
             font.family: "Futura Md BT"
