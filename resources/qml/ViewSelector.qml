@@ -7,7 +7,7 @@ Control
     id: base
 
     implicitWidth: 1024
-    implicitHeight: 90
+    implicitHeight: 95
     property string activeMode: "Overview"
     background: Item
     {
@@ -17,7 +17,7 @@ Control
             radius: 5
             color: "#1A1C48"
             height: parent.height
-            width: 250
+            width: 300
             anchors.bottom: parent.bottom
         }
 
@@ -33,32 +33,37 @@ Control
     }
     contentItem: Item
     {
-        anchors.bottom: parent.bottom
         Row
         {
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 18
+            spacing: 18
             ButtonGroup
             {
                 id: modeGroup
                 onClicked: activeMode = button.text
             }
-            Button
+            ViewSelectorButton
             {
                 text: "Overview"
                 ButtonGroup.group: modeGroup
+                iconSource: "../svg/overview.svg"
                 checkable: true
                 checked: true
             }
-            Button
+            ViewSelectorButton
             {
                 text: "Overheat"
                 ButtonGroup.group: modeGroup
+                iconSource: "../svg/warning.svg"
                 checkable: true
             }
-            Button
+            ViewSelectorButton
             {
                 text: "Health"
                 ButtonGroup.group: modeGroup
+                iconSource: "../svg/health.svg"
                 checkable: true
             }
         }
