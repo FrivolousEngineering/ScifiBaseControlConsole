@@ -84,7 +84,7 @@ class GraphMLParser(QObject):
         y_s = "{http://www.yworks.com/xml/graphml}"
         tree = etree.parse(file_path)
         root = tree.getroot()
-        scale = 2.5
+        scale = 1
         graph = root.find(d_s+"graph")
         self._nodes = []
         self._nodes_by_id = {}
