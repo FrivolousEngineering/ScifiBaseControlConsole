@@ -172,8 +172,7 @@ Control
                 leftMargin: 5
                 right: parent.right
                 rightMargin: 4
-                top: parent.top
-                topMargin: 1
+                verticalCenter: parent.verticalCenter
             }
 
             height: width
