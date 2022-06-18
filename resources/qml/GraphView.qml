@@ -185,10 +185,6 @@ Rectangle
                         {
                             ctx.lineWidth = connectionLineWidth
                             var connection = graph_data.connections[connection_index]
-                            //var gradient = ctx.createLinearGradient(connection.points[0].x, connection.points[0].y, connection.points[connection.points.length-1].x, connection.points[connection.points.length-1].y)
-                            //gradient.addColorStop(0, connection.color)
-                            //gradient.addColorStop(1, "lightsteelblue")
-                            //ctx.strokeStyle = gradient
                             ctx.strokeStyle = Qt.rgba(0, 0.819, 1, 1);
 
                             ctx.beginPath()

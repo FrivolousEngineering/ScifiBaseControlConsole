@@ -55,6 +55,12 @@ Control
                 ButtonGroup.group: modeGroup
                 checkable: true
             }
+            Button
+            {
+                text: "Health"
+                ButtonGroup.group: modeGroup
+                checkable: true
+            }
         }
     }
 }

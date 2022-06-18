@@ -26,10 +26,7 @@ Control
 
     property color nodeColor:
     {
-        if(viewMode == "Overview")
-        {
-            return "white"
-        } else if(viewMode == "Overheat")
+        if(viewMode == "Overheat")
         {
             if(controller.temperature < controller.max_safe_temperature * 0.8)
             {
@@ -38,6 +35,15 @@ Control
 
             return interpolateColor((controller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
         }
+
+        if(viewMode == "Health")
+        {
+            return interpolateColor(controller.health / 100., Qt.rgba(0,1,0,1), Qt.rgba(1,0,0,1))
+        }
+
+        // Default color!
+        return "white"
+
     }
 
     function interpolateColor(ratio, low_color, high_color) {
