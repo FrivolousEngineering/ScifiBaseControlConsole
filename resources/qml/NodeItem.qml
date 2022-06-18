@@ -300,6 +300,9 @@ Control
                 if(!pressed) // Released
                 {
                     controller.setPerformance(value)
+                } else
+                {
+                    base.clicked()
                 }
             }
         }
