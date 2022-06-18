@@ -20,6 +20,10 @@ Rectangle
     property var selectedNodeData: null
     onSelectedNodeDataChanged: print("OMG", selectedNodeData)
 
+    property var activeViewMode: "Overview"
+
+    onActiveViewModeChanged: print("OMGZOMG", activeViewMode)
+
     function showModifierWindow(nodeId)
     {
         addModifierWindow.nodeObject = backend.getNodeById(nodeId)
@@ -308,8 +312,19 @@ Rectangle
         anchors.right: parent.right
         collapsed: true
         activeNode: window.selectedNodeData
-
     }
+
+    ViewSelector
+    {
+        anchors
+        {
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+        onActiveModeChanged: window.activeViewMode = activeMode
+    }
+
     AddModifierWindow
     {
         id: addModifierWindow
@@ -327,5 +342,4 @@ Rectangle
             }
         }
     }
-
 }
