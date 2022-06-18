@@ -19,7 +19,6 @@ Rectangle
 
     property var selectedNodeData: null
 
-
     property var activeViewMode: "Overview"
 
     function showModifierWindow(nodeId)
@@ -90,7 +89,19 @@ Rectangle
 
                     prevScale = scale
                 }
-
+                Rectangle
+                {
+                    id: highlighted
+                    visible: window.selectedNodeData !== null
+                    property int borderSize: 20
+                    property var modelPosition: graph_data.getNodeById(window.selectedNodeData.id)
+                    x: modelPosition.x - borderSize / 2
+                    y: modelPosition.y - borderSize / 2
+                    width: modelPosition.width + borderSize
+                    height: modelPosition.height + borderSize
+                    opacity: 0.75
+                    radius: 20
+                }
                 Canvas
                 {
                     width: window.content_width
@@ -254,6 +265,7 @@ Rectangle
                 {
                     implicitWidth: window.content_width
                     implicitHeight: window.content_height
+
                     Repeater
                     {
                         model: backend.nodeData//graph_data.nodes
@@ -268,6 +280,7 @@ Rectangle
                             titleText: modelData.id
                             viewMode: window.activeViewMode
                             controller: modelData
+
                             onClicked:
                             {
                                 window.selectedNodeData = modelData
@@ -300,11 +313,21 @@ Rectangle
             }
         }
     }
+
+
     NodeFocusSideBar
     {
         id: focusBar
         anchors.right: parent.right
         collapsed: true
+        onCollapsedChanged:
+        {
+            if(collapsed)
+            {
+                window.selectedNodeData = null
+            }
+        }
+
         activeNode: window.selectedNodeData
     }
 
@@ -333,6 +356,7 @@ Rectangle
             {
                 // Ensure that this window his hidden again when inactivity was triggered
                 addModifierWindow.visible = false
+                window.selectedNodeData = null
             }
         }
     }
