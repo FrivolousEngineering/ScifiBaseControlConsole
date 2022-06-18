@@ -71,13 +71,21 @@ Control
             id: contentHolder
             anchors.fill: parent
         }
+        Loader
+        {
+            id: contentLoader
+            anchors.fill: parent
+            sourceComponent:
+            {
+                if(controller.hasSettablePerformance)
+                {
+                    return performanceNode
+                }
+            }
+        }
     }
 
-    MouseArea
-    {
-        anchors.fill: parent
-        onClicked: base.clicked()
-    }
+
 
     background: Rectangle
     {
@@ -85,6 +93,11 @@ Control
         color: base.backgroundColor
         border.width: base.borderSize
         border.color: base.nodeColor
+        MouseArea
+        {
+            anchors.fill: parent
+            onClicked: base.clicked()
+        }
 
         Rectangle
         {
@@ -145,4 +158,64 @@ Control
             }
         }
     }
+
+
+    Component
+    {
+        id: performanceNode
+        CustomDial
+        {
+            id: performanceDial
+            anchors
+            {
+                left: parent.left
+                leftMargin: 5
+                right: parent.right
+                rightMargin: 4
+                top: parent.top
+                topMargin: 1
+            }
+
+            height: width
+
+            from: controller.min_performance
+            to: controller.max_performance
+
+            Behavior on currentValue {
+                NumberAnimation {
+                    duration: 1000
+                    easing.type: Easing.InOutCubic
+                }
+            }
+
+            Behavior on targetValue
+            {
+                NumberAnimation {
+                    duration: 1000
+                    easing.type: Easing.InOutCubic
+                }
+            }
+
+            Binding
+            {
+                target: performanceDial
+                property: "targetValue"
+                value: controller.targetPerformance
+                when: !performanceDial.pressed
+            }
+
+            currentValue: controller.performance
+
+            onPressedChanged:
+            {
+                if(!pressed) // Released
+                {
+                    controller.setPerformance(value)
+                }
+            }
+        }
+    }
+
+
+
 }

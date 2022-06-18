@@ -27,7 +27,6 @@ Dial
     }
 
     hoverEnabled: true
-
     property alias targetValue: control.value
     property double currentValue
 

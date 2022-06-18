@@ -14,8 +14,8 @@ Rectangle
 
     color: "black"
 
-    property int content_width: 8000
-    property int content_height: 8000
+    property int content_width: 3000
+    property int content_height: 3000
 
     property var selectedNodeData: null
 
@@ -47,10 +47,8 @@ Rectangle
                 id: mousearea
                 anchors.fill : parent
                 propagateComposedEvents: true
-                onClicked:
-                {
-                    mouse.accepted = false
-                }
+
+                onClicked: mouse.accepted = false
                 onWheel:
                 {
                     var new_scale = content.scale + wheel.angleDelta.y / 600
@@ -247,7 +245,6 @@ Rectangle
                                     {
                                         drawArrowDownAdvanced(ctx, prev_x, prev_y - i, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
-
                                 } else
                                 {
                                     // Draw up arrow
