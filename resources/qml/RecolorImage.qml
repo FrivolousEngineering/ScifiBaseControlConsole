@@ -16,8 +16,8 @@ Item
         id: img
         anchors.fill: parent
         visible: false
-        sourceSize.width: parent.width
-        sourceSize.height: parent.height
+        sourceSize.width: base.width
+        sourceSize.height: base.height
     }
 
     ColorOverlay

@@ -346,8 +346,6 @@ class Node(QObject):
         self.updateResourceList("resources_required", data["resources_required"])
         self.updateResourceList("resources_produced", data["resources_produced"])
 
-
-
     def updateResourceList(self, property_name, data):
         list_to_check = getattr(self, "_" + property_name)
         list_updated = False

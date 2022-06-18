@@ -21,6 +21,7 @@ Control
     property color iconColor: textColor
     property string viewMode: "Overview"
     property alias content: contentHolder.children
+    property alias iconSource: icon.source
 
     property var controller: null
 
@@ -134,17 +135,37 @@ Control
                 anchors
                 {
                     fill: parent
-                    bottomMargin: base.defaultmargin
-                    margins: base.defaultMargin + base.borderSize
+                    margins: base.defaultMargin
                 }
 
-                // TODO: Ensure that this actually is an image and not a rectangle.
-                Rectangle
+                RecolorImage
                 {
                     id: icon
                     width: base.iconSize
                     height: base.iconSize
                     color: base.iconColor
+                    sourceSize.width: 4 * width
+                    sourceSize.height: 4 * width
+                    source:
+                    {
+                        // I knowwwwwww. It's horrible code.
+                        // But I really can't be arsed to fix this now.
+                        if(controller.id == "fuel_storage")
+                        {
+                            return "../svg/jerrycan.svg"
+                        }
+                        if(controller.id.includes("battery"))
+                        {
+                            return "../svg/battery.svg"
+                        }
+                        if(controller.id.includes("valve"))
+                        {
+                            return "../svg/valve.svg"
+                        }
+
+
+                        return "../svg/node.svg"
+                    }
                 }
                 Label
                 {
@@ -152,11 +173,14 @@ Control
                     text: "Not Set"
                     font.family: "Futura Md BT"
                     font.pixelSize: 12
+                    height: 12
                     color: base.textColor
+                    verticalAlignment: Text.AlignVCenter
                     anchors
                     {
                         left: icon.right
                         leftMargin: base.defaultMargin
+                        top: parent.top
                     }
                 }
             }
