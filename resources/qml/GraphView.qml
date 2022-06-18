@@ -129,6 +129,44 @@ Rectangle
                         ctx.fill()
                     }
 
+                    function drawArrowDownAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    {
+                        ctx.beginPath()
+                        ctx.lineWidth = 1
+
+                        ctx.moveTo(x, y - 0.5 * arrowWidth)
+                        ctx.lineTo(x + 0.5 * lineWidth, y - 0.5 * arrowWidth + 0.5 * lineWidth)
+                        ctx.lineTo(x + 0.5 * lineWidth, y + 0.5 * arrowWidth + 0.5 * lineWidth)
+                        ctx.lineTo(x, y + 0.5 * arrowWidth)
+
+                        ctx.lineTo(x - 0.5 * lineWidth, y + 0.5 * arrowWidth + 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * lineWidth, y - 0.5 * arrowWidth + 0.5 * lineWidth)
+
+                        ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
+                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+
+                        ctx.fill()
+                    }
+
+                    function drawArrowUpAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    {
+                        ctx.beginPath()
+                        ctx.lineWidth = 1
+
+                        ctx.moveTo(x, y + 0.5 * arrowWidth)
+                        ctx.lineTo(x + 0.5 * lineWidth, y + 0.5 * arrowWidth - 0.5 * lineWidth)
+                        ctx.lineTo(x + 0.5 * lineWidth, y - 0.5 * arrowWidth - 0.5 * lineWidth)
+                        ctx.lineTo(x, y - 0.5 * arrowWidth)
+
+                        ctx.lineTo(x - 0.5 * lineWidth, y - 0.5 * arrowWidth - 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * lineWidth, y + 0.5 * arrowWidth - 0.5 * lineWidth)
+
+                        ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
+                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+
+                        ctx.fill()
+                    }
+
                     function drawArrowRight(ctx, x, y, lineWidth) {
                         ctx.beginPath()
                         ctx.lineWidth = 3
@@ -236,7 +274,7 @@ Rectangle
                                     // Draw down arrow
                                     for(var i = verticalDifference + arrowSpacing; i < arrowSpacing; i += arrowSpacing)
                                     {
-                                        drawArrowDown(ctx, prev_x, prev_y - i, 10)
+                                        drawArrowDownAdvanced(ctx, prev_x, prev_y - i, 10)
                                     }
 
                                 } else
@@ -244,7 +282,7 @@ Rectangle
                                     // Draw up arrow
                                     for(var i = 0; i < verticalDifference; i+= arrowSpacing)
                                     {
-                                        drawArrowUp(ctx, prev_x, prev_y - i, 10)
+                                        drawArrowUpAdvanced(ctx, prev_x, prev_y - i, 10)
                                     }
                                 }
                             }
