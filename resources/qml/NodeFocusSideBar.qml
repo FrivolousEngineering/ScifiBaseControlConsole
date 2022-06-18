@@ -83,12 +83,24 @@ Rectangle
             text: "Resources received"
             color: "white"
         }
-
+        Rectangle
+        {
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width / 4 * 3
+            height: 1
+            color: "#00D1FF"
+            opacity: 0.5
+        }
 
         Repeater
         {
             model: activeNode.resourcesReceived
             delegate: resourceComponent
+        }
+        Item
+        {
+            width: 1
+            height: base.defaultMargin
         }
 
         Label
@@ -98,10 +110,23 @@ Rectangle
             text: "Resources required"
             color: "white"
         }
+        Rectangle
+        {
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width / 4 * 3
+            height: 1
+            color: "#00D1FF"
+            opacity: 0.5
+        }
         Repeater
         {
             model: activeNode.resourcesRequired
             delegate: resourceComponent
+        }
+        Item
+        {
+            width: 1
+            height: base.defaultMargin
         }
         Label
         {
@@ -109,6 +134,14 @@ Rectangle
             font.pixelSize: 32
             text: "Resources produced"
             color: "white"
+        }
+        Rectangle
+        {
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width / 4 * 3
+            height: 1
+            color: "#00D1FF"
+            opacity: 0.5
         }
         Repeater
         {
