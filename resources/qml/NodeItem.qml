@@ -81,6 +81,10 @@ Control
                 {
                     return performanceNode
                 }
+                if("amount_stored" in controller.additionalProperties)
+                {
+                    return storageNode
+                }
             }
         }
     }
@@ -159,6 +163,70 @@ Control
         }
     }
 
+    Component
+    {
+        id: storageNode
+        Item
+        {
+            property double amountStored: controller.additionalProperties["amount_stored"]["value"]
+            property double maxAmountStored: controller.additionalProperties["amount_stored"]["max_value"]
+
+            Behavior on amountStored {
+                NumberAnimation {
+                    duration: 1250
+                    easing.type: Easing.InOutCubic
+                }
+            }
+            Item
+            {
+                id: storageItem
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: childrenRect.height
+                anchors.verticalCenter: parent.verticalCenter
+                Text
+                {
+                    id: storageText
+                    text:"Storage"
+                    font.family: "Futura Md BT"
+                    font.pixelSize: 12
+                    color: "white"
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    horizontalAlignment: Text.AlignHCenter
+                }
+                Text
+                {
+                    id: amountStoredText
+                    text: Math.round(amountStored)
+                    font.family: "Futura Md BT"
+                    font.pixelSize: 24
+                    font.bold: true
+                    color: "white"
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: storageText.bottom
+                    anchors.topMargin: 4
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+
+            Text
+            {
+                visible: maxAmountStored > -1
+                text: "/" + maxAmountStored
+                font.family: "Futura Md BT"
+                font.pixelSize: 16
+                color: "white"
+                opacity: 0.5
+                horizontalAlignment: Text.AlignHCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: storageItem.bottom
+                anchors.topMargin: 8
+            }
+        }
+    }
 
     Component
     {

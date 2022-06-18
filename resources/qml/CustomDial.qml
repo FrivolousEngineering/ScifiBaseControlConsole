@@ -100,7 +100,7 @@ Dial
             text: Math.round(currentDial.value * 100) / 100
             color: "white"
             font: Qt.font({
-                family: "Roboto",
+                family: "Futura Md BT",
                 pixelSize: 20,
                 bold: true,
                 capitalization: Font.AllUppercase
@@ -114,7 +114,7 @@ Dial
             text: "Target<br>" + Math.round(control.value * 100) / 100
             color: "white"
             font: Qt.font({
-                family: "Roboto",
+                family: "Futura Md BT",
                 pixelSize: 9,
                 bold: true,
                 capitalization: Font.AllUppercase
