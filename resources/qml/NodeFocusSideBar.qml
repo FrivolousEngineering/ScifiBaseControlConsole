@@ -134,6 +134,7 @@ Rectangle
         {
             width: 1
             height: base.defaultMargin
+            visible: resourcesRequiredRepeater.count
         }
 
         Label
@@ -163,6 +164,7 @@ Rectangle
         {
             width: 1
             height: base.defaultMargin
+            visible: resourcesProducedRepeater.count
         }
         Label
         {
@@ -187,6 +189,46 @@ Rectangle
             model: activeNode.resourcesProduced
             delegate: resourceComponent
         }
+        Item
+        {
+            width: 1
+            height: base.defaultMargin
+        }
+        Button
+        {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 62
+            background: Rectangle
+            {
+                border.width: 2
+                border.color: "white"
+                color: "transparent"
+            }
+
+            contentItem: Item
+            {
+
+                Image
+                {
+                    source: "../svg/plus.svg"
+                    width: sourceSize.width
+                    height: sourceSize.height
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: base.defaultMargin
+                }
+                Label
+                {
+                    font.family: "Futura Md BT"
+                    font.pixelSize: 32
+                    color: "white"
+                    text: "Modifier"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        }
     }
 
     Component
@@ -200,6 +242,7 @@ Rectangle
             {
                 font.family: "Futura Md BT"
                 font.pixelSize: base.defaultFontSize
+
                 text: modelData.type
                 color: "#56CCF2"
             }
