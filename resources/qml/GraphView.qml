@@ -107,12 +107,25 @@ Rectangle
                         ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
                         ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
 
-                        //ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
-                        //ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
-                        //ctx.lineTo(x + 0.5 * arrowWidth, y)
-                        //ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
+                        ctx.fill()
+                    }
 
-                        //ctx.stroke()
+                    function drawArrowLeftAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    {
+                        ctx.beginPath()
+                        ctx.lineWidth = 1
+
+                        ctx.moveTo(x - 0.5 * arrowWidth, y)
+                        ctx.lineTo(x - 0.5 * arrowWidth + 0.5 * lineWidth, y + 0.5 * lineWidth)
+                        ctx.lineTo(x + 0.5 * arrowWidth + 0.5 * lineWidth, y + 0.5 * lineWidth)
+                        ctx.lineTo(x + 0.5 * arrowWidth, y)
+
+                        ctx.lineTo(x + 0.5 * arrowWidth + 0.5 * lineWidth, y - 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * arrowWidth + 0.5 * lineWidth, y - 0.5 * lineWidth)
+
+                        ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
+                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+
                         ctx.fill()
                     }
 
@@ -216,7 +229,7 @@ Rectangle
                                     // Draw right facing arrows
                                     for(var i = horizontalDifference + arrowSpacing; i < arrowSpacing; i += arrowSpacing)
                                     {
-                                        drawArrowLeft(ctx, prev_x - i, prev_y, 10)
+                                        drawArrowLeftAdvanced(ctx, prev_x - i, prev_y, 10)
                                     }
                                 } else if (verticalDifference < 0)
                                 {
