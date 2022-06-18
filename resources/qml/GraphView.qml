@@ -160,7 +160,6 @@ Rectangle
                     {
                         var ctx = getContext("2d")
 
-                        print("OMGZOMG")
                         var horizontalDifference = 0
                         var verticalDifference = 0
                         var connectionLineWidth = 10
