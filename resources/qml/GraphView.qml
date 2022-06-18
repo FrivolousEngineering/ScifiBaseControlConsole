@@ -228,7 +228,7 @@ Rectangle
                                 if(horizontalDifference > 0)
                                 {
                                     // Draw right facing arrows
-                                    for(var i = 0; i < horizontalDifference; i+= arrowSpacing)
+                                    for(var i = 5; i < horizontalDifference; i+= arrowSpacing)
                                     {
                                         drawArrowRightAdvanced(ctx, prev_x - i, prev_y, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
@@ -236,14 +236,14 @@ Rectangle
                                 {
                                     // Draw left facint arrow
                                     // Draw right facing arrows
-                                    for(var i = horizontalDifference + arrowSpacing; i < arrowSpacing; i += arrowSpacing)
+                                    for(var i = horizontalDifference; i < 5; i += arrowSpacing)
                                     {
                                         drawArrowLeftAdvanced(ctx, prev_x - i, prev_y, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
                                 } else if (verticalDifference < 0)
                                 {
                                     // Draw down arrow
-                                    for(var i = verticalDifference + arrowSpacing; i < arrowSpacing; i += arrowSpacing)
+                                    for(var i = verticalDifference + arrowSpacing; i < 5; i += arrowSpacing)
                                     {
                                         drawArrowDownAdvanced(ctx, prev_x, prev_y - i, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
@@ -251,13 +251,12 @@ Rectangle
                                 } else
                                 {
                                     // Draw up arrow
-                                    for(var i = 0; i < verticalDifference; i+= arrowSpacing)
+                                    for(var i = 5; i < verticalDifference + 5; i+= arrowSpacing)
                                     {
                                         drawArrowUpAdvanced(ctx, prev_x, prev_y - i, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
                                 }
                             }
-
                         }
                     }
                 }
