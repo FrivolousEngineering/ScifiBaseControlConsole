@@ -46,15 +46,14 @@ Control
 
     }
 
-    function interpolateColor(ratio, low_color, high_color) {
-
+    function interpolateColor(ratio, low_color, high_color)
+    {
         return Qt.rgba(
              high_color.r * (1 - ratio) + low_color.r * ratio,
              high_color.g * (1 - ratio) + low_color.g * ratio,
              high_color.b * (1 - ratio) + low_color.b * ratio
         );
     }
-
 
     // Since we've placed the title bar in the background, the content item needs to leave that open
     topPadding: titleBarHeight + padding

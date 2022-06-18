@@ -1,6 +1,7 @@
 from typing import Optional
 
 from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtGui import QColor
 from lxml import etree
 
 
@@ -43,7 +44,7 @@ class ConnectionGraphic(QObject):
         self._source = source
         self._target = target
         self._points = points
-        self._color = color
+        self._color = QColor(color)
 
     @Property(str)
     def source(self):
@@ -57,7 +58,7 @@ class ConnectionGraphic(QObject):
     def points(self):
         return self._points
 
-    @Property(str)
+    @Property("QColor")
     def color(self):
         return self._color
 

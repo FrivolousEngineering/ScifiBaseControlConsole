@@ -96,7 +96,7 @@ Rectangle
                     width: window.content_width
                     height: window.content_height
                     antialiasing: true
-                    function drawArrowRightAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    function drawArrowRightAdvanced(ctx, x, y, lineWidth, arrowWidth = 5, arrowColor = Qt.rgba(0.764, 0.937, 0.98, 1))
                     {
                         ctx.beginPath()
                         ctx.lineWidth = 1
@@ -110,12 +110,12 @@ Rectangle
                         ctx.lineTo(x - 0.5 * arrowWidth + 0.5 * lineWidth, y - 0.5 * lineWidth)
 
                         ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
-                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+                        ctx.fillStyle = arrowColor;
 
                         ctx.fill()
                     }
 
-                    function drawArrowLeftAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    function drawArrowLeftAdvanced(ctx, x, y, lineWidth, arrowWidth = 5, arrowColor = Qt.rgba(0.764, 0.937, 0.98, 1))
                     {
                         ctx.beginPath()
                         ctx.lineWidth = 1
@@ -129,13 +129,12 @@ Rectangle
                         ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
 
                         ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
-                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+                        ctx.fillStyle = arrowColor
 
                         ctx.fill()
-
                     }
 
-                    function drawArrowDownAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    function drawArrowDownAdvanced(ctx, x, y, lineWidth, arrowWidth = 5, arrowColor = Qt.rgba(0.764, 0.937, 0.98, 1))
                     {
                         ctx.beginPath()
                         ctx.lineWidth = 1
@@ -149,12 +148,12 @@ Rectangle
                         ctx.lineTo(x - 0.5 * lineWidth, y + 0.5 * arrowWidth - 0.5 * lineWidth)
 
                         ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
-                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+                        ctx.fillStyle = arrowColor
 
                         ctx.fill()
                     }
 
-                    function drawArrowUpAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    function drawArrowUpAdvanced(ctx, x, y, lineWidth, arrowWidth = 5, arrowColor = Qt.rgba(0.764, 0.937, 0.98, 1))
                     {
                         ctx.beginPath()
                         ctx.lineWidth = 1
@@ -168,7 +167,7 @@ Rectangle
                         ctx.lineTo(x - 0.5 * lineWidth, y - 0.5 * arrowWidth + 0.5 * lineWidth)
 
                         ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
-                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+                        ctx.fillStyle = arrowColor;
 
                         ctx.fill()
                     }
@@ -185,8 +184,7 @@ Rectangle
                         {
                             ctx.lineWidth = connectionLineWidth
                             var connection = graph_data.connections[connection_index]
-                            ctx.strokeStyle = Qt.rgba(0, 0.819, 1, 1);
-
+                            ctx.strokeStyle = Qt.darker(connection.color);
                             ctx.beginPath()
 
                             ctx.moveTo(connection.points[0].x, connection.points[1].y)
@@ -221,7 +219,7 @@ Rectangle
                                     // Draw right facing arrows
                                     for(var i = 0; i < horizontalDifference; i+= arrowSpacing)
                                     {
-                                        drawArrowRightAdvanced(ctx, prev_x - i, prev_y, 10)
+                                        drawArrowRightAdvanced(ctx, prev_x - i, prev_y, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
                                 } else if (horizontalDifference < 0 )
                                 {
@@ -229,14 +227,14 @@ Rectangle
                                     // Draw right facing arrows
                                     for(var i = horizontalDifference + arrowSpacing; i < arrowSpacing; i += arrowSpacing)
                                     {
-                                        drawArrowLeftAdvanced(ctx, prev_x - i, prev_y, 10)
+                                        drawArrowLeftAdvanced(ctx, prev_x - i, prev_y, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
                                 } else if (verticalDifference < 0)
                                 {
                                     // Draw down arrow
                                     for(var i = verticalDifference + arrowSpacing; i < arrowSpacing; i += arrowSpacing)
                                     {
-                                        drawArrowDownAdvanced(ctx, prev_x, prev_y - i, 10)
+                                        drawArrowDownAdvanced(ctx, prev_x, prev_y - i, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
 
                                 } else
@@ -244,7 +242,7 @@ Rectangle
                                     // Draw up arrow
                                     for(var i = 0; i < verticalDifference; i+= arrowSpacing)
                                     {
-                                        drawArrowUpAdvanced(ctx, prev_x, prev_y - i, 10)
+                                        drawArrowUpAdvanced(ctx, prev_x, prev_y - i, 10, 5, Qt.lighter(connection.color, 1.5))
                                     }
                                 }
                             }
