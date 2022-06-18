@@ -18,11 +18,9 @@ Rectangle
     property int content_height: 8000
 
     property var selectedNodeData: null
-    onSelectedNodeDataChanged: print("OMG", selectedNodeData)
+
 
     property var activeViewMode: "Overview"
-
-    onActiveViewModeChanged: print("OMGZOMG", activeViewMode)
 
     function showModifierWindow(nodeId)
     {
@@ -274,6 +272,8 @@ Rectangle
                             width: modelPosition.width
                             height: modelPosition.height
                             titleText: modelData.id
+                            viewMode: window.activeViewMode
+                            controller: modelData
                             onClicked:
                             {
                                 window.selectedNodeData = modelData

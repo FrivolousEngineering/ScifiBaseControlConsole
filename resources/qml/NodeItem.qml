@@ -19,8 +19,36 @@ Control
     property color backgroundColor: "#050732"
     property color textColor: backgroundColor
     property color iconColor: textColor
-
+    property string viewMode: "Overview"
     property alias content: contentHolder.children
+
+    property var controller: null
+
+    property color nodeColor:
+    {
+        if(viewMode == "Overview")
+        {
+            return "white"
+        } else if(viewMode == "Temperature")
+        {
+            if(controller.temperature < controller.max_safe_temperature * 0.8)
+            {
+                return "white"
+            }
+
+            return interpolateColor((controller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
+        }
+    }
+
+    function interpolateColor(ratio, low_color, high_color) {
+
+        return Qt.rgba(
+             high_color.r * (1 - ratio) + low_color.r * ratio,
+             high_color.g * (1 - ratio) + low_color.g * ratio,
+             high_color.b * (1 - ratio) + low_color.b * ratio
+        );
+    }
+
 
     // Since we've placed the title bar in the background, the content item needs to leave that open
     topPadding: titleBarHeight + padding
@@ -51,7 +79,7 @@ Control
         radius: base.cornerRadius
         color: base.backgroundColor
         border.width: base.borderSize
-        border.color: "white"
+        border.color: base.nodeColor
 
         Rectangle
         {
@@ -63,6 +91,7 @@ Control
             }
             height: base.titleBarHeight + base.borderSize
             radius: base.cornerRadius
+            color: base.nodeColor
 
             Rectangle
             {
