@@ -17,6 +17,9 @@ Rectangle
     property int content_width: 8000
     property int content_height: 8000
 
+    property var selectedNodeData: null
+    onSelectedNodeDataChanged: print("OMG", selectedNodeData)
+
     function showModifierWindow(nodeId)
     {
         addModifierWindow.nodeObject = backend.getNodeById(nodeId)
@@ -267,6 +270,11 @@ Rectangle
                             width: modelPosition.width
                             height: modelPosition.height
                             titleText: modelData.id
+                            onClicked:
+                            {
+                                window.selectedNodeData = modelData
+                                focusBar.collapsed = false
+                            }
                         }
 
                         /*Node
@@ -293,9 +301,15 @@ Rectangle
                 }
             }
         }
+    }
+    NodeFocusSideBar
+    {
+        id: focusBar
+        anchors.right: parent.right
+        collapsed: true
+        activeNode: window.selectedNodeData
 
     }
-
     AddModifierWindow
     {
         id: addModifierWindow
@@ -313,4 +327,5 @@ Rectangle
             }
         }
     }
+
 }

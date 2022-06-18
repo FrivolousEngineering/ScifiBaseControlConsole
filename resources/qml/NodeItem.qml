@@ -25,6 +25,7 @@ Control
     // Since we've placed the title bar in the background, the content item needs to leave that open
     topPadding: titleBarHeight + padding
     padding: borderSize + defaultMargin
+    signal clicked()
 
     contentItem: Item
     {
@@ -37,6 +38,12 @@ Control
             id: contentHolder
             anchors.fill: parent
         }
+    }
+
+    MouseArea
+    {
+        anchors.fill: parent
+        onClicked: base.clicked()
     }
 
     background: Rectangle
