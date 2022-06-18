@@ -75,6 +75,8 @@ Rectangle
             topMargin: base.defaultMargin
             left: parent.left
             leftMargin: base.defaultMargin
+            right: parent.right
+            rightMargin: base.defaultMargin
         }
         Label
         {
@@ -82,6 +84,7 @@ Rectangle
             font.pixelSize: 18
             text: "Resources received"
             color: "white"
+            visible: resourcesReceivedRepeater.count
         }
         Rectangle
         {
@@ -90,10 +93,12 @@ Rectangle
             height: 1
             color: "#00D1FF"
             opacity: 0.5
+            visible: resourcesReceivedRepeater.count
         }
 
         Repeater
         {
+            id: resourcesReceivedRepeater
             model: activeNode.resourcesReceived
             delegate: resourceComponent
         }
@@ -109,6 +114,7 @@ Rectangle
             font.pixelSize: 18
             text: "Resources required"
             color: "white"
+            visible: resourcesRequiredRepeater.count
         }
         Rectangle
         {
@@ -117,9 +123,11 @@ Rectangle
             height: 1
             color: "#00D1FF"
             opacity: 0.5
+            visible: resourcesRequiredRepeater.count
         }
         Repeater
         {
+            id: resourcesRequiredRepeater
             model: activeNode.resourcesRequired
             delegate: resourceComponent
         }
@@ -134,6 +142,7 @@ Rectangle
             font.pixelSize: 18
             text: "Resources produced"
             color: "white"
+            visible: resourcesProducedRepeater.count
         }
         Rectangle
         {
@@ -142,9 +151,11 @@ Rectangle
             height: 1
             color: "#00D1FF"
             opacity: 0.5
+            visible: resourcesProducedRepeater.count
         }
         Repeater
         {
+            id: resourcesProducedRepeater
             model: activeNode.resourcesProduced
             delegate: resourceComponent
         }
