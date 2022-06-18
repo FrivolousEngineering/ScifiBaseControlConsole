@@ -96,25 +96,6 @@ Rectangle
                         ctx.beginPath()
                         ctx.lineWidth = 1
 
-                        ctx.moveTo(x + 0.5 * arrowWidth, y)
-                        ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
-                        ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
-                        ctx.lineTo(x - 0.5 * arrowWidth, y)
-
-                        ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
-                        ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
-
-                        ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
-                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
-
-                        ctx.fill()
-                    }
-
-                    function drawArrowLeftAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
-                    {
-                        ctx.beginPath()
-                        ctx.lineWidth = 1
-
                         ctx.moveTo(x - 0.5 * arrowWidth, y)
                         ctx.lineTo(x - 0.5 * arrowWidth + 0.5 * lineWidth, y + 0.5 * lineWidth)
                         ctx.lineTo(x + 0.5 * arrowWidth + 0.5 * lineWidth, y + 0.5 * lineWidth)
@@ -129,26 +110,27 @@ Rectangle
                         ctx.fill()
                     }
 
-                    function drawArrowDownAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    function drawArrowLeftAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
                     {
                         ctx.beginPath()
                         ctx.lineWidth = 1
 
-                        ctx.moveTo(x, y - 0.5 * arrowWidth)
-                        ctx.lineTo(x + 0.5 * lineWidth, y - 0.5 * arrowWidth + 0.5 * lineWidth)
-                        ctx.lineTo(x + 0.5 * lineWidth, y + 0.5 * arrowWidth + 0.5 * lineWidth)
-                        ctx.lineTo(x, y + 0.5 * arrowWidth)
+                        ctx.moveTo(x + 0.5 * arrowWidth, y)
+                        ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y + 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * arrowWidth, y)
 
-                        ctx.lineTo(x - 0.5 * lineWidth, y + 0.5 * arrowWidth + 0.5 * lineWidth)
-                        ctx.lineTo(x - 0.5 * lineWidth, y - 0.5 * arrowWidth + 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
+                        ctx.lineTo(x + 0.5 * arrowWidth - 0.5 * lineWidth, y - 0.5 * lineWidth)
 
                         ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
                         ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
 
                         ctx.fill()
+
                     }
 
-                    function drawArrowUpAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    function drawArrowDownAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
                     {
                         ctx.beginPath()
                         ctx.lineWidth = 1
@@ -167,44 +149,23 @@ Rectangle
                         ctx.fill()
                     }
 
-                    function drawArrowRight(ctx, x, y, lineWidth) {
+                    function drawArrowUpAdvanced(ctx, x, y, lineWidth, arrowWidth = 5)
+                    {
                         ctx.beginPath()
-                        ctx.lineWidth = 3
-                        ctx.strokeStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
-                        ctx.moveTo(x, y - lineWidth / 2 + 2)
-                        ctx.lineTo(x - lineWidth / 2, y)
-                        ctx.lineTo(x, y + lineWidth / 2 - 2)
-                        ctx.stroke()
-                    }
+                        ctx.lineWidth = 1
 
-                    function drawArrowLeft(ctx, x, y, lineWidth) {
-                        ctx.beginPath()
-                        ctx.lineWidth = 3
-                        ctx.strokeStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
-                        ctx.moveTo(x, y - lineWidth / 2 + 2)
-                        ctx.lineTo(x + lineWidth / 2, y )
-                        ctx.lineTo(x, y + lineWidth / 2 - 2)
-                        ctx.stroke()
-                    }
+                        ctx.moveTo(x, y - 0.5 * arrowWidth)
+                        ctx.lineTo(x + 0.5 * lineWidth, y - 0.5 * arrowWidth + 0.5 * lineWidth)
+                        ctx.lineTo(x + 0.5 * lineWidth, y + 0.5 * arrowWidth + 0.5 * lineWidth)
+                        ctx.lineTo(x, y + 0.5 * arrowWidth)
 
-                    function drawArrowDown(ctx, x, y, lineWidth) {
-                        ctx.beginPath()
-                        ctx.lineWidth = 3
-                        ctx.strokeStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
-                        ctx.moveTo(x - lineWidth / 2 + 2, y )
-                        ctx.lineTo(x, y + lineWidth / 2)
-                        ctx.lineTo(x+ lineWidth / 2 - 2, y)
-                        ctx.stroke()
-                    }
+                        ctx.lineTo(x - 0.5 * lineWidth, y + 0.5 * arrowWidth + 0.5 * lineWidth)
+                        ctx.lineTo(x - 0.5 * lineWidth, y - 0.5 * arrowWidth + 0.5 * lineWidth)
 
-                    function drawArrowUp(ctx, x, y, lineWidth) {
-                        ctx.beginPath()
-                        ctx.lineWidth = 3
-                        ctx.strokeStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
-                        ctx.moveTo(x - lineWidth / 2 + 2, y )
-                        ctx.lineTo(x, y - lineWidth / 2)
-                        ctx.lineTo(x + lineWidth / 2 - 2, y)
-                        ctx.stroke()
+                        ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
+                        ctx.fillStyle = Qt.rgba(0.764, 0.937, 0.98, 1);
+
+                        ctx.fill()
                     }
 
                     onPaint:
