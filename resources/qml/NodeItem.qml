@@ -29,7 +29,7 @@ Control
         if(viewMode == "Overview")
         {
             return "white"
-        } else if(viewMode == "Temperature")
+        } else if(viewMode == "Overheat")
         {
             if(controller.temperature < controller.max_safe_temperature * 0.8)
             {

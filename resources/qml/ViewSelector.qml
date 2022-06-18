@@ -51,7 +51,7 @@ Control
             }
             Button
             {
-                text: "Temperature"
+                text: "Overheat"
                 ButtonGroup.group: modeGroup
                 checkable: true
             }
