@@ -25,6 +25,8 @@ Control
 
     property var controller: null
 
+
+
     property color nodeColor:
     {
         if(viewMode == "Overheat")
@@ -41,10 +43,13 @@ Control
         {
             return interpolateColor(controller.health / 100., Qt.rgba(0,1,0,1), Qt.rgba(1,0,0,1))
         }
+        if(viewMode == "Efficiency")
+        {
+            return interpolateColor(controller.effectiveness_factor, Qt.rgba(1,1,1,1), Qt.rgba(1,0,0,1))
+        }
 
         // Default color!
         return "white"
-
     }
 
     function interpolateColor(ratio, low_color, high_color)

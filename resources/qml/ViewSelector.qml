@@ -18,7 +18,7 @@ Control
             radius: 5
             color: "#1A1C48"
             height: parent.height
-            width: 250
+            width: 325
             anchors.bottom: parent.bottom
         }
         Image
@@ -75,6 +75,12 @@ Control
                 text: "Health"
                 ButtonGroup.group: modeGroup
                 iconSource: "../svg/health.svg"
+                checkable: true
+            }
+            ViewSelectorButton
+            {
+                text: "Efficiency"
+                ButtonGroup.group: modeGroup
                 checkable: true
             }
         }

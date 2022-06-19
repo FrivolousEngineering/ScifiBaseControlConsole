@@ -6,7 +6,6 @@ Button
     id: control
     property var iconSource
     background: Item {}
-    onClicked: print("OMG")
     implicitWidth: 80
     implicitHeight: 72
     contentItem: Item
