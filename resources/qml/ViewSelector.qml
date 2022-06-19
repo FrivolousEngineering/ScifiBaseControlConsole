@@ -81,6 +81,7 @@ Control
             {
                 text: "Efficiency"
                 ButtonGroup.group: modeGroup
+                iconSource: "../svg/gear.svg"
                 checkable: true
             }
         }
