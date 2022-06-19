@@ -273,7 +273,7 @@ Rectangle
                             y: modelPosition.y
                             width: modelPosition.width
                             height: modelPosition.height
-                            titleText: modelData.id
+                            titleText: modelData.label
                             viewMode: window.activeViewMode
                             controller: modelData
 

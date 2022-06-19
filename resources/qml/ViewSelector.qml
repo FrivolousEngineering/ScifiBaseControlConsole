@@ -18,7 +18,7 @@ Control
             radius: 5
             color: "#1A1C48"
             height: parent.height
-            width: 300
+            width: 250
             anchors.bottom: parent.bottom
         }
         Image
