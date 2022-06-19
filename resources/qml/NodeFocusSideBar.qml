@@ -29,7 +29,7 @@ Rectangle
             color: "white"
             font.family: "Futura Md BT"
             font.pixelSize: 32
-            text: activeNode.id
+            text: activeNode.label
             anchors.left: parent.left
             anchors.leftMargin: base.defaultMargin
         }
