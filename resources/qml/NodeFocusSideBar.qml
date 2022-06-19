@@ -250,7 +250,7 @@ Rectangle
             {
                 font.family: "Futura Md BT"
                 font.pixelSize: base.defaultFontSize
-                text: modelData.value
+                text: Math.round(modelData.value * 100) / 100
                 anchors.right: parent.right
                 color: "white"
             }
