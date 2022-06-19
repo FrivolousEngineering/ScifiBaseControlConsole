@@ -8,9 +8,13 @@ Rectangle
     property int defaultMargin: 16
     property var activeNode: null
     color: "#06071E"
-    width: collapsed ? 0: 350
+    width: 350
+
+    property real collapseMove: collapsed ? -width : 0
+    anchors.rightMargin: collapseMove
+    Behavior on collapseMove { NumberAnimation {duration: 200}}
     height: parent.height
-    visible: width != 0
+    visible: collapseMove > -width
     property int defaultFontSize: 16
     property int largeFontSize: 24
 
