@@ -35,7 +35,6 @@ Control
             {
                 return "white"
             }
-
             return interpolateColor((controller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
         }
 
@@ -46,6 +45,12 @@ Control
         if(viewMode == "Efficiency")
         {
             return interpolateColor(controller.effectiveness_factor, Qt.rgba(1,1,1,1), Qt.rgba(1,0,0,1))
+        }
+
+        if(viewMode == "Active")
+        {
+            if(controller.active)
+                return "#00D1FF"
         }
 
         // Default color!

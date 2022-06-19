@@ -18,7 +18,7 @@ Control
             radius: 5
             color: "#1A1C48"
             height: parent.height
-            width: 325
+            width: 400
             anchors.bottom: parent.bottom
         }
         Image
@@ -82,6 +82,13 @@ Control
                 text: "Efficiency"
                 ButtonGroup.group: modeGroup
                 iconSource: "../svg/gear.svg"
+                checkable: true
+            }
+            ViewSelectorButton
+            {
+                text: "Active"
+                ButtonGroup.group: modeGroup
+                iconSource: "../svg/power.svg"
                 checkable: true
             }
         }

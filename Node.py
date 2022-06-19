@@ -45,6 +45,7 @@ class Node(QObject):
         self._heat_convection = 1.0
         self._heat_emissivity = 1.0
         self._modifiers = []
+        self._active = True
 
         self._update_timer = QTimer()
         self._update_timer.setInterval(2000)
@@ -101,6 +102,7 @@ class Node(QObject):
     maxAmountStoredChanged = Signal()
     amountStoredChanged = Signal()
     effectivenessFactorChanged = Signal()
+    activeChanged = Signal()
 
     def updateServerUrl(self, server_url):
         if server_url == "":
@@ -304,6 +306,10 @@ class Node(QObject):
     def isTemperatureDependant(self):
         return self._is_temperature_dependant
 
+    @Property(float, notify=activeChanged)
+    def active(self):
+        return self._active
+
     @Property(float, notify=optimalTemperatureChanged)
     def optimalTemperature(self):
         return self._optimal_temperature
@@ -330,6 +336,7 @@ class Node(QObject):
             return
         self._updateProperty("temperature", data["temperature"] - 273.15 )
         self._updateProperty("enabled", bool(data["enabled"]))
+        self._updateProperty("active", bool(data["active"]))
         self._updateProperty("performance", data["performance"])
         self._updateProperty("min_performance", data["min_performance"])
         self._updateProperty("max_performance", data["max_performance"])
