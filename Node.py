@@ -393,7 +393,11 @@ class Node(QObject):
         if not data:
             return
 
+        # Offset is given in the reply, but it's not a list of data. Remove it here.
+        del data["offset"]
+
         all_keys = set(data.keys())
+
         keys_changed = False
         data_changed = False
         if set(self._all_chart_data.keys()) != all_keys:
