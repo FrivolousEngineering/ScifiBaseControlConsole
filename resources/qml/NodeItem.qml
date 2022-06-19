@@ -52,6 +52,8 @@ Control
         return "white"
     }
 
+    Behavior on nodeColor { ColorAnimation {duration: 1000} }
+
     function interpolateColor(ratio, low_color, high_color)
     {
         return Qt.rgba(
