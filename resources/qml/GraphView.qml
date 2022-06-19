@@ -323,6 +323,7 @@ Rectangle
             }
         }
         onAddModifierClicked: window.showModifierWindow(selectedNodeData.id)
+        onShowGraphs: graphWindow.visible = true
         activeNode: window.selectedNodeData
     }
 
@@ -354,5 +355,10 @@ Rectangle
                 window.selectedNodeData = null
             }
         }
+    }
+    ChartWindow
+    {
+        id: graphWindow
+        visible: false
     }
 }

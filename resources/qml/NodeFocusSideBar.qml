@@ -19,6 +19,7 @@ Rectangle
     property int largeFontSize: 24
 
     signal addModifierClicked()
+    signal showGraphs()
 
     Item
     {
@@ -228,6 +229,31 @@ Rectangle
                     font.pixelSize: 32
                     color: "white"
                     text: "Modifier"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        }
+        Button
+        {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 62
+            background: Rectangle
+            {
+                border.width: 2
+                border.color: "white"
+                color: "transparent"
+            }
+            onClicked: base.showGraphs()
+            contentItem: Item
+            {
+                Label
+                {
+                    font.family: "Futura Md BT"
+                    font.pixelSize: 32
+                    color: "white"
+                    text: "See History"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                 }

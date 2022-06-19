@@ -20,8 +20,10 @@ LineSeries
     {
         gridVisible: false
         labelsVisible: false
-        lineVisible: false
-        visible: false
+        lineVisible: true
+        visible: true
+        min: yMin
+        max: yMax
     }
     axisX: ValueAxis
     {
