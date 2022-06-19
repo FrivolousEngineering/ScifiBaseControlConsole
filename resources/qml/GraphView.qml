@@ -341,8 +341,8 @@ Rectangle
     {
         id: addModifierWindow
         anchors.centerIn: parent
-        width: 350
-        height: 350
+        width: 500
+        height: 500
         onModifierAdded: backend.getNodeById(nodeId).addModifier(type)
         Connections
         {

@@ -90,8 +90,6 @@ Control
         }
     }
 
-
-
     background: Rectangle
     {
         radius: base.cornerRadius
@@ -307,7 +305,4 @@ Control
             }
         }
     }
-
-
-
 }

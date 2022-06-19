@@ -209,7 +209,6 @@ Rectangle
             onClicked: base.addModifierClicked()
             contentItem: Item
             {
-
                 Image
                 {
                     source: "../svg/plus.svg"

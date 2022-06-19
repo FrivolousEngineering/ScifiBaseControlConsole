@@ -1,11 +1,23 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
-CutoffRectangle
+Rectangle
 {
     id: addModifierWindow
     property string nodeId: ""
     property var nodeObject
+
+    // Graphical properties
+    property int titleBarHeight: 32
+    property int cornerRadius: 10
+    property int borderSize: 2
+    property int defaultMargin: 8
+
     visible: false
+
+    color: "#050732"
+    border.width: 2
+    border.color: "White"
+    radius: 10
 
     signal modifierAdded(string nodeId, string type)
     property var activeModifier: backend.getModifierByType(view.model[0])
@@ -21,8 +33,8 @@ CutoffRectangle
             bottom: buttonBar.top
             left: parent.left
             right: descriptionText.left
-            margins: addModifierWindow.angleSize
-            bottomMargin: 3
+            margins: addModifierWindow.cornerRadius
+
         }
         clip: true
 
@@ -34,10 +46,11 @@ CutoffRectangle
         currentIndex: 0
         Component.onCompleted: activeModifier = currentItem.modifier
 
-        delegate: Button
+        delegate: OurButton
         {
             property var modifier: backend.getModifierByType(modelData)
             text: modifier.name
+            width: view.width - 5
             onClicked:
             {
                 view.currentIndex = index
@@ -51,14 +64,15 @@ CutoffRectangle
     {
         id: descriptionText
         anchors.right: parent.right
-        anchors.rightMargin: 2
+        anchors.rightMargin: cornerRadius
         anchors.bottom: parent.bottom
         anchors.top: parent.top
-        anchors.topMargin: addModifierWindow.angleSize
-        width: 125
+        anchors.topMargin: addModifierWindow.cornerRadius
+        width: parent.width / 2
         color: "white"
         text: activeModifier ? activeModifier.description: ""
         wrapMode: Text.WordWrap
+        font.family: "Futura Md BT"
     }
 
     Row
@@ -68,20 +82,22 @@ CutoffRectangle
         anchors
         {
             bottom: parent.bottom
-            bottomMargin: 3
+            bottomMargin: addModifierWindow.cornerRadius
             horizontalCenter: parent.horizontalCenter
         }
-        Button
+        OurButton
         {
             id: closeButton
             text: "close"
+            width: 55
             onClicked: addModifierWindow.visible = false
         }
 
-        Button
+        OurButton
         {
             id: apply
             text: "Apply modifier"
+            width: 125
             onClicked:
             {
                 addModifierWindow.modifierAdded(addModifierWindow.nodeObject.id, activeModifier.type )
