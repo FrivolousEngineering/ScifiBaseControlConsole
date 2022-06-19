@@ -310,7 +310,6 @@ Rectangle
         }
     }
 
-
     NodeFocusSideBar
     {
         id: focusBar
@@ -323,7 +322,7 @@ Rectangle
                 window.selectedNodeData = null
             }
         }
-
+        onAddModifierClicked: window.showModifierWindow(selectedNodeData.id)
         activeNode: window.selectedNodeData
     }
 

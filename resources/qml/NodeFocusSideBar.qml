@@ -14,6 +14,7 @@ Rectangle
     property int defaultFontSize: 16
     property int largeFontSize: 24
 
+    signal addModifierClicked()
 
     Item
     {
@@ -205,7 +206,7 @@ Rectangle
                 border.color: "white"
                 color: "transparent"
             }
-
+            onClicked: base.addModifierClicked()
             contentItem: Item
             {
 
