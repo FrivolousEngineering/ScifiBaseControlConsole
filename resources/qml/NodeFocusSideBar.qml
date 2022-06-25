@@ -101,7 +101,27 @@ Rectangle
             {
                 font.family: "Futura Md BT"
                 font.pixelSize: base.largeFontSize
-                text: activeNode.health
+                text: Math.round(activeNode.health * 100) / 100
+                anchors.right: parent.right
+                color: "white"
+            }
+        }
+        Item
+        {
+            width: parent.width
+            height: base.largeFontSize
+            Label
+            {
+                font.family: "Futura Md BT"
+                font.pixelSize: base.largeFontSize
+                text: "Temperature"
+                color: "#56CCF2"
+            }
+            Label
+            {
+                font.family: "Futura Md BT"
+                font.pixelSize: base.largeFontSize
+                text: Math.round(activeNode.temperature * 100) / 100
                 anchors.right: parent.right
                 color: "white"
             }
