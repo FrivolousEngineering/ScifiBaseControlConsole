@@ -10,17 +10,16 @@ Control
     topPadding: 30
     bottomPadding: 30
     leftPadding: 16
-    rightPadding: 60
     background: Item
     {
         Rectangle
         {
             id: mainBackground
-            anchors.horizontalCenter: parent.horizontalCenter
+
             radius: 5
             color: "#1A1C48"
             height: parent.height
-            width: 400
+            width: 325
             anchors.bottom: parent.bottom
         }
         Image
@@ -32,7 +31,6 @@ Control
     }
     contentItem: Item
     {
-
         RecolorImage
         {
             id: icon
@@ -45,6 +43,7 @@ Control
 
         Label
         {
+            id: label
             text: backend.userName
             color: "white"
             font.family: "Futura Md BT"
@@ -52,6 +51,22 @@ Control
             anchors.left: icon.right
             anchors.leftMargin: 16
             anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Button
+        {
+            width: 18
+            height: 18
+            anchors.right: parent.right
+            anchors.rightMargin: 18
+            anchors.verticalCenter: parent.verticalCenter
+            background: RecolorImage
+            {
+                source: "../svg/logout.svg"
+                color:  "white"
+            }
+            contentItem: Item {}
+            onClicked: print("OMGZOMG")
         }
     }
 }
