@@ -310,6 +310,12 @@ Rectangle
         }
     }
 
+    TopBar
+    {
+        anchors.left: parent.left
+        anchors.top: parent.top
+    }
+
     NodeFocusSideBar
     {
         id: focusBar
