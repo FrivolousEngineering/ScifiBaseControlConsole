@@ -7,7 +7,6 @@ Control
 
     implicitWidth: 350
     implicitHeight: 90
-    property string activeMode: "Overview"
     background: Item
     {
         Rectangle
