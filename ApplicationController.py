@@ -21,6 +21,7 @@ class ApplicationController(QObject):
     authenticationRequiredChanged = Signal()
     authenticationScannerAttachedChanged = Signal()
     inactivityTimeout = Signal()
+    userNameChanged = Signal()
 
     def __init__(self, parent=None, rfid_card = None):
         QObject.__init__(self, parent)
@@ -57,6 +58,8 @@ class ApplicationController(QObject):
         self._inactivity_timer.setSingleShot(True)
         self._inactivity_timer.timeout.connect(self.inactivityTimeout)
 
+        self._user_name = "Unknown"
+
         self._serial = None
         if self._rfid_card:
             self.setAuthenticationRequired(False)
@@ -80,6 +83,16 @@ class ApplicationController(QObject):
 
     def onInactivityTimeout(self):
         self.setAuthenticationRequired(True)
+        self.setUserName("")
+
+    def setUserName(self, user_name):
+        if self._user_name != user_name:
+            self._user_name = user_name
+            self.userNameChanged.emit()
+
+    @Property(str, notify=userNameChanged)
+    def userName(self):
+        return self._user_name
 
     @Slot()
     def tickleTimeout(self):
@@ -138,7 +151,7 @@ class ApplicationController(QObject):
                 pass
 
         if self._serial is not None:
-            # Call later
+            # Call latertext
             self._authentication_scanner_attached = True
             self.authenticationScannerAttachedChanged.emit()
             threading.Timer(2, self._startSerialThreads).start()
@@ -188,6 +201,9 @@ class ApplicationController(QObject):
             if status_code != 404:
                 self._serial_worker.setReadResult(True)
                 self.setAuthenticationRequired(False)
+                data = bytes(reply.readAll())
+                data = json.loads(data)
+                self.setUserName(data["user_name"])
             else:
                 self._serial_worker.setReadResult(False)
                 self.setAuthenticationRequired(True)

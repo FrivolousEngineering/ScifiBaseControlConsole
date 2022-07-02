@@ -7,6 +7,10 @@ Control
 
     implicitWidth: 350
     implicitHeight: 90
+    topPadding: 30
+    bottomPadding: 30
+    leftPadding: 16
+    rightPadding: 60
     background: Item
     {
         Rectangle
@@ -24,6 +28,30 @@ Control
             source: "../svg/curved_corner_flipped.svg"
             anchors.horizontalCenter: mainBackground.right
 
+        }
+    }
+    contentItem: Item
+    {
+
+        RecolorImage
+        {
+            id: icon
+            anchors.verticalCenter: parent.verticalCenter
+            source: "../svg/user.svg"
+            width: 18
+            height: 18
+            color:  "white"
+        }
+
+        Label
+        {
+            text: backend.userName
+            color: "white"
+            font.family: "Futura Md BT"
+            font.pixelSize: 18
+            anchors.left: icon.right
+            anchors.leftMargin: 16
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 }
