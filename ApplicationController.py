@@ -252,7 +252,7 @@ class ApplicationController(QObject):
         return all([node.server_reachable for node in self._data])
 
     @Slot(str, result="QVariant")
-    def getNodeById(self, nodeId):
+    def getNodeById(self, node_id: str):
         for node in self._data:
-            if node.id == nodeId:
+            if node.id == node_id:
                 return node
