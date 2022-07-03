@@ -49,7 +49,7 @@ class Node(QObject):
         self._active = True
 
         self._update_timer = QTimer()
-        self._update_timer.setInterval(2000)
+        self._update_timer.setInterval(10000)
         self._update_timer.setSingleShot(False)
         self._update_timer.timeout.connect(self.partialUpdate)
         #self._update_timer.start()
@@ -202,9 +202,9 @@ class Node(QObject):
     @Slot(float)
     def setPerformance(self, performance):
         data = "{\"performance\": %s}" % performance
-        reply = self._network_manager.put(QNetworkRequest(QUrl(self._performance_url)), data.encode())
         self._target_performance = performance
         self.targetPerformanceChanged.emit()
+        reply = self._network_manager.put(QNetworkRequest(QUrl(self._performance_url)), data.encode())
         self._onFinishedCallbacks[reply] = self._onPerformanceChanged
 
     @Slot(str)
