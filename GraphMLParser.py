@@ -91,6 +91,10 @@ class GraphMLParser(QObject):
         self._nodes_by_id = {}
         self._connections = []
         self._xml_id_to_our = {}
+
+        x_offset = 200
+        y_offset = 200
+
         for node in graph.findall(d_s + "node"):
             for data in node.findall(d_s + "data"):
                 if data.attrib["key"] != "d5":
@@ -99,8 +103,8 @@ class GraphMLParser(QObject):
                 node_id = shape_node.find(y_s + "NodeLabel").text
                 geometry = shape_node.find(y_s + "Geometry")
                 node_graphic = NodeGraphic(node_id,
-                                           scale * float(geometry.attrib["x"]),
-                                           scale * float(geometry.attrib["y"]),
+                                           scale * float(geometry.attrib["x"]) + x_offset,
+                                           scale * float(geometry.attrib["y"]) + y_offset,
                                            scale * float(geometry.attrib["width"]),
                                            scale * float(geometry.attrib["height"]))
                 self._nodes.append(node_graphic)
@@ -124,7 +128,7 @@ class GraphMLParser(QObject):
                                     scale * float(path.attrib["sy"]) + source_node.y + 0.5 * source_node.height))
 
                 for point in path:
-                    points.append(Point(scale * float(point.attrib["x"]), scale * float(point.attrib["y"])))
+                    points.append(Point(scale * float(point.attrib["x"]) + x_offset, scale * float(point.attrib["y"]) + y_offset))
                 points.append(Point(scale * float(path.attrib["tx"]) + target_node.x + 0.5 * target_node.width,
                                     scale * float(path.attrib["ty"]) + target_node.y + 0.5 * target_node.height))
                 line_style = poly_line.find(y_s + "LineStyle")
