@@ -182,7 +182,6 @@ class ApplicationController(QObject):
         modifier_data_url = f"{self.getBaseUrl()}/node/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
-
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         url_string = reply.url().toString()

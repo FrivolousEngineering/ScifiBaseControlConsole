@@ -4,10 +4,13 @@ import QtQuick.Controls 2.2
 Button
 {
     id: control
-    property var iconSource
-    background: Item {}
+    property alias iconSource: icon.source
+
     implicitWidth: 80
     implicitHeight: 72
+
+    background: Item {}
+
     contentItem: Item
     {
         RecolorImage
@@ -21,13 +24,16 @@ Button
         }
         Label
         {
+            anchors
+            {
+                top: icon.bottom
+                horizontalCenter: parent.horizontalCenter
+                topMargin: 6
+            }
             font.family: "Futura Md BT"
             font.pixelSize: 12
             color: control.checked ? "white": "#9499C3"
             text: control.text
-            anchors.top: icon.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 6
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
@@ -41,7 +47,5 @@ Button
             radius: height
             anchors.bottom: parent.bottom
         }
-
     }
-
 }
