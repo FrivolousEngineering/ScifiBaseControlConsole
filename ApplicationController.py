@@ -99,12 +99,12 @@ class ApplicationController(QObject):
         self._inactivity_timer.start()
 
     def getBaseUrl(self):
-        return "http://" + self._zeroconf_worker.server_address + ":5000"
+        return f"http://{self._zeroconf_worker.server_address}:5000"
 
     def onCardDetected(self, card_id):
         print("A CARD WAS DETECTED!", card_id)
 
-        RFID_url = self.getBaseUrl() + "/RFID/{card_id}/".format(card_id=card_id)
+        RFID_url = f"{self.getBaseUrl()}/RFID/{card_id}/"
         self._network_manager.get(QNetworkRequest(QUrl(RFID_url)))
 
     def _startSerialThreads(self):
@@ -171,13 +171,13 @@ class ApplicationController(QObject):
 
     def requestModifiersData(self):
         # This is pretty static data so we only need to request this once.
-        modifier_data_url = self.getBaseUrl() + "/modifier/"
+        modifier_data_url = f"{self.getBaseUrl()}/modifier/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
     def requestKnownNodes(self):
         print('requesting nodes')
         # Debug function
-        modifier_data_url = self.getBaseUrl() + "/node/"
+        modifier_data_url = f"{self.getBaseUrl()}/node/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
     def _onNetworkFinished(self, reply: QNetworkReply):
