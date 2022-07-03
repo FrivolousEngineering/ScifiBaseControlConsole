@@ -195,7 +195,7 @@ Rectangle
         }
         Label
         {
-            font.family: "Futura Md BT"
+            font.family: "Futura Md BTmargin"
             font.pixelSize: 18
             text: "Resources produced"
             color: "white"
@@ -221,6 +221,37 @@ Rectangle
             width: 1
             height: base.defaultMargin
         }
+
+        Label
+        {
+            font.family: "Futura Md BT"
+            font.pixelSize: 18
+            text: "Modifiers"
+            color: "white"
+            visible: modifiersRepeater.count
+        }
+        Rectangle
+        {
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width / 4 * 3
+            height: 1
+            color: "#00D1FF"
+            opacity: 0.5
+            visible: modifiersRepeater.count
+        }
+        Repeater
+        {
+            id: modifiersRepeater
+            model: activeNode.modifiers
+            delegate: modifierComponent
+        }
+        Item
+        {
+            width: 1
+            height: base.defaultMargin
+        }
+
+
         Button
         {
             anchors.left: parent.left
@@ -328,6 +359,31 @@ Rectangle
                 font.family: "Futura Md BT"
                 font.pixelSize: base.defaultFontSize
                 text: Math.round(modelData.value * 100) / 100
+                anchors.right: parent.right
+                color: "white"
+            }
+        }
+    }
+    Component
+    {
+        id: modifierComponent
+        Item
+        {
+            width: parent.width
+            height: base.defaultFontSize
+            Label
+            {
+                font.family: "Futura Md BT"
+                font.pixelSize: base.defaultFontSize
+
+                text: modelData.name
+                color: "#56CCF2"
+            }
+            Label
+            {
+                font.family: "Futura Md BT"
+                font.pixelSize: base.defaultFontSize
+                text: modelData.duration
                 anchors.right: parent.right
                 color: "white"
             }
