@@ -52,6 +52,11 @@ Control
             if(controller.active)
                 return "#00D1FF"
         }
+        if(viewMode == "Modifiers")
+        {
+            if(controller.modifiers.length > 0)
+                return "#00D1FF"
+        }
 
         // Default color!
         return "white"

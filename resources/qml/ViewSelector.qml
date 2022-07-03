@@ -18,7 +18,7 @@ Control
             radius: 5
             color: "#1A1C48"
             height: parent.height
-            width: 400
+            width: 520
             anchors.bottom: parent.bottom
         }
         Image
@@ -89,6 +89,13 @@ Control
                 text: "Active"
                 ButtonGroup.group: modeGroup
                 iconSource: "../svg/power.svg"
+                checkable: true
+            }
+            ViewSelectorButton
+            {
+                text: "Modifiers"
+                ButtonGroup.group: modeGroup
+                iconSource: "../svg/person.svg"
                 checkable: true
             }
         }
