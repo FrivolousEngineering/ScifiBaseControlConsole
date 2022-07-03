@@ -59,7 +59,7 @@ class ApplicationController(QObject):
         self._inactivity_timer.timeout.connect(self.inactivityTimeout)
 
         self._user_name = "Unknown"
-
+        self._serial_worker = None
         self._serial = None
         if self._rfid_card:
             self.setAuthenticationRequired(False)
@@ -73,6 +73,8 @@ class ApplicationController(QObject):
             node.updateServerUrl(self._zeroconf_worker.server_address)
         self.requestModifiersData()
         self.requestKnownNodes()
+        if self._rfid_card:
+            self.onCardDetected(self._rfid_card)
 
     def setAuthenticationRequired(self, auth_required: bool) -> None:
         if self._authentication_required != auth_required:
@@ -199,7 +201,8 @@ class ApplicationController(QObject):
             self.modifiersChanged.emit()
         elif "RFID" in url_string:
             if status_code != 404:
-                self._serial_worker.setReadResult(True)
+                if self._serial_worker:
+                    self._serial_worker.setReadResult(True)
                 self.setAuthenticationRequired(False)
                 data = bytes(reply.readAll())
                 data = json.loads(data)
