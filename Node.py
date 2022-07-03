@@ -18,13 +18,14 @@ class Node(QObject):
         self._temperature = 293
         self._node_id = node_id
 
-        self._source_url = "http://localhost:5000/node/%s/" % self._node_id
-        self._incoming_connections_url = "http://localhost:5000/node/%s/connections/incoming/" % self._node_id
-        self._outgoing_connections_url = "http://localhost:5000/node/%s/connections/outgoing/" % self._node_id
-        self._performance_url = "http://localhost:5000/node/%s/performance/" % self._node_id
-        self._additional_properties_url = "http://localhost:5000/node/%s/additional_properties/" % self._node_id
-        self._static_properties_url = "http://localhost:5000/node/%s/static_properties/" % self._node_id
-        self._modifiers_url = "http://localhost:5000/node/%s/modifiers/" % self._node_id
+        self._source_url = f"http://localhost:5000/node/{self._node_id}/"
+        self._incoming_connections_url = f"http://localhost:5000/node/{self._node_id}/connections/incoming/"
+        self._outgoing_connections_url = f"http://localhost:5000/node/{self._node_id}/connections/outgoing/"
+        self._performance_url = f"http://localhost:5000/node/{self._node_id}/performance/"
+        self._additional_properties_url = f"http://localhost:5000/node/{self._node_id}/additional_properties/"
+        self._static_properties_url = f"http://localhost:5000/node/{self._node_id}/static_properties/"
+        self._modifiers_url = f"http://localhost:5000/node/{self._node_id}/modifiers/"
+        self._all_chart_data_url = f"http://localhost:5000/node/{self._node_id}/all_property_chart_data/?showLast=50"
 
         self._all_chart_data = {}
 
@@ -110,14 +111,14 @@ class Node(QObject):
 
         self._server_url = "http://" + server_url + ":5000"
 
-        self._source_url = self._server_url+ "/node/%s/" % self._node_id
-        self._incoming_connections_url = self._server_url + "/node/%s/connections/incoming/" % self._node_id
-        self._all_chart_data_url =  self._server_url + "/node/%s/all_property_chart_data/?showLast=50" % self._node_id
-        self._outgoing_connections_url = self._server_url + "/node/%s/connections/outgoing/" % self._node_id
-        self._performance_url = self._server_url + "/node/%s/performance/" % self._node_id
-        self._additional_properties_url = self._server_url + "/node/%s/additional_properties/" % self._node_id
-        self._static_properties_url = self._server_url + "/node/%s/static_properties/" % self._node_id
-        self._modifiers_url = self._server_url + "/node/%s/modifiers/" % self._node_id
+        self._source_url = f"{self._server_url}/node/{self._node_id}/"
+        self._incoming_connections_url = f"{self._server_url}/node/{self._node_id}/connections/incoming/"
+        self._all_chart_data_url = f"{self._server_url}/node/{self._node_id}/all_property_chart_data/?showLast=50"
+        self._outgoing_connections_url = f"{self._server_url}/node/{self._node_id}/connections/outgoing/"
+        self._performance_url = f"{self._server_url}/node/{self._node_id}/performance/"
+        self._additional_properties_url = f"{self._server_url}/node/{self._node_id}/additional_properties/"
+        self._static_properties_url = f"{self._server_url}/node/{self._node_id}/static_properties/"
+        self._modifiers_url = f"{self._server_url}/node/{self._node_id}/modifiers/"
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
         reply = self._network_manager.get(QNetworkRequest(QUrl(url)))
