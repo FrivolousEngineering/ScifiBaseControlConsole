@@ -23,6 +23,8 @@ class ApplicationController(QObject):
     inactivityTimeout = Signal()
     userNameChanged = Signal()
 
+    showModifierFailedMessage = Signal()
+
     def __init__(self, parent=None, rfid_card = None):
         QObject.__init__(self, parent)
 
@@ -185,13 +187,12 @@ class ApplicationController(QObject):
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         url_string = reply.url().toString()
-        if "modifier" in url_string:
+        if "/modifier/" in url_string:
             if status_code == 404:
                 print("server was not found!")
                 self._failed_update_modifier_timer.start()
                 return
             data = bytes(reply.readAll())
-
             try:
                 self._modifiers = json.loads(data)
             except:
@@ -210,6 +211,13 @@ class ApplicationController(QObject):
             else:
                 self._serial_worker.setReadResult(False)
                 self.setAuthenticationRequired(True)
+        elif "/modifiers/" in url_string:
+            if status_code == 403:
+                self.showModifierFailedMessage.emit()
+                #TOOD: Show "Unable to add modifier message"
+                pass
+            print(status_code)
+
         else:
             # Yeah it's hackish, but it's faster than building a real system. For now we don't need more
             if status_code == 404:
@@ -256,3 +264,15 @@ class ApplicationController(QObject):
         for node in self._data:
             if node.id == node_id:
                 return node
+
+    @Slot(str, str)
+    def addModifier(self, modifier: str, node_id: str):
+        data = "{\"modifier_name\": \"%s\"}" % modifier
+
+        modifiers_url = f"{self.getBaseUrl()}/node/{node_id}/modifiers/?accessCardID={self._rfid_card}"
+        print(modifiers_url)
+        request = QNetworkRequest(QUrl(modifiers_url))
+        request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
+
+        reply = self._network_manager.post(request, data.encode())
+
