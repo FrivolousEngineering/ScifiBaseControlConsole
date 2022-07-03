@@ -74,7 +74,7 @@ Control
             {
                 text: "Health"
                 ButtonGroup.group: modeGroup
-                iconSource: "../svg/health.svg"
+                iconSource: "../svg/wrench.svg"
                 checkable: true
             }
             ViewSelectorButton
