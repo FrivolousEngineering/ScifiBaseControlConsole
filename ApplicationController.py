@@ -182,6 +182,7 @@ class ApplicationController(QObject):
         modifier_data_url = f"{self.getBaseUrl()}/node/"
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
+
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         url_string = reply.url().toString()
@@ -229,10 +230,9 @@ class ApplicationController(QObject):
                 self._data = sorted(self._data, key=lambda node: node.id)  # sort by age
                 self._data.reverse()
                 self.nodesChanged.emit()
-            except:
+            except Exception:
                 print("Failed to get modifier data")
                 self._failed_update_nodes_timer.start()
-                return
 
     @Property("QVariantList", notify=modifiersChanged)
     def modifierData(self):
