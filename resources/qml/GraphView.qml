@@ -330,7 +330,7 @@ Rectangle
         }
         onAddModifierClicked: window.showModifierWindow(selectedNodeData.id)
         onShowGraphs: graphWindow.visible = true
-        //onShowDetailedInfoClicked: showDetailedInfoWindow.visible = true
+        onShowDetailedInfoClicked: showDetailedInfoWindow.visible = true
         activeNode: window.selectedNodeData
     }
 
@@ -364,19 +364,13 @@ Rectangle
         }
     }
 
-    ModifierFailedMessage
-    {}
-    Rectangle
+    ModifierFailedMessage {}
+
+    DetailedNodeInfoWindow
     {
         id: showDetailedInfoWindow
-        color: "#06071E"
-        border.width: 2
-        border.color: "white"
-        radius: 10
-
-        width: 500
-        height: 500
-        visible: false
+        anchors.centerIn: parent
+        description: selectedNodeData.description
     }
 
     ChartWindow

@@ -20,6 +20,7 @@ Rectangle
 
     signal addModifierClicked()
     signal showGraphs()
+    signal showDetailedInfoClicked()
 
     Item
     {
@@ -274,6 +275,32 @@ Rectangle
                     font.pixelSize: 32
                     color: "white"
                     text: "See History"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        }
+
+        Button
+        {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 62
+            background: Rectangle
+            {
+                border.width: 2
+                border.color: "white"
+                color: "transparent"
+            }
+            onClicked: base.showDetailedInfoClicked()
+            contentItem: Item
+            {
+                Label
+                {
+                    font.family: "Futura Md BT"
+                    font.pixelSize: 32
+                    color: "white"
+                    text: "More Info"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
