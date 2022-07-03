@@ -13,7 +13,10 @@ Rectangle
     height: 500
     visible: false
     property alias description: descriptionLabel.text
-    property string custom_description: ""
+    property alias custom_description: customDescriptionLabel.text
+    property alias titleText: titleLabel.text
+    property int spacerSize: 10
+    property int default_margin: 16
     Button
     {
         id: closeButton
@@ -21,8 +24,8 @@ Rectangle
         onClicked: showDetailedInfoWindow.visible = false
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.rightMargin: 10
+        anchors.topMargin: default_margin
+        anchors.rightMargin: default_margin
         width: 32
         height: 32
         background: Item {}
@@ -35,19 +38,68 @@ Rectangle
         }
     }
 
+    Label
+    {
+        id: titleLabel
+        color: "white"
+        font.family: "Futura Md BT"
+        font.pixelSize: 24
+        font.bold: true
+        text: ""
+        anchors.top: parent.top
+        anchors.topMargin: default_margin
+        anchors.leftMargin: default_margin
+        anchors.left: parent.left
+    }
+
     Column
     {
         anchors
         {
             left: parent.left
             right: parent.right
-            margins: 16
+            margins: default_margin
             top: closeButton.bottom
+        }
+        Label
+        {
+            color: "white"
+            font.family: "Futura Md BT"
+            font.pixelSize: 16
+            font.bold: true
+            text: "General Description"
         }
         Label
         {
             id: descriptionLabel
             color: "white"
+            font.family: "Futura Md BT"
+            wrapMode: Text.WordWrap
+            anchors
+            {
+                left: parent.left
+                right: parent.right
+            }
+        }
+        Item
+        {
+            width: spacerSize
+            height: spacerSize
+        }
+        Label
+        {
+            color: "white"
+            font.family: "Futura Md BT"
+            font.pixelSize: 16
+            font.bold: true
+            text: "Custom Description"
+            visible: customDescriptionLabel.text != ""
+        }
+        Label
+        {
+            id: customDescriptionLabel
+            color: "white"
+            font.family: "Futura Md BT"
             wrapMode: Text.WordWrap
             anchors
             {

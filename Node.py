@@ -287,6 +287,10 @@ class Node(QObject):
     def description(self):
         return self._static_properties.get("description", "")
 
+    @Property(str, notify=staticPropertiesChanged)
+    def custom_description(self):
+        return self._static_properties.get("custom_description", "")
+
     @Property("QStringList", notify=staticPropertiesChanged)
     def supported_modifiers(self):
         return self._static_properties.get("supported_modifiers", "")

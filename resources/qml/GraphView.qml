@@ -371,6 +371,8 @@ Rectangle
         id: showDetailedInfoWindow
         anchors.centerIn: parent
         description: selectedNodeData.description
+        custom_description: selectedNodeData.custom_description
+        titleText: selectedNodeData.label
     }
 
     ChartWindow
