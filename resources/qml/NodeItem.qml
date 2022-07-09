@@ -42,7 +42,27 @@ Control
                     {
                         return "white"
                     }
-                    return interpolateColor((controtextColorfller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
+                    return interpolateColor((controller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
+                }
+            }
+            PropertyChanges
+            {
+                target: statusIcon
+                visible: true
+                state:
+                {
+                    var current_temp = Math.round(controller.historyData["temperature"][controller.historyData["temperature"].length - 1] * 10) / 10
+                    var previous_temp = Math.round(controller.historyData["temperature"][controller.historyData["temperature"].length - 2] * 10) / 10
+
+                    if(current_temp == previous_temp)
+                    {
+                        return "neutral"
+                    }
+                    if (current_temp > previous_temp)
+                    {
+                        return "up"
+                    }
+                    return "down"
                 }
             }
         },
@@ -55,6 +75,27 @@ Control
             {
                 target: base
                 nodeColor: interpolateColor(controller.health / 100., Qt.rgba(0,1,0,1), Qt.rgba(1,0,0,1))
+            }
+            PropertyChanges
+            {
+                target: statusIcon
+                visible: true
+                upColor: statusIcon.greenColor
+                downColor: statusIcon.redColor
+                state:
+                {
+                    var current_health = Math.round(controller.historyData["health"][controller.historyData["health"].length - 1] * 100) / 100
+                    var previous_health = Math.round(controller.historyData["health"][controller.historyData["health"].length - 2] * 100) / 100
+                    if(current_health == previous_health)
+                    {
+                        return "neutral"
+                    }
+                    if (current_health > previous_health)
+                    {
+                        return "up"
+                    }
+                    return "down"
+                }
             }
         },
         State
@@ -103,7 +144,7 @@ Control
              high_color.r * (1 - ratio) + low_color.r * ratio,
              high_color.g * (1 - ratio) + low_color.g * ratio,
              high_color.b * (1 - ratio) + low_color.b * ratio
-        );
+        )
     }
 
     implicitWidth: 140
@@ -113,13 +154,13 @@ Control
     topPadding: titleBarHeight + padding
     padding: borderSize + defaultMargin
 
-
     contentItem: Item
     {
         StatusIcon
         {
             id: statusIcon
             anchors.right: parent.right
+            visible: false
         }
         Item
         {
@@ -214,8 +255,6 @@ Control
                         {
                             return "../svg/valve.svg"
                         }
-
-
                         return "../svg/node.svg"
                     }
                 }
@@ -247,8 +286,10 @@ Control
             property double amountStored: controller.additionalProperties["amount_stored"]["value"]
             property double maxAmountStored: controller.additionalProperties["amount_stored"]["max_value"]
 
-            Behavior on amountStored {
-                NumberAnimation {
+            Behavior on amountStored
+            {
+                NumberAnimation
+                {
                     duration: 1250
                     easing.type: Easing.InOutCubic
                 }
@@ -322,8 +363,10 @@ Control
             from: controller.min_performance
             to: controller.max_performance
 
-            Behavior on currentValue {
-                NumberAnimation {
+            Behavior on currentValue
+            {
+                NumberAnimation
+                {
                     duration: 1000
                     easing.type: Easing.InOutCubic
                 }
@@ -331,7 +374,8 @@ Control
 
             Behavior on targetValue
             {
-                NumberAnimation {
+                NumberAnimation
+                {
                     duration: 1000
                     easing.type: Easing.InOutCubic
                 }
@@ -347,16 +391,7 @@ Control
 
             currentValue: controller.performance
 
-            onPressedChanged:
-            {
-                if(!pressed) // Released
-                {
-                    controller.setPerformance(value)
-                } else
-                {
-                    base.clicked()
-                }
-            }
+            onPressedChanged: pressed ? base.clicked(): controller.setPerformance(value)
         }
     }
 }

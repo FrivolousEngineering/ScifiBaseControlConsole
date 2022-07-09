@@ -11,14 +11,17 @@ Item
 
     state: "neutral"
 
-    property color upColor: "#FF3F3F"
-    property color downColor: "#5FC996"
+    property color upColor: redColor
+    property color downColor: greenColor
     property color neutralColor: "#D9D9D9"
+
+    readonly property color redColor: "#FF3F3F"
+    readonly property color greenColor: "#5FC996"
 
     states: [
         State {
             name: "up"
-            PropertyChanges { target: triangle; rotationAngle: 0; color: base.upColor; visible: true }
+            PropertyChanges { target: triangle; rotationAngle: 180; color: base.upColor; visible: true }
             PropertyChanges { target: circle; visible: false }
         },
         State
