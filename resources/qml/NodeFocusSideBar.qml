@@ -300,12 +300,21 @@ Rectangle
             onClicked: base.showGraphs()
             contentItem: Item
             {
+                RecolorImage
+                {
+                    source: "../svg/history.svg"
+                    width: 32
+                    height: 32
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: base.defaultMargin
+                }
                 Label
                 {
                     font.family: "Futura Md BT"
                     font.pixelSize: 32
                     color: "white"
-                    text: "See History"
+                    text: "History"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
@@ -326,6 +335,15 @@ Rectangle
             onClicked: base.showDetailedInfoClicked()
             contentItem: Item
             {
+                RecolorImage
+                {
+                    source: "../svg/info.svg"
+                    width: 38
+                    height: 38
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: base.defaultMargin
+                }
                 Label
                 {
                     font.family: "Futura Md BT"
