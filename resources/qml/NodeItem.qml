@@ -294,6 +294,53 @@ Control
                     easing.type: Easing.InOutCubic
                 }
             }
+            RecolorImage
+            {
+                id: warningIcon
+                source: "../svg/warning.svg"
+
+                states: [
+                    State
+                    {
+                        name: "critical"
+                        when: maxAmountStored != -1 && amountStored < maxAmountStored * 0.1
+                        PropertyChanges
+                        {
+                            target: warningIcon
+                            visible: true
+                        }
+                        PropertyChanges { target: warningAnimation; running: true; }
+                    },
+                    State
+                    {
+                        name: "warning"
+                        when: maxAmountStored != -1 && amountStored < maxAmountStored * 0.2
+                        PropertyChanges
+                        {
+                            target: warningIcon
+                            color: "yellow"
+                            visible: true
+                        }
+                    }
+                ]
+                SequentialAnimation {
+                    id: warningAnimation
+                    running: false
+                    PropertyAnimation { to: "red"; duration: 750; target: warningIcon; property: "color"; easing.type: Easing.InOutCubic}
+                    PropertyAnimation { to: "#505050"; duration: 750; target: warningIcon; property: "color"; easing.type: Easing.InOutCubic}
+                    loops: Animation.Infinite
+                }
+
+                visible: false
+
+                width: 32
+                height: 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: storageItem.top
+                anchors.bottomMargin: base.defaultMargin
+                sourceSize.width: 4 * width
+                sourceSize.height: 4 * width
+            }
             Item
             {
                 id: storageItem
@@ -317,12 +364,13 @@ Control
                     id: amountStoredText
                     text: Math.round(amountStored)
                     font.family: "Futura Md BT"
-                    font.pixelSize: 24
+                    font.pixelSize: 22
                     font.bold: true
                     color: "white"
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: storageText.bottom
+                    width: contentWidth
+                    height: contentHeight
                     anchors.topMargin: 4
                     horizontalAlignment: Text.AlignHCenter
                 }
