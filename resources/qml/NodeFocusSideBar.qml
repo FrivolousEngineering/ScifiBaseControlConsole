@@ -224,6 +224,36 @@ Rectangle
 
         Label
         {
+            font.family: "Futura Md BTmargin"
+            font.pixelSize: 18
+            text: "Resources provided"
+            color: "white"
+            visible: resourcesProvidedRepeater.count
+        }
+        Rectangle
+        {
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width / 4 * 3
+            height: 1
+            color: "#00D1FF"
+            opacity: 0.5
+            visible: resourcesProvidedRepeater.count
+        }
+        Repeater
+        {
+            id: resourcesProvidedRepeater
+            model: activeNode.resourcesProvided
+            delegate: resourceComponent
+        }
+        Item
+        {
+            width: 1
+            height: base.defaultMargin
+            visible: resourcesProvidedRepeater.count
+        }
+
+        Label
+        {
             font.family: "Futura Md BT"
             font.pixelSize: 18
             text: "Modifiers"
@@ -239,6 +269,7 @@ Rectangle
             opacity: 0.5
             visible: modifiersRepeater.count
         }
+
         Repeater
         {
             id: modifiersRepeater

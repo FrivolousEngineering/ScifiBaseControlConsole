@@ -69,6 +69,7 @@ class Node(QObject):
         self._optional_resources_required = []
         self._resources_received = []
         self._resources_produced = []
+        self._resources_provided = []
         self._health = 100
 
         self._max_amount_stored = 0
@@ -99,6 +100,7 @@ class Node(QObject):
     optionalResourcesRequiredChanged = Signal()
     resourcesReceivedChanged = Signal()
     resourcesProducedChanged = Signal()
+    resourcesProvidedChanged = Signal()
     healthChanged = Signal()
     maxAmountStoredChanged = Signal()
     amountStoredChanged = Signal()
@@ -233,6 +235,10 @@ class Node(QObject):
     def resourcesProduced(self):
         return self._resources_produced
 
+    @Property("QVariantList", notify=resourcesProvidedChanged)
+    def resourcesProvided(self):
+        return self._resources_provided
+
     @Property("QVariantList", notify=resourcesReceivedChanged)
     def resourcesReceived(self):
         return self._resources_received
@@ -365,6 +371,7 @@ class Node(QObject):
         self.updateResourceList("resources_received", data["resources_received"])
         self.updateResourceList("resources_required", data["resources_required"])
         self.updateResourceList("resources_produced", data["resources_produced"])
+        self.updateResourceList("resources_provided", data["resources_provided"])
 
     def updateResourceList(self, property_name, data):
         list_to_check = getattr(self, "_" + property_name)
