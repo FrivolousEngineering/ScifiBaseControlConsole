@@ -266,12 +266,15 @@ Control
                     font.pixelSize: 12
                     height: 12
                     color: base.textColor
+                    wrapMode: Text.WordWrap
                     verticalAlignment: Text.AlignVCenter
                     anchors
                     {
                         left: icon.right
                         leftMargin: base.defaultMargin
+                        right: parent.right
                         top: parent.top
+                        bottom: parent.bottom
                     }
                 }
             }
