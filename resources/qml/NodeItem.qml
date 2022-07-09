@@ -42,7 +42,7 @@ Control
                     {
                         return "white"
                     }
-                    return interpolateColor((controller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
+                    return interpolateColor((controtextColorfller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
                 }
             }
         },
@@ -65,34 +65,35 @@ Control
             PropertyChanges
             {
                 target: base
-                nodeColor:  interpolateColor(controller.effectiveness_factor, Qt.rgba(1,1,1,1), Qt.rgba(1,0,0,1))
+                nodeColor: interpolateColor(controller.effectiveness_factor, Qt.rgba(1,1,1,1), Qt.rgba(1,0,0,1))
             }
         },
         State
         {
             name: "Active"
-            when: viewMode == "Active" && controller.active
+            when: viewMode == "Active"
 
             PropertyChanges
             {
                 target: base
-                nodeColor: "#00D1FF"
+                nodeColor: controller.active ? "#00D1FF" : defaultNodeColor
             }
         },
         State
         {
             name: "Modifiers"
-            when: viewMode == "Modifiers" && controller.modifiers.length > 0
+            when: viewMode == "Modifiers"
 
             PropertyChanges
             {
                 target: base
-                nodeColor: "#00D1FF"
+                nodeColor: controller.modifiers.length > 0 ? "#00D1FF" : defaultNodeColor
             }
         }
     ]
 
-    property color nodeColor: "white"
+    property color nodeColor: defaultNodeColor
+    readonly property color defaultNodeColor: "white"
 
     Behavior on nodeColor { ColorAnimation {duration: 1000} }
 
