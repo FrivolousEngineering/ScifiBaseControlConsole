@@ -27,44 +27,72 @@ Control
 
     property var controller: null
 
-    property color nodeColor:
-    {
-        if(viewMode == "Overheat")
+    states: [
+        State
         {
-            if(controller.temperature < controller.max_safe_temperature * 0.8)
-            {
-                return "white"
-            }
-            return interpolateColor((controller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
-        }
+            name: "Overheat"
+            when: viewMode == "Overheat"
 
-        if(viewMode == "Health")
-        {
-            return interpolateColor(controller.health / 100., Qt.rgba(0,1,0,1), Qt.rgba(1,0,0,1))
-        }
-        if(viewMode == "Efficiency")
-        {
-            return interpolateColor(controller.effectiveness_factor, Qt.rgba(1,1,1,1), Qt.rgba(1,0,0,1))
-        }
-
-        if(viewMode == "Active")
-        {
-            if(controller.active)
+            PropertyChanges
             {
-                return "#00D1FF"
+                target: base
+                nodeColor:
+                {
+                    if(controller.temperature < controller.max_safe_temperature * 0.8)
+                    {
+                        return "white"
+                    }
+                    return interpolateColor((controller.temperature - (controller.max_safe_temperature * 0.8)) / (controller.max_safe_temperature * 0.2), Qt.rgba(1,0,0,1), Qt.rgba(1,1,1,1))
+                }
+            }
+        },
+        State
+        {
+            name: "Health"
+            when: viewMode == "Health"
+
+            PropertyChanges
+            {
+                target: base
+                nodeColor: interpolateColor(controller.health / 100., Qt.rgba(0,1,0,1), Qt.rgba(1,0,0,1))
+            }
+        },
+        State
+        {
+            name: "Efficiency"
+            when: viewMode == "Efficiency"
+
+            PropertyChanges
+            {
+                target: base
+                nodeColor:  interpolateColor(controller.effectiveness_factor, Qt.rgba(1,1,1,1), Qt.rgba(1,0,0,1))
+            }
+        },
+        State
+        {
+            name: "Active"
+            when: viewMode == "Active" && controller.active
+
+            PropertyChanges
+            {
+                target: base
+                nodeColor: "#00D1FF"
+            }
+        },
+        State
+        {
+            name: "Modifiers"
+            when: viewMode == "Modifiers" && controller.modifiers.length > 0
+
+            PropertyChanges
+            {
+                target: base
+                nodeColor: "#00D1FF"
             }
         }
-        if(viewMode == "Modifiers")
-        {
-            if(controller.modifiers.length > 0)
-            {
-                return "#00D1FF"
-            }
-        }
+    ]
 
-        // Default color!
-        return "white"
-    }
+    property color nodeColor: "white"
 
     Behavior on nodeColor { ColorAnimation {duration: 1000} }
 
