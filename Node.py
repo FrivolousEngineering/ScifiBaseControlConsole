@@ -108,7 +108,6 @@ class Node(QObject):
     def updateServerUrl(self, server_url):
         if server_url == "":
             return
-
         self._server_url = "http://" + server_url + ":5000"
 
         self._source_url = f"{self._server_url}/node/{self._node_id}/"
@@ -133,6 +132,7 @@ class Node(QObject):
         self.get(self._outgoing_connections_url, self._onOutgoingConnectionsFinished)
         self.get(self._static_properties_url, self._onStaticPropertiesFinished)
 
+        self.partialUpdate()
         self._update_timer.start()
 
     @Slot()
