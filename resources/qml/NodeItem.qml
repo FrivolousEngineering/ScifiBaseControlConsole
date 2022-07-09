@@ -30,9 +30,12 @@ Control
     states: [
         State
         {
+            id: overheatState
             name: "Overheat"
             when: viewMode == "Overheat"
-
+            property real current_temp: Math.round(controller.historyData["temperature"][controller.historyData["temperature"].length - 1] * 100) / 100
+            property real previous_temp: Math.round(controller.historyData["temperature"][controller.historyData["temperature"].length - 2] * 100) / 100
+            property real no_show_range: 0.1
             PropertyChanges
             {
                 target: base
@@ -51,14 +54,11 @@ Control
                 visible: true
                 state:
                 {
-                    var current_temp = Math.round(controller.historyData["temperature"][controller.historyData["temperature"].length - 1] * 10) / 10
-                    var previous_temp = Math.round(controller.historyData["temperature"][controller.historyData["temperature"].length - 2] * 10) / 10
-
-                    if(current_temp == previous_temp)
+                    if(overheatState.current_temp + overheatState.no_show_range > overheatState.previous_temp && overheatState.current_temp - overheatState.no_show_range < overheatState.previous_temp)
                     {
                         return "neutral"
                     }
-                    if (current_temp > previous_temp)
+                    if (overheatState.current_temp > overheatState.previous_temp)
                     {
                         return "up"
                     }
