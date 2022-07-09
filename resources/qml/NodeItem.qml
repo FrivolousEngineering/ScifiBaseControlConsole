@@ -8,9 +8,12 @@ Control
 {
     id: base
 
+    signal clicked()
+
     property alias titleText: titleTextLabel.text
-    implicitWidth: 140
-    implicitHeight: 180
+    property alias content: contentHolder.children
+    property alias iconSource: icon.source
+
     property int titleBarHeight: 32
     property int cornerRadius: 10
     property int borderSize: 2
@@ -20,12 +23,9 @@ Control
     property color textColor: backgroundColor
     property color iconColor: textColor
     property string viewMode: "Overview"
-    property alias content: contentHolder.children
-    property alias iconSource: icon.source
+
 
     property var controller: null
-
-
 
     property color nodeColor:
     {
@@ -50,12 +50,16 @@ Control
         if(viewMode == "Active")
         {
             if(controller.active)
+            {
                 return "#00D1FF"
+            }
         }
         if(viewMode == "Modifiers")
         {
             if(controller.modifiers.length > 0)
+            {
                 return "#00D1FF"
+            }
         }
 
         // Default color!
@@ -73,15 +77,19 @@ Control
         );
     }
 
+    implicitWidth: 140
+    implicitHeight: 180
+
     // Since we've placed the title bar in the background, the content item needs to leave that open
     topPadding: titleBarHeight + padding
     padding: borderSize + defaultMargin
-    signal clicked()
+
 
     contentItem: Item
     {
         StatusIcon
         {
+            id: statusIcon
             anchors.right: parent.right
         }
         Item
