@@ -181,6 +181,8 @@ Control
                 {
                     return storageNode
                 }
+                if(controller.node_type == "Lights")
+                    return lightsNode
             }
         }
     }
@@ -394,6 +396,47 @@ Control
                 anchors.topMargin: 8
             }
         }
+    }
+
+    Component
+    {
+        id: lightsNode
+        Item
+        {
+            Item
+            {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: childrenRect.height
+                Text
+                {
+                    id: statusText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.family: "Futura Md BT"
+                    text: "status"
+                    font.pixelSize: 12
+                    color: "white"
+                }
+                Text
+                {
+                    id: amountStoredText
+                    text: controller.active ? "ON" : "OFF"
+                    font.family: "Futura Md BT"
+                    font.pixelSize: 22
+                    font.bold: true
+                    color: "white"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: statusText.bottom
+                    width: contentWidth
+                    height: contentHeight
+                    anchors.topMargin: 4
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+        }
+
     }
 
     Component

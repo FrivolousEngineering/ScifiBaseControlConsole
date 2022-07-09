@@ -288,6 +288,10 @@ class Node(QObject):
         return self._static_properties.get("description", "")
 
     @Property(str, notify=staticPropertiesChanged)
+    def node_type(self):
+        return self._static_properties.get("node_type", "")
+
+    @Property(str, notify=staticPropertiesChanged)
     def custom_description(self):
         return self._static_properties.get("custom_description", "")
 
