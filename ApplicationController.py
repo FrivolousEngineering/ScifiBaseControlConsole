@@ -22,7 +22,7 @@ class ApplicationController(QObject):
     authenticationScannerAttachedChanged = Signal()
     inactivityTimeout = Signal()
     userNameChanged = Signal()
-
+    accessLevelChanged = Signal()
     showModifierFailedMessage = Signal()
 
     def __init__(self, parent=None, rfid_card = None):
@@ -61,6 +61,7 @@ class ApplicationController(QObject):
         self._inactivity_timer.timeout.connect(self.inactivityTimeout)
 
         self._user_name = "Unknown"
+        self._access_level = 0
         self._serial_worker = None
         self._serial = None
         if self._rfid_card:
@@ -88,6 +89,12 @@ class ApplicationController(QObject):
     def onInactivityTimeout(self):
         self.setAuthenticationRequired(True)
         self.setUserName("")
+        self.setAccessLevel(0)
+
+    def setAccessLevel(self, access_level):
+        if self._access_level != access_level:
+            self._access_level = access_level
+            self.accessLevelChanged.emit()
 
     def setUserName(self, user_name):
         if self._user_name != user_name:
@@ -208,6 +215,8 @@ class ApplicationController(QObject):
                 data = bytes(reply.readAll())
                 data = json.loads(data)
                 self.setUserName(data["user_name"])
+                user_data_url = f"{self.getBaseUrl()}/user/{data['user_name']}/"
+                self._network_manager.get(QNetworkRequest(QUrl(user_data_url)))
             else:
                 self._serial_worker.setReadResult(False)
                 self.setAuthenticationRequired(True)
@@ -216,8 +225,11 @@ class ApplicationController(QObject):
                 self.showModifierFailedMessage.emit()
                 #TOOD: Show "Unable to add modifier message"
                 pass
-            print(status_code)
-
+        elif "/user/" in url_string:
+            if status_code not in [404, 500] and self._user_name != "":
+                data = bytes(reply.readAll())
+                data = json.loads(data)
+                self.setAccessLevel(data["engineering_level"])
         else:
             # Yeah it's hackish, but it's faster than building a real system. For now we don't need more
             if status_code == 404:
