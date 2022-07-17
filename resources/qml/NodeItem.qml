@@ -33,8 +33,10 @@ Control
             id: overheatState
             name: "Overheat"
             when: viewMode == "Overheat"
-            property real current_temp: Math.round(controller.historyData["temperature"][controller.historyData["temperature"].length - 1] * 100) / 100
-            property real previous_temp: Math.round(controller.historyData["temperature"][controller.historyData["temperature"].length - 2] * 100) / 100
+            property int last_index: controller.historyData["temperature"] ? controller.historyData["temperature"].length - 1: 0
+
+            property real current_temp: controller.historyData["temperature"] ? Math.round(controller.historyData["temperature"][last_index] * 100) / 100: 0
+            property real previous_temp: controller.historyData["temperature"] ? Math.round(controller.historyData["temperature"][last_index - 1] * 100) / 100: 0
             property real no_show_range: 0.1
             PropertyChanges
             {
