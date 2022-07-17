@@ -92,11 +92,11 @@ Rectangle
                     id: highlighted
                     visible: window.selectedNodeData !== null
                     property int borderSize: 20
-                    property var modelPosition: graph_data.getNodeById(window.selectedNodeData.id)
-                    x: modelPosition.x - borderSize / 2
-                    y: modelPosition.y - borderSize / 2
-                    width: modelPosition.width + borderSize
-                    height: modelPosition.height + borderSize
+                    property var modelPosition: window.selectedNodeData ? graph_data.getNodeById(window.selectedNodeData.id): null
+                    x: modelPosition ? modelPosition.x - borderSize / 2: 0
+                    y: modelPosition ? modelPosition.y - borderSize / 2: 0
+                    width: modelPosition ? modelPosition.width + borderSize: 0
+                    height: modelPosition ?modelPosition.height + borderSize: 0
                     opacity: 0.75
                     radius: 20
                 }

@@ -37,7 +37,7 @@ Rectangle
             color: "white"
             font.family: "Futura Md BT"
             font.pixelSize: 32
-            text: activeNode.label
+            text: activeNode ? activeNode.label: ""
             anchors.left: parent.left
             anchors.leftMargin: base.defaultMargin
         }
@@ -103,7 +103,7 @@ Rectangle
             {
                 font.family: "Futura Md BT"
                 font.pixelSize: base.largeFontSize
-                text: Math.round(activeNode.health * 100) / 100
+                text: activeNode ? Math.round(activeNode.health * 100) / 100: 100
                 anchors.right: parent.right
                 color: "white"
             }
@@ -123,7 +123,7 @@ Rectangle
             {
                 font.family: "Futura Md BT"
                 font.pixelSize: base.largeFontSize
-                text: Math.round(activeNode.temperature * 100) / 100
+                text: activeNode ? Math.round(activeNode.temperature * 100) / 100: 20
                 anchors.right: parent.right
                 color: "white"
             }
@@ -155,7 +155,7 @@ Rectangle
         Repeater
         {
             id: resourcesReceivedRepeater
-            model: activeNode.resourcesReceived
+            model: activeNode ? activeNode.resourcesReceived: null
             delegate: resourceComponent
         }
         Item
@@ -185,7 +185,7 @@ Rectangle
         Repeater
         {
             id: resourcesRequiredRepeater
-            model: activeNode.resourcesRequired
+            model: activeNode ? activeNode.resourcesRequired: null
             delegate: resourceComponent
         }
         Item
@@ -214,7 +214,7 @@ Rectangle
         Repeater
         {
             id: resourcesProducedRepeater
-            model: activeNode.resourcesProduced
+            model: activeNode ? activeNode.resourcesProduced: null
             delegate: resourceComponent
         }
         Item
@@ -243,7 +243,7 @@ Rectangle
         Repeater
         {
             id: resourcesProvidedRepeater
-            model: activeNode.resourcesProvided
+            model: activeNode ? activeNode.resourcesProvided: null
             delegate: resourceComponent
         }
         Item
@@ -274,7 +274,7 @@ Rectangle
         Repeater
         {
             id: modifiersRepeater
-            model: activeNode.modifiers
+            model: activeNode ? activeNode.modifiers: null
             delegate: modifierComponent
         }
         Item

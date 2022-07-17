@@ -57,7 +57,6 @@ Rectangle
         anchors.leftMargin: 50
         font.family: "Futura Md BT"
         text: Math.round(historyGraph.yMax * 100) / 100
-        visible: !chartButton.collapsed
         horizontalAlignment: Text.AlignHCenter
         font.pointSize: 16
     }
@@ -70,7 +69,6 @@ Rectangle
         anchors.leftMargin: 50
         font.family: "Futura Md BT"
         text: Math.round(historyGraph.yMin * 100) / 100
-        visible: !chartButton.collapsed
 
         horizontalAlignment: Text.AlignHCenter
         font.pointSize: 16
@@ -85,7 +83,6 @@ Rectangle
         color: "white"
         text: ""
         horizontalAlignment: Text.AlignHCenter
-        visible: !chartButton.collapsed
     }
     Button
     {

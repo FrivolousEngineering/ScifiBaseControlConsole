@@ -44,7 +44,7 @@ Rectangle
 
         model: nodeObject ? nodeObject.supported_modifiers: null
         currentIndex: 0
-        Component.onCompleted: activeModifier = currentItem.modifier
+        Component.onCompleted: currentItem ? activeModifier = currentItem.modifier: null
 
         delegate: OurButton
         {
