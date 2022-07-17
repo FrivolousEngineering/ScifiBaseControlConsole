@@ -17,15 +17,8 @@ class Node(QObject):
         QObject.__init__(self, parent)
         self._temperature = 293
         self._node_id = node_id
-
-        self._source_url = f"http://localhost:5000/node/{self._node_id}/"
-        self._incoming_connections_url = f"http://localhost:5000/node/{self._node_id}/connections/incoming/"
-        self._outgoing_connections_url = f"http://localhost:5000/node/{self._node_id}/connections/outgoing/"
-        self._performance_url = f"http://localhost:5000/node/{self._node_id}/performance/"
-        self._additional_properties_url = f"http://localhost:5000/node/{self._node_id}/additional_properties/"
-        self._static_properties_url = f"http://localhost:5000/node/{self._node_id}/static_properties/"
-        self._modifiers_url = f"http://localhost:5000/node/{self._node_id}/modifiers/"
-        self._all_chart_data_url = f"http://localhost:5000/node/{self._node_id}/all_property_chart_data/?showLast=50"
+        self._server_url = "localhost"
+        self.updateServerUrl(self._server_url)
 
         self._all_chart_data = {}
 
@@ -52,7 +45,7 @@ class Node(QObject):
         self._update_timer.setInterval(10000)
         self._update_timer.setSingleShot(False)
         self._update_timer.timeout.connect(self.partialUpdate)
-        #self._update_timer.start()
+
 
         # Timer that is used when the server could not be reached.
         self._failed_update_timer = QTimer()
@@ -110,7 +103,8 @@ class Node(QObject):
     def updateServerUrl(self, server_url):
         if server_url == "":
             return
-        self._server_url = "http://" + server_url + ":5000"
+
+        self._server_url = f"http://{server_url}:5000"
 
         self._source_url = f"{self._server_url}/node/{self._node_id}/"
         self._incoming_connections_url = f"{self._server_url}/node/{self._node_id}/connections/incoming/"
