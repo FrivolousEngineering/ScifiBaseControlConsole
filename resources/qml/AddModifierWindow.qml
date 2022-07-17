@@ -48,11 +48,13 @@ Rectangle
             property var modifier: backend.getModifierByType(modelData)
             text: modifier.name
             width: view.width - 5
+            height: visible ? implicitHeight: 0
             onClicked:
             {
                 view.currentIndex = index
                 activeModifier =  modifier
             }
+            visible: backend.accessLevel >= modifier.required_engineering_level
             highlighted: index == view.currentIndex
         }
     }
