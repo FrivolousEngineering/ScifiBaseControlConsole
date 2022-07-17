@@ -18,6 +18,7 @@ class Node(QObject):
         self._temperature = 293
         self._node_id = node_id
         self._server_url = "localhost"
+        self._access_card = ""
         self.updateServerUrl(self._server_url)
 
         self._all_chart_data = {}
@@ -65,6 +66,7 @@ class Node(QObject):
         self._resources_provided = []
         self._health = 100
 
+
         self._max_amount_stored = 0
         self._amount_stored = 0
         self._effectiveness_factor = 0
@@ -100,6 +102,13 @@ class Node(QObject):
     effectivenessFactorChanged = Signal()
     activeChanged = Signal()
 
+    def setAccessCard(self, access_card):
+        self._access_card = access_card
+        self._updateUrlsWithAuth(self._server_url, access_card)
+
+    def _updateUrlsWithAuth(self, server_url, access_card):
+        self._performance_url = f"{self._server_url}/node/{self._node_id}/performance/?accessCardID={self._access_card}"
+
     def updateServerUrl(self, server_url):
         if server_url == "":
             return
@@ -110,10 +119,10 @@ class Node(QObject):
         self._incoming_connections_url = f"{self._server_url}/node/{self._node_id}/connections/incoming/"
         self._all_chart_data_url = f"{self._server_url}/node/{self._node_id}/all_property_chart_data/?showLast=50"
         self._outgoing_connections_url = f"{self._server_url}/node/{self._node_id}/connections/outgoing/"
-        self._performance_url = f"{self._server_url}/node/{self._node_id}/performance/"
         self._additional_properties_url = f"{self._server_url}/node/{self._node_id}/additional_properties/"
         self._static_properties_url = f"{self._server_url}/node/{self._node_id}/static_properties/"
         self._modifiers_url = f"{self._server_url}/node/{self._node_id}/modifiers/"
+        self._updateUrlsWithAuth(self._server_url, self._access_card)
 
     def get(self, url: str, callback: Callable[[QNetworkReply], None]) -> None:
         reply = self._network_manager.get(QNetworkRequest(QUrl(url)))

@@ -120,6 +120,8 @@ class ApplicationController(QObject):
         print("A CARD WAS DETECTED!", card_id)
 
         RFID_url = f"{self.getBaseUrl()}/RFID/{card_id}/"
+        for node in self._data:
+            node.setAccessCard(card_id)
         self._network_manager.get(QNetworkRequest(QUrl(RFID_url)))
 
     def _startSerialThreads(self):
@@ -244,6 +246,7 @@ class ApplicationController(QObject):
                 data = json.loads(data)
                 for item in data:
                     new_node = Node(item["node_id"])
+                    new_node.setAccessCard(self._rfid_card)
                     new_node.updateServerUrl(self._zeroconf_worker.server_address)
                     self._data.append(new_node)
                     new_node.serverReachableChanged.connect(self.serverReachableChanged)
@@ -251,8 +254,8 @@ class ApplicationController(QObject):
                 self._data = sorted(self._data, key=lambda node: node.id)  # sort by age
                 self._data.reverse()
                 self.nodesChanged.emit()
-            except Exception:
-                print("Failed to get modifier data")
+            except Exception as e:
+                print("Failed to get modifier data", e)
                 self._failed_update_nodes_timer.start()
 
     @Property("QVariantList", notify=modifiersChanged)
