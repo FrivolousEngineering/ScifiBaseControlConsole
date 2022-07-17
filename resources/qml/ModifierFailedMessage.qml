@@ -27,14 +27,14 @@ Rectangle
         onTriggered: modifierFailedMessage.visible = false
     }
     visible: false
-    width: 500
+    width: 550
     height: 250
     anchors.centerIn: parent
     Button
     {
         id: closeButton
         text: "X"
-        onClicked: modifierFailedMessage.viszible = false
+        onClicked: modifierFailedMessage.visible = false
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: 10
@@ -51,7 +51,7 @@ Rectangle
     }
     OurLabel
     {
-        anchors.centerIn: parentfzzz
+        anchors.centerIn: parent
         font.pixelSize: 24
         text: "Maximum number of modifiers placed. \nPlease wait untill modifiers have elapsed"
     }

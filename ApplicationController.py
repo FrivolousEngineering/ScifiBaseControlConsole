@@ -227,8 +227,6 @@ class ApplicationController(QObject):
         elif "/modifiers/" in url_string:
             if status_code == 403:
                 self.showModifierFailedMessage.emit()
-                #TOOD: Show "Unable to add modifier message"
-                pass
         elif "/user/" in url_string:
             if status_code not in [404, 500] and self._user_name != "":
                 data = bytes(reply.readAll())
