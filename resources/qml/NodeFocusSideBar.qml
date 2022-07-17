@@ -27,15 +27,16 @@ Rectangle
     {
         id: titleBar
         height: childrenRect.height
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.topMargin: base.defaultMargin
-        Label
+        anchors
+        {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            topMargin: base.defaultMargin
+        }
+        OurLabel
         {
             id: titleLabel
-            color: "white"
-            font.family: "Futura Md BT"
             font.pixelSize: 32
             text: activeNode ? activeNode.label: ""
             anchors.left: parent.left
@@ -51,11 +52,10 @@ Rectangle
             height: 32
             anchors.verticalCenter: titleLabel.verticalCenter
             background: Item {}
-            contentItem: Label {
+            contentItem: OurLabel {
                 text: "X"
                 font.pointSize: 20
                 opacity: enabled ? 1.0 : 0.3
-                color: "white"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
@@ -92,40 +92,34 @@ Rectangle
         {
             width: parent.width
             height: base.largeFontSize
-            Label
+            OurLabel
             {
-                font.family: "Futura Md BT"
                 font.pixelSize: base.largeFontSize
                 text: "Health"
                 color: "#56CCF2"
             }
-            Label
+            OurLabel
             {
-                font.family: "Futura Md BT"
                 font.pixelSize: base.largeFontSize
                 text: activeNode ? Math.round(activeNode.health * 100) / 100: 100
                 anchors.right: parent.right
-                color: "white"
             }
         }
         Item
         {
             width: parent.width
             height: base.largeFontSize
-            Label
+            OurLabel
             {
-                font.family: "Futura Md BT"
                 font.pixelSize: base.largeFontSize
                 text: "Temperature"
                 color: "#56CCF2"
             }
-            Label
+            OurLabel
             {
-                font.family: "Futura Md BT"
                 font.pixelSize: base.largeFontSize
                 text: activeNode ? Math.round(activeNode.temperature * 100) / 100: 20
                 anchors.right: parent.right
-                color: "white"
             }
         }
         Item
@@ -134,12 +128,10 @@ Rectangle
             height: base.defaultMargin
         }
 
-        Label
+        OurLabel
         {
-            font.family: "Futura Md BT"
             font.pixelSize: 18
             text: "Resources received"
-            color: "white"
             visible: resourcesReceivedRepeater.count
         }
         Rectangle
@@ -165,12 +157,10 @@ Rectangle
             visible: resourcesRequiredRepeater.count
         }
 
-        Label
+        OurLabel
         {
-            font.family: "Futura Md BT"
             font.pixelSize: 18
             text: "Resources required"
-            color: "white"
             visible: resourcesRequiredRepeater.count
         }
         Rectangle
@@ -194,12 +184,10 @@ Rectangle
             height: base.defaultMargin
             visible: resourcesProducedRepeater.count
         }
-        Label
+        OurLabel
         {
-            font.family: "Futura Md BTmargin"
             font.pixelSize: 18
             text: "Resources produced"
-            color: "white"
             visible: resourcesProducedRepeater.count
         }
         Rectangle
@@ -223,9 +211,8 @@ Rectangle
             height: base.defaultMargin
         }
 
-        Label
+        OurLabel
         {
-            font.family: "Futura Md BTmargin"
             font.pixelSize: 18
             text: "Resources provided"
             color: "white"
@@ -253,12 +240,10 @@ Rectangle
             visible: resourcesProvidedRepeater.count
         }
 
-        Label
+        OurLabel
         {
-            font.family: "Futura Md BT"
             font.pixelSize: 18
             text: "Modifiers"
-            color: "white"
             visible: modifiersRepeater.count
         }
         Rectangle
@@ -308,11 +293,9 @@ Rectangle
                     anchors.left: parent.left
                     anchors.leftMargin: base.defaultMargin
                 }
-                Label
+                OurLabel
                 {
-                    font.family: "Futura Md BT"
                     font.pixelSize: 32
-                    color: "white"
                     text: "Modifier"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -342,11 +325,9 @@ Rectangle
                     anchors.left: parent.left
                     anchors.leftMargin: base.defaultMargin
                 }
-                Label
+                OurLabel
                 {
-                    font.family: "Futura Md BT"
                     font.pixelSize: 32
-                    color: "white"
                     text: "History"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -377,11 +358,9 @@ Rectangle
                     anchors.left: parent.left
                     anchors.leftMargin: base.defaultMargin
                 }
-                Label
+                OurLabel
                 {
-                    font.family: "Futura Md BT"
                     font.pixelSize: 32
-                    color: "white"
                     text: "More Info"
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -397,21 +376,15 @@ Rectangle
         {
             width: parent.width
             height: base.defaultFontSize
-            Label
+            OurLabel
             {
-                font.family: "Futura Md BT"
-                font.pixelSize: base.defaultFontSize
-
                 text: modelData.type
                 color: "#56CCF2"
             }
-            Label
+            OurLabel
             {
-                font.family: "Futura Md BT"
-                font.pixelSize: base.defaultFontSize
                 text: Math.round(modelData.value * 100) / 100
                 anchors.right: parent.right
-                color: "white"
             }
         }
     }
@@ -422,21 +395,15 @@ Rectangle
         {
             width: parent.width
             height: base.defaultFontSize
-            Label
+            OurLabel
             {
-                font.family: "Futura Md BT"
-                font.pixelSize: base.defaultFontSize
-
                 text: modelData.name
                 color: "#56CCF2"
             }
-            Label
+            OurLabel
             {
-                font.family: "Futura Md BT"
-                font.pixelSize: base.defaultFontSize
                 text: modelData.duration
                 anchors.right: parent.right
-                color: "white"
             }
         }
     }

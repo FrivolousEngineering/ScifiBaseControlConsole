@@ -34,13 +34,10 @@ Rectangle
             left: parent.left
             right: descriptionText.left
             margins: addModifierWindow.cornerRadius
-
         }
         clip: true
 
-        ScrollBar.vertical: ScrollBar {
-            active: true
-        }
+        ScrollBar.vertical: ScrollBar { active: true }
 
         model: nodeObject ? nodeObject.supported_modifiers: null
         currentIndex: 0
@@ -60,19 +57,21 @@ Rectangle
         }
     }
 
-    Text
+    OurText
     {
         id: descriptionText
-        anchors.right: parent.right
-        anchors.rightMargin: cornerRadius
-        anchors.bottom: parent.bottom
-        anchors.top: parent.top
-        anchors.topMargin: addModifierWindow.cornerRadius
+        anchors
+        {
+            right: parent.right
+            rightMargin: cornerRadius
+            bottom: parent.bottom
+            top: parent.top
+            topMargin: addModifierWindow.cornerRadius
+        }
+
         width: parent.width / 2
-        color: "white"
         text: activeModifier ? activeModifier.description: ""
         wrapMode: Text.WordWrap
-        font.family: "Futura Md BT"
     }
 
     Row

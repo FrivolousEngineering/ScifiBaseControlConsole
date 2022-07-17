@@ -34,7 +34,7 @@ Rectangle
     {
         id: closeButton
         text: "X"
-        onClicked: modifierFailedMessage.visible = false
+        onClicked: modifierFailedMessage.viszible = false
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: 10
@@ -42,21 +42,17 @@ Rectangle
         width: 32
         height: 32
         background: Item {}
-        contentItem: Label {
+        contentItem: OurLabel {
             text: "X"
             font.pointSize: 20
-            color: "white"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
     }
-    Label
+    OurLabel
     {
-        anchors.centerIn: parent
-        font.family: "Futura Md BT"
+        anchors.centerIn: parentfzzz
         font.pixelSize: 24
-        color: "white"
         text: "Maximum number of modifiers placed. \nPlease wait untill modifiers have elapsed"
-
     }
 }

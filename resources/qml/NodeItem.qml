@@ -260,11 +260,10 @@ Control
                         return "../svg/node.svg"
                     }
                 }
-                Label
+                OurLabel
                 {
                     id: titleTextLabel
                     text: "Not Set"
-                    font.family: "Futura Md BT"
                     font.pixelSize: 12
                     height: 12
                     color: base.textColor
@@ -353,25 +352,21 @@ Control
                 anchors.right: parent.right
                 height: childrenRect.height
                 anchors.verticalCenter: parent.verticalCenter
-                Text
+                OurText
                 {
                     id: storageText
-                    text:"Storage"
-                    font.family: "Futura Md BT"
+                    text: "Storage"
                     font.pixelSize: 12
-                    color: "white"
                     anchors.left: parent.left
                     anchors.right: parent.right
                     horizontalAlignment: Text.AlignHCenter
                 }
-                Text
+                OurText
                 {
                     id: amountStoredText
                     text: Math.round(amountStored)
-                    font.family: "Futura Md BT"
                     font.pixelSize: 22
                     font.bold: true
-                    color: "white"
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: storageText.bottom
                     width: contentWidth
@@ -381,13 +376,10 @@ Control
                 }
             }
 
-            Text
+            OurText
             {
                 visible: maxAmountStored > -1
                 text: "/" + maxAmountStored
-                font.family: "Futura Md BT"
-                font.pixelSize: 16
-                color: "white"
                 opacity: 0.5
                 horizontalAlignment: Text.AlignHCenter
                 anchors.left: parent.left
@@ -409,24 +401,20 @@ Control
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: childrenRect.height
-                Text
+                OurText
                 {
                     id: statusText
                     anchors.horizontalCenter: parent.horizontalCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.family: "Futura Md BT"
                     text: "status"
                     font.pixelSize: 12
-                    color: "white"
                 }
-                Text
+                OurText
                 {
                     id: amountStoredText
                     text: controller.active ? "ON" : "OFF"
-                    font.family: "Futura Md BT"
                     font.pixelSize: 22
                     font.bold: true
-                    color: "white"
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: statusText.bottom
                     width: contentWidth

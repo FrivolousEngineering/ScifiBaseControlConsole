@@ -29,20 +29,16 @@ Rectangle
         width: 32
         height: 32
         background: Item {}
-        contentItem: Label {
+        contentItem: OurLabel {
             text: "X"
-            font.pointSize: 20
-            color: "white"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
     }
 
-    Label
+    OurLabel
     {
         id: titleLabel
-        color: "white"
-        font.family: "Futura Md BT"
         font.pixelSize: 24
         font.bold: true
         text: ""
@@ -61,19 +57,14 @@ Rectangle
             margins: default_margin
             top: closeButton.bottom
         }
-        Label
+        OurLabel
         {
-            color: "white"
-            font.family: "Futura Md BT"
-            font.pixelSize: 16
             font.bold: true
             text: "General Description"
         }
-        Label
+        OurLabel
         {
             id: descriptionLabel
-            color: "white"
-            font.family: "Futura Md BT"
             wrapMode: Text.WordWrap
             anchors
             {
@@ -86,20 +77,15 @@ Rectangle
             width: spacerSize
             height: spacerSize
         }
-        Label
+        OurLabel
         {
-            color: "white"
-            font.family: "Futura Md BT"
-            font.pixelSize: 16
             font.bold: true
             text: "Custom Description"
             visible: customDescriptionLabel.text != ""
         }
-        Label
+        OurLabel
         {
             id: customDescriptionLabel
-            color: "white"
-            font.family: "Futura Md BT"
             wrapMode: Text.WordWrap
             anchors
             {

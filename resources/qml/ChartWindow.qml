@@ -48,39 +48,38 @@ Rectangle
             onHovered: selectedPointText.text =  Math.round(point.y * 100) / 100
         }
     }
-    Text
+    OurLabel
     {
-        color: "white"
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.left: parent.left
-        anchors.leftMargin: 50
-        font.family: "Futura Md BT"
+        anchors
+        {
+            top: parent.top
+            topMargin: 10
+            left: parent.left
+            leftMargin: 50
+        }
         text: Math.round(historyGraph.yMax * 100) / 100
         horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 16
     }
-    Text
+    OurLabel
     {
-        color: "white"
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        anchors.left: parent.left
-        anchors.leftMargin: 50
-        font.family: "Futura Md BT"
+        anchors
+        {
+            bottom: parent.bottom
+            bottomMargin: 10
+            left: parent.left
+            leftMargin: 50
+        }
+
         text: Math.round(historyGraph.yMin * 100) / 100
 
         horizontalAlignment: Text.AlignHCenter
-        font.pointSize: 16
     }
-    Text
+    OurLabel
     {
         id: selectedPointText
         anchors.bottom: parent.bottom
-        font.family: "Futura Md BT"
         width: parent.width / 3
         anchors.horizontalCenter: parent.horizontalCenter
-        color: "white"
         text: ""
         horizontalAlignment: Text.AlignHCenter
     }
@@ -96,11 +95,10 @@ Rectangle
         width: 32
         height: 32
         background: Item {}
-        contentItem: Label {
+        contentItem: OurLabel {
             text: "X"
             font.pointSize: 20
             opacity: enabled ? 1.0 : 0.3
-            color: "white"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
@@ -125,5 +123,4 @@ Rectangle
             }
         }
     }
-
 }

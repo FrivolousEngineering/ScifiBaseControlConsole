@@ -41,12 +41,10 @@ Control
             color:  "white"
         }
 
-        Label
+        OurLabel
         {
             id: label
             text: backend.userName
-            color: "white"
-            font.family: "Futura Md BT"
             font.pixelSize: 18
             anchors.left: icon.right
             anchors.leftMargin: 16

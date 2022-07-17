@@ -51,50 +51,48 @@ Dial
             height: childrenRect.height
             anchors.centerIn: parent
             width: parent.width
-            Text
+            OurLabel
             {
                 id: performanceText
                 text: "Performance"
-                color: "white"
-                font: Qt.font({
-                    family: "Futura Md BT",
-                    pixelSize: 12,
-                });
+                font.pixelSize: 12
                 anchors.left: parent.left
                 anchors.right: parent.right
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
-            Text
+            OurLabel
             {
                 id: valueText
+                anchors
+                {
+                    left: parent.left
+                    right: parent.right
+                    top: performanceText.bottom
+                }
+
                 text: Math.round(currentDial.value * 100) / 100
-                color: "white"
-                font: Qt.font({
-                    family: "Futura Md BT",
-                    pixelSize: 20,
-                    bold: true
-                });
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: performanceText.bottom
+                font.pixelSize: 20
+                font.bold: true
+
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
         }
-        Text
+        OurLabel
         {
+            anchors
+            {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                bottomMargin: 4
+            }
+
             text: "Target<br>" + Math.round(control.value * 100) / 100
-            color: "white"
             opacity: 0.5
-            font: Qt.font({
-                family: "Futura Md BT",
-                pixelSize: 12,
-                bold: true
-            });
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 4
+            font.pixelSize: 12
+            font.bold: true
+
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
