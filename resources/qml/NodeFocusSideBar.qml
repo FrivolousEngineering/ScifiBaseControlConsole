@@ -17,6 +17,7 @@ Rectangle
     visible: collapseMove > -width
     property int defaultFontSize: 16
     property int largeFontSize: 24
+    property bool showModifierButton: false
 
     signal addModifierClicked()
     signal showGraphs()
@@ -294,6 +295,7 @@ Rectangle
                 border.color: "white"
                 color: "transparent"
             }
+            visible: base.showModifierButton
             onClicked: base.addModifierClicked()
             contentItem: Item
             {

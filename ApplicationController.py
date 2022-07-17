@@ -105,6 +105,10 @@ class ApplicationController(QObject):
     def userName(self):
         return self._user_name
 
+    @Property(int, notify=accessLevelChanged)
+    def accessLevel(self):
+        return self._access_level
+
     @Slot()
     def tickleTimeout(self):
         self._inactivity_timer.start()

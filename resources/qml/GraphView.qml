@@ -321,6 +321,7 @@ Rectangle
         id: focusBar
         anchors.right: parent.right
         collapsed: true
+        showModifierButton: backend.accessLevel > 0
         onCollapsedChanged:
         {
             if(collapsed)
