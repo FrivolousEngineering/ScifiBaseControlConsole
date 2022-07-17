@@ -23,6 +23,7 @@ Control
     property color textColor: backgroundColor
     property color iconColor: textColor
     property string viewMode: "Overview"
+    property bool canBeModified: false
 
 
     property var controller: null
@@ -472,7 +473,7 @@ Control
                 value: controller.targetPerformance
                 when: !performanceDial.pressed
             }
-
+            enabled: base.canBeModified
             currentValue: controller.performance
 
             onPressedChanged: pressed ? base.clicked(): controller.setPerformance(value)
