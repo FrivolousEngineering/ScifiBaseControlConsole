@@ -5,8 +5,8 @@ import QtQuick.Controls 2.2
 Rectangle
 {
     id: window
-    width: 925 + 30
-    height: 750
+    width: 650 + 30
+    height: 650
     anchors.centerIn: parent
     property string activeProperty: "temperature"
     property variant activeData: selectedNodeData.historyData[activeProperty]
