@@ -44,7 +44,6 @@ Rectangle
         }
         Button
         {
-            text: "X"
             onClicked: base.collapsed = !collapsed
             anchors.right: parent.right
             anchors.rightMargin: base.defaultMargin
@@ -54,7 +53,7 @@ Rectangle
             background: Item {}
             contentItem: OurLabel {
                 text: "X"
-                font.pointSize: 20
+                font.pixelSize: 32
                 opacity: enabled ? 1.0 : 0.3
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

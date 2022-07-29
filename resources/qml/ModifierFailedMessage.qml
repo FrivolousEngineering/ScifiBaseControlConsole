@@ -33,7 +33,6 @@ Rectangle
     Button
     {
         id: closeButton
-        text: "X"
         onClicked: modifierFailedMessage.visible = false
         anchors.right: parent.right
         anchors.top: parent.top
@@ -44,7 +43,7 @@ Rectangle
         background: Item {}
         contentItem: OurLabel {
             text: "X"
-            font.pointSize: 20
+            font.pixelSize: 32
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
