@@ -51,7 +51,7 @@ Rectangle
                 onClicked: mouse.accepted = false
                 onWheel:
                 {
-                    var new_scale = content.scale + wheel.angleDelta.y / 600
+                    var new_scale = content.scale + wheel.angleDelta.y / 1800
                     if(new_scale < 0.2) new_scale = 0.2
                     if(new_scale > 5) new_scale = 5
 
