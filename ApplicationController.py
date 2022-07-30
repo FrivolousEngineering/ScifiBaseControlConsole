@@ -8,6 +8,7 @@ import json
 
 from Node import Node
 from SerialWorker import SerialWorker
+from NFCWorker import NFCWorker
 from ZeroConfWorker import ZeroConfWorker
 
 INACTIVITY_TIMEOUT = 30  # Seconds
@@ -127,7 +128,7 @@ class ApplicationController(QObject):
     def _startSerialThreads(self):
         print("starting serial threads")
 
-        self._serial_worker = SerialWorker(self._serial)
+        self._serial_worker = NFCWorker()
         self._serial_thread = QThread()
         self._serial_thread.started.connect(self._serial_worker.run)
         self._serial_worker.cardDetected.connect(self.onCardDetected)  # Connect your signals/slots
@@ -150,7 +151,7 @@ class ApplicationController(QObject):
         self._authentication_scanner_attached = False
         self.authenticationScannerAttachedChanged.emit()
         self._serial = None
-        print("Attempting to create serial")
+        '''print("Attempting to create serial")
         for i in range(0, 10):
             try:
                 port = "/dev/ttyUSB%s" % i
@@ -175,7 +176,9 @@ class ApplicationController(QObject):
         else:
             print("Unable to create serial. Attempting again in a few seconds.")
             # Check again after a bit of time has passed
-            threading.Timer(10, self._createSerial).start()
+            threading.Timer(10, self._createSerial).start()'''
+
+        threading.Timer(2, self._startSerialThreads).start()
 
     @Property(bool, notify=authenticationRequiredChanged)
     def authenticationRequired(self):
