@@ -24,7 +24,17 @@ class NFCWorker(QObject):
     def run(self):
         print("Starting NFC Worker")
         while True:
-            tag = self.reader.connect(rdwr={'on-connect': lambda tag: False})
+            try:
+                tag = self.reader.connect(rdwr={'on-connect': lambda tag: False})
+            except OSError:
+                time.sleep(5)
+                print("FAILED TO FIND THE REAADERRR")
+                # Couldn't find serial connection. Try again in a bit!
+                self.reader.close()
+                self.reader = nfc.ContactlessFrontend()
+                self.reader.open('usb')
+
+                continue
             try:
                 uid = tag.identifier
 
@@ -34,6 +44,9 @@ class NFCWorker(QObject):
                 self.cardDetected.emit(card_uid)
 
             except AttributeError:  # can happen on a misread from pynfc
-                print("Failed to read tag")
+                self.reader.close()
+                self.reader = nfc.ContactlessFrontend()
+                self.reader.open('usb')
+
             finally:
                 time.sleep(1)  # Only a single read per second
