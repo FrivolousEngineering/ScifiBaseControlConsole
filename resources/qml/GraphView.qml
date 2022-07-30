@@ -361,4 +361,63 @@ Rectangle
         id: graphWindow
         visible: false
     }
+    Item
+    {
+        anchors.fill: parent
+        visible: backend.authenticationRequired
+        enabled: visible
+        Rectangle
+        {
+            color: "black"
+            anchors.fill: parent
+            opacity: 0.8
+            MouseArea
+            {
+                anchors.fill: parent
+            }
+
+        }
+        OurLabel
+        {
+            id: authRequiredText
+            anchors.centerIn: parent
+            text: "AUTHENTICATION REQUIRED"
+            font.pixelSize: 50
+            font.bold: true
+        }
+
+        OurLabel
+        {
+            id: authFailedText
+            anchors.top: authRequiredText.bottom
+            anchors.topMargin: 10
+            font.pixelSize: 25
+            text: "UNRECOGNISED CARD"
+
+            visible: false
+            anchors.horizontalCenter: authRequiredText.horizontalCenter
+        }
+
+        Connections
+        {
+            target: backend
+            onShowUnknownAccessCardMessage:
+            {
+                authFailedText.visible = true
+                timeoutTimer.restart()
+            }
+        }
+
+        Timer
+        {
+            id: timeoutTimer
+            interval: 5000
+            running: false
+            onTriggered:
+            {
+                authFailedText.visible = false
+                backend.logout()
+            }
+        }
+    }
 }

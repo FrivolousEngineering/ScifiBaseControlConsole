@@ -11,7 +11,7 @@ from SerialWorker import SerialWorker
 from NFCWorker import NFCWorker
 from ZeroConfWorker import ZeroConfWorker
 
-INACTIVITY_TIMEOUT = 30  # Seconds
+INACTIVITY_TIMEOUT = 10  # Seconds
 FAILED_REQUEST_TRY_AGAIN = 10  # Seconds
 
 
@@ -25,6 +25,7 @@ class ApplicationController(QObject):
     userNameChanged = Signal()
     accessLevelChanged = Signal()
     showModifierFailedMessage = Signal()
+    showUnknownAccessCardMessage = Signal()
 
     def __init__(self, parent=None, rfid_card = None):
         QObject.__init__(self, parent)
@@ -115,11 +116,17 @@ class ApplicationController(QObject):
     def tickleTimeout(self):
         self._inactivity_timer.start()
 
+    @Slot()
+    def logout(self):
+        self._rfid_card = None
+        self._authentication_required = True
+
     def getBaseUrl(self):
         return f"http://{self._zeroconf_worker.server_address}:5000"
 
     def onCardDetected(self, card_id):
         print("A CARD WAS DETECTED!", card_id)
+        self.tickleTimeout()
         if card_id == self._rfid_card:
             return  # Same card as before. Don't request permission again!
         self._rfid_card = card_id
@@ -231,6 +238,7 @@ class ApplicationController(QObject):
                 self._network_manager.get(QNetworkRequest(QUrl(user_data_url)))
             else:
                 print("UNKNOWN CARD!")
+                self.showUnknownAccessCardMessage.emit()
                 self._serial_worker.setReadResult(False)
                 self.setAuthenticationRequired(True)
         elif "/modifiers/" in url_string:
