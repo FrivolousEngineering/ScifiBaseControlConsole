@@ -5,6 +5,7 @@ from PyQt5.QtCore import pyqtSignal as Signal
 import nfc
 import time
 
+
 class NFCWorker(QObject):
     cardDetected = Signal(str)
     finished = Signal()
@@ -21,10 +22,9 @@ class NFCWorker(QObject):
 
     @Slot()
     def run(self):
-        print("RUNNING")
+        print("Starting NFC Worker")
         while True:
             tag = self.reader.connect(rdwr={'on-connect': lambda tag: False})
-            print("TAGGG", tag)
             try:
                 uid = tag.identifier
 
@@ -34,6 +34,7 @@ class NFCWorker(QObject):
                 self.cardDetected.emit(card_uid)
 
             except AttributeError:  # can happen on a misread from pynfc
-                print("NOPE")
+
+                print("Failed to read tag")
             finally:
                 time.sleep(1)  # Only a single read per second
