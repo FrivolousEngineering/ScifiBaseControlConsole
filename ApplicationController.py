@@ -89,10 +89,7 @@ class ApplicationController(QObject):
             self.authenticationRequiredChanged.emit()
 
     def onInactivityTimeout(self):
-        self.setAuthenticationRequired(True)
-        self.setUserName("")
-        self._rfid_card = None
-        self.setAccessLevel(0)
+        self.logout()
 
     def setAccessLevel(self, access_level):
         if self._access_level != access_level:
@@ -118,8 +115,10 @@ class ApplicationController(QObject):
 
     @Slot()
     def logout(self):
+        self.setAuthenticationRequired(True)
+        self.setUserName("")
         self._rfid_card = None
-        self._authentication_required = True
+        self.setAccessLevel(0)
 
     def getBaseUrl(self):
         return f"http://{self._zeroconf_worker.server_address}:5000"

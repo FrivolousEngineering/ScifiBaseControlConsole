@@ -64,7 +64,7 @@ Control
                 color:  "white"
             }
             contentItem: Item {}
-            onClicked: print("OMGZOMG")
+            onClicked: backend.logout()
         }
     }
 }
