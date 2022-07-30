@@ -276,7 +276,7 @@ Rectangle
                             titleText: modelData.label
                             viewMode: window.activeViewMode
                             controller: modelData
-                            canBeModified: backend.accessLevel > 0
+                            canBeModified: backend ? backend.accessLevel > 0: 0
 
                             onClicked:
                             {
