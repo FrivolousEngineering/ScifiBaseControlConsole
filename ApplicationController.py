@@ -90,6 +90,7 @@ class ApplicationController(QObject):
     def onInactivityTimeout(self):
         self.setAuthenticationRequired(True)
         self.setUserName("")
+        self._rfid_card = None
         self.setAccessLevel(0)
 
     def setAccessLevel(self, access_level):
@@ -119,7 +120,9 @@ class ApplicationController(QObject):
 
     def onCardDetected(self, card_id):
         print("A CARD WAS DETECTED!", card_id)
-
+        if card_id == self._rfid_card:
+            return  # Same card as before. Don't request permission again!
+        self._rfid_card = card_id
         RFID_url = f"{self.getBaseUrl()}/RFID/{card_id}/"
         for node in self._data:
             node.setAccessCard(card_id)
@@ -227,6 +230,7 @@ class ApplicationController(QObject):
                 user_data_url = f"{self.getBaseUrl()}/user/{data['user_name']}/"
                 self._network_manager.get(QNetworkRequest(QUrl(user_data_url)))
             else:
+                print("UNKNOWN CARD!")
                 self._serial_worker.setReadResult(False)
                 self.setAuthenticationRequired(True)
         elif "/modifiers/" in url_string:

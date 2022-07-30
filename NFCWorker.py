@@ -34,7 +34,6 @@ class NFCWorker(QObject):
                 self.cardDetected.emit(card_uid)
 
             except AttributeError:  # can happen on a misread from pynfc
-
                 print("Failed to read tag")
             finally:
                 time.sleep(1)  # Only a single read per second
