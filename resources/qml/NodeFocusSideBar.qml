@@ -49,6 +49,7 @@ Rectangle
                 id: titleLabel
                 font.pixelSize: 24
                 text: activeNode ? activeNode.label: ""
+                font.bold: true
                 anchors.left: parent.left
                 anchors.leftMargin: base.defaultMargin
             }
@@ -74,7 +75,7 @@ Rectangle
             {
                 anchors.top: titleLabel.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: base.defaultMargin
+                anchors.topMargin: base.defaultMargin / 2
                 width: parent.width / 4 * 3
                 height: 1
                 color: "#00D1FF"
@@ -129,8 +130,9 @@ Rectangle
 
             OurLabel
             {
-                font.pixelSize: 18
+                font.pixelSize: 16
                 text: "Resources received"
+                font.bold: true
                 visible: resourcesReceivedRepeater.count
             }
             Rectangle
@@ -158,8 +160,9 @@ Rectangle
 
             OurLabel
             {
-                font.pixelSize: 18
+                font.pixelSize: 16
                 text: "Resources required"
+                font.bold: true
                 visible: resourcesRequiredRepeater.count
             }
             Rectangle
@@ -185,8 +188,9 @@ Rectangle
             }
             OurLabel
             {
-                font.pixelSize: 18
+                font.pixelSize: 16
                 text: "Resources produced"
+                font.bold: true
                 visible: resourcesProducedRepeater.count
             }
             Rectangle
@@ -212,9 +216,10 @@ Rectangle
 
             OurLabel
             {
-                font.pixelSize: 18
+                font.pixelSize: 16
                 text: "Resources provided"
                 color: "white"
+                font.bold: true
                 visible: resourcesProvidedRepeater.count
             }
             Rectangle
@@ -235,9 +240,10 @@ Rectangle
 
             OurLabel
             {
-                font.pixelSize: 18
+                font.pixelSize: 16
                 text: "Modifiers"
                 visible: modifiersRepeater.count
+                font.bold: true
             }
             Rectangle
             {
