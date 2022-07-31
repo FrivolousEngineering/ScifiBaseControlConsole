@@ -23,6 +23,11 @@ Rectangle
     signal showGraphs()
     signal showDetailedInfoClicked()
 
+    MouseArea
+    {
+        anchors.fill: parent
+    }
+
     Item
     {
         id: titleBar
