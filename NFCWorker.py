@@ -26,9 +26,9 @@ class NFCWorker(QObject):
         while True:
             try:
                 tag = self.reader.connect(rdwr={'on-connect': lambda tag: False})
-            except OSError:
+            except OSError: 
+                print("FAILED TO FIND THE READER")
                 time.sleep(5)
-                print("FAILED TO FIND THE REAADERRR")
                 # Couldn't find serial connection. Try again in a bit!
                 self.reader.close()
                 self.reader = nfc.ContactlessFrontend()
