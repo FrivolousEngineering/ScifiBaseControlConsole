@@ -18,6 +18,7 @@ Rectangle
     property int defaultFontSize: 16
     property int largeFontSize: 24
     property bool showModifierButton: false
+    property int buttonSize: 40
 
     signal addModifierClicked()
     signal showGraphs()
@@ -29,7 +30,9 @@ Rectangle
     }
     ScrollView
     {
-        anchors.fill: parent
+        height: parent.height
+        width: parent.width
+        clip: true
         Item
         {
             id: titleBar
@@ -44,7 +47,7 @@ Rectangle
             OurLabel
             {
                 id: titleLabel
-                font.pixelSize: 32
+                font.pixelSize: 24
                 text: activeNode ? activeNode.label: ""
                 anchors.left: parent.left
                 anchors.leftMargin: base.defaultMargin
@@ -83,7 +86,6 @@ Rectangle
         {
             spacing: 5
 
-            height: 200
             anchors
             {
                 top: titleBar.bottom
@@ -100,13 +102,11 @@ Rectangle
                 height: base.largeFontSize
                 OurLabel
                 {
-                    font.pixelSize: base.largeFontSize
                     text: "Health"
                     color: "#56CCF2"
                 }
                 OurLabel
                 {
-                    font.pixelSize: base.largeFontSize
                     text: activeNode ? Math.round(activeNode.health * 100) / 100: 100
                     anchors.right: parent.right
                 }
@@ -117,21 +117,14 @@ Rectangle
                 height: base.largeFontSize
                 OurLabel
                 {
-                    font.pixelSize: base.largeFontSize
                     text: "Temperature"
                     color: "#56CCF2"
                 }
                 OurLabel
                 {
-                    font.pixelSize: base.largeFontSize
                     text: activeNode ? Math.round(activeNode.temperature * 100) / 100: 20
                     anchors.right: parent.right
                 }
-            }
-            Item
-            {
-                width: 1
-                height: base.defaultMargin
             }
 
             OurLabel
@@ -159,7 +152,7 @@ Rectangle
             Item
             {
                 width: 1
-                height: base.defaultMargin
+                height: base.defaultMargin / 2
                 visible: resourcesRequiredRepeater.count
             }
 
@@ -187,7 +180,7 @@ Rectangle
             Item
             {
                 width: 1
-                height: base.defaultMargin
+                height: base.defaultMargin / 2
                 visible: resourcesProducedRepeater.count
             }
             OurLabel
@@ -214,7 +207,7 @@ Rectangle
             Item
             {
                 width: 1
-                height: base.defaultMargin
+                height: base.defaultMargin / 2
             }
 
             OurLabel
@@ -238,12 +231,6 @@ Rectangle
                 id: resourcesProvidedRepeater
                 model: activeNode ? activeNode.resourcesProvided: null
                 delegate: resourceComponent
-            }
-            Item
-            {
-                width: 1
-                height: base.defaultMargin
-                visible: resourcesProvidedRepeater.count
             }
 
             OurLabel
@@ -271,15 +258,14 @@ Rectangle
             Item
             {
                 width: 1
-                height: base.defaultMargin
+                height: base.defaultMargin / 2
             }
-
 
             Button
             {
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: 62
+                height: base.buttonSize
                 background: Rectangle
                 {
                     border.width: 2
@@ -290,89 +276,99 @@ Rectangle
                 onClicked: base.addModifierClicked()
                 contentItem: Item
                 {
-                    Image
+                    RecolorImage
                     {
                         source: "../svg/plus.svg"
-                        width: sourceSize.width
-                        height: sourceSize.height
+                        width: base.buttonSize / 2
+                        height: base.buttonSize / 2
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
                         anchors.leftMargin: base.defaultMargin
                     }
                     OurLabel
                     {
-                        font.pixelSize: 32
+                        font.pixelSize: base.buttonSize / 2
                         text: "Modifier"
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
             }
-            Button
+
+            Item
             {
+                height: base.buttonSize
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: 62
-                background: Rectangle
+                Button
                 {
-                    border.width: 2
-                    border.color: "white"
-                    color: "transparent"
-                }
-                onClicked: base.showGraphs()
-                contentItem: Item
-                {
-                    RecolorImage
+                    id: historyButton
+                    anchors.left: parent.left
+                    width: parent.width / 2 - base.defaultMargin / 2
+                    height: base.buttonSize
+                    background: Rectangle
                     {
-                        source: "../svg/history.svg"
-                        width: 32
-                        height: 32
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: base.defaultMargin
+                        border.width: 2
+                        border.color: "white"
+                        color: "transparent"
                     }
-                    OurLabel
+                    onClicked: base.showGraphs()
+                    contentItem: Item
                     {
-                        font.pixelSize: 32
-                        text: "History"
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        RecolorImage
+                        {
+                            source: "../svg/history.svg"
+                            width: base.buttonSize / 2
+                            height: base.buttonSize / 2
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 2
+                        }
+                        OurLabel
+                        {
+                            font.pixelSize: base.buttonSize / 2
+                            text: "History"
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+                    }
+                }
+
+                Button
+                {
+                    anchors.left: historyButton.right
+                    anchors.right: parent.right
+                    anchors.leftMargin: base.defaultMargin / 2
+                    height: base.buttonSize
+                    background: Rectangle
+                    {
+                        border.width: 2
+                        border.color: "white"
+                        color: "transparent"
+                    }
+                    onClicked: base.showDetailedInfoClicked()
+                    contentItem: Item
+                    {
+                        RecolorImage
+                        {
+                            source: "../svg/info.svg"
+                            width: base.buttonSize / 2 + 3
+                            height: base.buttonSize / 2 + 3
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: 2
+                        }
+                        OurLabel
+                        {
+                            font.pixelSize: base.buttonSize / 2
+                            text: "Info"
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
                     }
                 }
             }
 
-            Button
-            {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: 62
-                background: Rectangle
-                {
-                    border.width: 2
-                    border.color: "white"
-                    color: "transparent"
-                }
-                onClicked: base.showDetailedInfoClicked()
-                contentItem: Item
-                {
-                    RecolorImage
-                    {
-                        source: "../svg/info.svg"
-                        width: 38
-                        height: 38
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: base.defaultMargin
-                    }
-                    OurLabel
-                    {
-                        font.pixelSize: 32
-                        text: "More Info"
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-                }
-            }
         }
     }
     Component
