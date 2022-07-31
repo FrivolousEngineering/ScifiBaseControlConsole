@@ -176,6 +176,12 @@ Control
             anchors.fill: parent
             sourceComponent:
             {
+                if(controller.id == "science_scanner")
+                {
+                    // Okay it's hacky as fuck. But it's a few days before the event. I'm sorry future me.
+
+                    return scienceScannerNode
+                }
                 if(controller.hasSettablePerformance)
                 {
                     return performanceNode
@@ -409,7 +415,7 @@ Control
                     id: statusText
                     anchors.horizontalCenter: parent.horizontalCenter
                     horizontalAlignment: Text.AlignHCenter
-                    text: "status"
+                    text: "Status"
                     font.pixelSize: 12
                 }
                 OurText
@@ -427,7 +433,6 @@ Control
                 }
             }
         }
-
     }
 
     Component
@@ -479,4 +484,89 @@ Control
             onPressedChanged: pressed ? base.clicked(): controller.setPerformance(value)
         }
     }
+
+    Component
+    {
+        id: scienceScannerNode
+        Item
+        {
+            RecolorImage
+            {
+                id: warningIcon
+                source: "../svg/warning.svg"
+                SequentialAnimation {
+                    id: warningAnimation
+                    running: warningIcon.visible
+                    PropertyAnimation { to: "red"; duration: 750; target: warningIcon; property: "color"; easing.type: Easing.InOutCubic}
+                    PropertyAnimation { to: "#505050"; duration: 750; target: warningIcon; property: "color"; easing.type: Easing.InOutCubic}
+                    loops: Animation.Infinite
+                }
+
+                visible: controller.targetPerformance >= 1.5
+
+                width: 32
+                height: 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottomMargin: base.defaultMargin
+                sourceSize.width: 4 * width
+                sourceSize.height: 4 * width
+            }
+
+            Item
+            {
+                id: statusItem
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: childrenRect.height
+                OurText
+                {
+                    id: statusText
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    text: "Status"
+                    font.pixelSize: 12
+                }
+
+                OurText
+                {
+                    text: controller.targetPerformance > 0.2 ? "ACTIVE" : "INACTIVE"
+                    font.pixelSize: 22
+                    font.bold: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: statusText.bottom
+                    width: contentWidth
+                    height: contentHeight
+                    anchors.topMargin: 4
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
+            OurText
+            {
+                text:
+                {
+                    if(controller.targetPerformance >= 0.5 && controller.targetPerformance < 1.0 )
+                    {
+                        return "Low"
+                    }
+                    if(controller.targetPerformance >= 1.0 && controller.targetPerformance < 1.5)
+                    {
+                        return "Medium"
+                    }
+                    if(controller.targetPerformance >= 1.5)
+                    {
+                        return "High"
+                    }
+                    return ""
+                }
+                opacity: 0.5
+                horizontalAlignment: Text.AlignHCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: statusItem.bottom
+                anchors.topMargin: 8
+            }
+        }
+    }
+
 }
