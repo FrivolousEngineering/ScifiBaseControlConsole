@@ -100,7 +100,7 @@ Rectangle
             Item
             {
                 width: parent.width
-                height: base.largeFontSize
+                height: base.defaultFontSize
                 OurLabel
                 {
                     text: "Health"
@@ -115,7 +115,7 @@ Rectangle
             Item
             {
                 width: parent.width
-                height: base.largeFontSize
+                height: base.defaultFontSize
                 OurLabel
                 {
                     text: "Temperature"
@@ -126,6 +126,12 @@ Rectangle
                     text: activeNode ? Math.round(activeNode.temperature * 100) / 100: 20
                     anchors.right: parent.right
                 }
+            }
+
+            Item
+            {
+                width: 1
+                height: base.defaultMargin / 2
             }
 
             OurLabel
