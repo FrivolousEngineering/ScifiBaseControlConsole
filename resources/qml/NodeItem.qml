@@ -192,6 +192,8 @@ Control
                 }
                 if(controller.node_type == "Lights")
                     return lightsNode
+                if(controller.node_type == "SoundSystem")
+                    return toggableNode
             }
         }
     }
@@ -484,6 +486,40 @@ Control
             onPressedChanged: pressed ? base.clicked(): controller.setPerformance(value)
         }
     }
+
+    Component
+    {
+        id: toggableNode
+        Item
+        {
+
+            Switch
+            {
+                id: control
+                onToggled: controller.setPerformance(checked)
+                anchors.centerIn: parent
+                checked: controller.targetPerformance > 0
+                indicator: Rectangle
+                {
+                    implicitWidth: 72
+                    implicitHeight: 39
+                    x: control.leftPadding
+                    y: parent.height / 2 - height / 2
+                    radius: implicitHeight / 2
+                    color: control.checked ? "#00D1FF" : "#4C4C4F"
+
+                    Rectangle {
+                        x: control.checked ? parent.width - width : 0
+                        width: height
+                        height: parent.height
+                        radius: parent.radius
+                        color: control.down ? "#cccccc" : "#ffffff"
+                    }
+                }
+            }
+        }
+    }
+
 
     Component
     {
