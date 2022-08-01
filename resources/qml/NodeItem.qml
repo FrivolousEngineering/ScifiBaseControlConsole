@@ -194,6 +194,8 @@ Control
                     return lightsNode
                 if(controller.node_type == "SoundSystem")
                     return toggableNode
+                if(controller.id == "health_scanner")
+                    return toggableNode
             }
         }
     }
