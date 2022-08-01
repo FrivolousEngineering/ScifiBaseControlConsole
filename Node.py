@@ -413,7 +413,8 @@ class Node(QObject):
             return
 
         # Offset is given in the reply, but it's not a list of data. Remove it here.
-        del data["offset"]
+        if "offset" in data:
+            del data["offset"]
 
         all_keys = set(data.keys())
 
