@@ -14,7 +14,7 @@ Rectangle
 
     color: "black"
 
-    property int content_width: 4000
+    property int content_width: 5000
     property int content_height: 5000
 
     property var selectedNodeData: null
