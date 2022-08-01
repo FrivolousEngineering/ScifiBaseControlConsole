@@ -25,6 +25,8 @@ Control
     property string viewMode: "Overview"
     property bool canBeModified: false
 
+    property int animationLength: 12500
+
 
     property var controller: null
 
@@ -307,7 +309,7 @@ Control
             {
                 NumberAnimation
                 {
-                    duration: 1250
+                    duration: base.animationLength
                     easing.type: Easing.InOutCubic
                 }
             }
@@ -461,7 +463,7 @@ Control
             {
                 NumberAnimation
                 {
-                    duration: 1000
+                    duration: base.animationLength
                     easing.type: Easing.InOutCubic
                 }
             }
@@ -470,7 +472,7 @@ Control
             {
                 NumberAnimation
                 {
-                    duration: 1000
+                    duration: base.animationLength
                     easing.type: Easing.InOutCubic
                 }
             }
