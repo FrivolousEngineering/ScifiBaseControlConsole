@@ -236,6 +236,11 @@ Rectangle
                 model: activeNode ? activeNode.resourcesProvided: null
                 delegate: resourceComponent
             }
+            Item
+            {
+                width: 1
+                height: base.defaultMargin / 2
+            }
 
             OurLabel
             {
