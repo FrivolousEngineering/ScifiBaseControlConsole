@@ -397,6 +397,15 @@ Rectangle
             visible: false
             anchors.horizontalCenter: authRequiredText.horizontalCenter
         }
+        OurLabel
+        {
+            anchors.top: authFailedText.bottom
+            text: "CONTACT AMIN, CUESTA OR UNO"
+            anchors.topMargin: 10
+            font.pixelSize: 25
+            visible: authFailedText.visible
+            anchors.horizontalCenter: authRequiredText.horizontalCenter
+        }
 
         Connections
         {
