@@ -87,7 +87,7 @@ class Node(QObject):
     maxSafeTemperatureChanged = Signal()
     heatConvectionChanged = Signal()
     heatEmissivityChanged = Signal()
-    serverReachableChanged = Signal()
+    serverReachableChanged = Signal(bool)
     isTemperatureDependantChanged = Signal()
     optimalTemperatureChanged = Signal()
     targetPerformanceChanged = Signal()
@@ -151,22 +151,25 @@ class Node(QObject):
         self.get(self._modifiers_url, self._onModifiersChanged)
         self.get(self._additional_properties_url, self._onAdditionalPropertiesFinished)
 
+    def _setServerReachable(self, server_reachable: bool):
+        if self.server_reachable != server_reachable:
+            self.server_reachable = server_reachable
+            self.serverReachableChanged.emit(self.server_reachable)
+
     def _readData(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         if status_code == 404:
             print("Node was not found!")
             return
-        # For some magical reason, it segfaults if i convert the readAll() data directly to bytes.
+        # For some magical reason, it segfaults if I convert the readAll() data directly to bytes.
         # So, yes, the extra .data() is needed.
         data = bytes(reply.readAll().data())
-        if not data:
+        if not data or status_code == 503:
             self._failed_update_timer.start()
             self._update_timer.stop()
-            self.server_reachable = False
-            self.serverReachableChanged.emit()
+            self._setServerReachable(False)
             return None
-        self.server_reachable = True
-        self.serverReachableChanged.emit()
+        self._setServerReachable(True)
         try:
             return json.loads(data)
         except json.decoder.JSONDecodeError:

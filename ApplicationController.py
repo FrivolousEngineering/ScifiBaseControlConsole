@@ -210,6 +210,9 @@ class ApplicationController(QObject):
 
     def _onNetworkFinished(self, reply: QNetworkReply):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
+        if status_code == 503:
+            self.onServerReachableChanged(False)
+            return
         url_string = reply.url().toString()
         if "/modifier/" in url_string:
             if status_code == 404:
@@ -262,7 +265,7 @@ class ApplicationController(QObject):
                     new_node.setAccessCard(self._rfid_card)
                     new_node.updateServerUrl(self._zeroconf_worker.server_address)
                     self._data.append(new_node)
-                    new_node.serverReachableChanged.connect(self.serverReachableChanged)
+                    new_node.serverReachableChanged.connect(self.onServerReachableChanged)
 
                 self._data = sorted(self._data, key=lambda node: node.id)  # sort by age
                 self._data.reverse()
@@ -270,6 +273,11 @@ class ApplicationController(QObject):
             except Exception as e:
                 print("Failed to get modifier data", e)
                 self._failed_update_nodes_timer.start()
+
+    def onServerReachableChanged(self, is_server_reachable):
+        if self._server_reachable != is_server_reachable:
+            self._server_reachable = is_server_reachable
+            self.serverReachableChanged.emit()
 
     @Property("QVariantList", notify=modifiersChanged)
     def modifierData(self):
@@ -287,7 +295,7 @@ class ApplicationController(QObject):
 
     @Property(bool, notify=serverReachableChanged)
     def serverReachable(self):
-        return all([node.server_reachable for node in self._data])
+        return self._server_reachable
 
     @Slot(str, result="QVariant")
     def getNodeById(self, node_id: str):
