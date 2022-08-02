@@ -322,7 +322,7 @@ Control
                     State
                     {
                         name: "critical"
-                        when: maxAmountStored != -1 && amountStored < maxAmountStored * 0.1
+                        when: maxAmountStored != -1 && (amountStored < maxAmountStored * 0.1 || amountStored > maxAmountStored * 0.9)
                         PropertyChanges
                         {
                             target: warningIcon
@@ -333,7 +333,7 @@ Control
                     State
                     {
                         name: "warning"
-                        when: maxAmountStored != -1 && amountStored < maxAmountStored * 0.2
+                        when: maxAmountStored != -1 && (amountStored < maxAmountStored * 0.2 || amountStored > maxAmountStored > 0.8)
                         PropertyChanges
                         {
                             target: warningIcon
