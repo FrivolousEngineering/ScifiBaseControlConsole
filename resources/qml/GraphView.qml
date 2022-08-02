@@ -364,7 +364,7 @@ Rectangle
     Item
     {
         anchors.fill: parent
-        visible: backend.authenticationRequired
+        visible: backend.authenticationRequired || !backend.serverReachable
         enabled: visible
         Rectangle
         {
@@ -381,7 +381,7 @@ Rectangle
         {
             id: authRequiredText
             anchors.centerIn: parent
-            text: "AUTHENTICATION REQUIRED"
+            text: backend.serverReachable ? "AUTHENTICATION REQUIRED": "COULD NOT REACH SERVER"
             font.pixelSize: 50
             font.bold: true
         }
@@ -403,7 +403,7 @@ Rectangle
             text: "CONTACT AMIN, CUESTA OR UNO"
             anchors.topMargin: 10
             font.pixelSize: 25
-            visible: authFailedText.visible
+            visible: authFailedText.visible || !backend.serverReachable
             anchors.horizontalCenter: authRequiredText.horizontalCenter
         }
 
