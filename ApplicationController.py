@@ -70,7 +70,7 @@ class ApplicationController(QObject):
         else:
             # Check for RFID scanner as normal
             self._createSerial()
-            self.inactivityTimeout.connect(self.onInactivityTimeout)
+            self._inactivity_timer.timeout.connect(self.onInactivityTimeout)
 
     def _onServerAddressChanged(self):
         for node in self._data:
