@@ -31,71 +31,64 @@ Rectangle
     ScrollView
     {
         height: parent.height
-        width: parent.width
-        clip: true
-        Item
-        {
-            id: titleBar
-            height: childrenRect.height
-            anchors
-            {
-                left: parent.left
-                right: parent.right
-                top: parent.top
-                topMargin: base.defaultMargin
-            }
-            OurLabel
-            {
-                id: titleLabel
-                font.pixelSize: 24
-                text: activeNode ? activeNode.label: ""
-                font.bold: true
-                anchors.left: parent.left
-                anchors.leftMargin: base.defaultMargin
-            }
-            Button
-            {
-                onClicked: base.collapsed = !collapsed
-                anchors.right: parent.right
-                anchors.rightMargin: base.defaultMargin
-                width: 32
-                height: 32
-                anchors.verticalCenter: titleLabel.verticalCenter
-                background: Item {}
-                contentItem: OurLabel {
-                    text: "X"
-                    font.pixelSize: 32
-                    opacity: enabled ? 1.0 : 0.3
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
-
-            Rectangle
-            {
-                anchors.top: titleLabel.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: base.defaultMargin / 2
-                width: parent.width / 4 * 3
-                height: 1
-                color: "#00D1FF"
-                opacity: 0.5
-            }
-        }
+        width: base.width - 2 * base.defaultMargin
+        anchors.left: parent.left
+        anchors.leftMargin: base.defaultMargin
 
         Column
         {
             spacing: 5
 
-            anchors
+            width: parent.width
+
+            Item
             {
-                top: titleBar.bottom
-                topMargin: base.defaultMargin
-                left: parent.left
-                leftMargin: base.defaultMargin
-                right: parent.right
-                rightMargin: base.defaultMargin
+                id: titleBar
+                height: childrenRect.height
+                anchors
+                {
+                    left: parent.left
+                    right: parent.right
+                }
+                OurLabel
+                {
+                    id: titleLabel
+                    font.pixelSize: 24
+                    text: activeNode ? activeNode.label: ""
+                    font.bold: true
+                    anchors.left: parent.left
+                    anchors.leftMargin: base.defaultMargin
+                }
+                Button
+                {
+                    onClicked: base.collapsed = !collapsed
+                    anchors.right: parent.right
+                    anchors.rightMargin: base.defaultMargin
+                    width: 32
+                    height: 32
+                    anchors.verticalCenter: titleLabel.verticalCenter
+                    background: Item {}
+                    contentItem: OurLabel {
+                        text: "X"
+                        font.pixelSize: 32
+                        opacity: enabled ? 1.0 : 0.3
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
+
+                Rectangle
+                {
+                    anchors.top: titleLabel.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.topMargin: base.defaultMargin / 2
+                    width: parent.width / 4 * 3
+                    height: 1
+                    color: "#00D1FF"
+                    opacity: 0.5
+                }
             }
+
 
             Item
             {
@@ -272,7 +265,6 @@ Rectangle
                 width: 1
                 height: base.defaultMargin / 2
             }
-
             Button
             {
                 anchors.left: parent.left
