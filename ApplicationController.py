@@ -212,7 +212,6 @@ class ApplicationController(QObject):
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         if status_code == 503:
             self.onServerReachableChanged(False)
-            return
         url_string = reply.url().toString()
         if "/modifier/" in url_string:
             if status_code == 404:
