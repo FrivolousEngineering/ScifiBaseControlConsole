@@ -60,7 +60,6 @@ class ApplicationController(QObject):
         self._inactivity_timer = QTimer()
         self._inactivity_timer.setInterval(INACTIVITY_TIMEOUT * 1000)
         self._inactivity_timer.setSingleShot(True)
-        self._inactivity_timer.timeout.connect(self.inactivityTimeout)
 
         self._user_name = "Unknown"
         self._access_level = 0
