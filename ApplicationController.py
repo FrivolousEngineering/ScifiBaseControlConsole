@@ -65,6 +65,7 @@ class ApplicationController(QObject):
         self._access_level = 0
         self._serial_worker = None
         self._serial = None
+        self._server_reachable_count = 0
         if self._rfid_card:
             self.setAuthenticationRequired(False)
         else:
@@ -281,8 +282,16 @@ class ApplicationController(QObject):
                 self._failed_update_nodes_timer.start()
 
     def onServerReachableChanged(self, is_server_reachable):
-        if self._server_reachable != is_server_reachable:
-            self._server_reachable = is_server_reachable
+        if not is_server_reachable:
+            self._server_reachable_count += 1
+        else:
+            self._server_reachable_count = 0
+
+        if self._server_reachable_count > 50 and self._server_reachable:
+            self._server_reachable = False
+            self.serverReachableChanged.emit()
+        if not self._server_reachable and is_server_reachable:
+            self._server_reachable = True
             self.serverReachableChanged.emit()
 
     @Property("QVariantList", notify=modifiersChanged)
