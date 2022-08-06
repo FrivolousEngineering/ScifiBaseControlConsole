@@ -221,6 +221,7 @@ class ApplicationController(QObject):
             data = bytes(reply.readAll())
             try:
                 self._modifiers = json.loads(data)
+                self.onServerReachableChanged(True)
             except:
                 print("Failed to get modifier data")
                 self._failed_update_modifier_timer.start()
@@ -231,6 +232,7 @@ class ApplicationController(QObject):
                 if self._serial_worker:
                     self._serial_worker.setReadResult(True)
                 self.setAuthenticationRequired(False)
+                self.onServerReachableChanged(True)
                 data = bytes(reply.readAll())
                 data = json.loads(data)
                 self.setUserName(data["user_name"])
@@ -241,24 +243,29 @@ class ApplicationController(QObject):
                 self.showUnknownAccessCardMessage.emit()
                 self._serial_worker.setReadResult(False)
                 self.setAuthenticationRequired(True)
+                self.onServerReachableChanged(True)
         elif "/modifiers/" in url_string:
             if status_code == 403:
                 self.showModifierFailedMessage.emit()
+            self.onServerReachableChanged(True)
         elif "/user/" in url_string:
             if status_code not in [404, 500] and self._user_name != "":
                 data = bytes(reply.readAll())
                 data = json.loads(data)
+                self.onServerReachableChanged(True)
                 self.setAccessLevel(data["engineering_level"])
         else:
             # Yeah it's hackish, but it's faster than building a real system. For now we don't need more
             if status_code == 404:
                 print("Server was not found!")
                 self._failed_update_nodes_timer.start()
+                self.onServerReachableChanged(False)
                 return
             data = bytes(reply.readAll())
 
             try:
                 data = json.loads(data)
+                self.onServerReachableChanged(True)
                 for item in data:
                     new_node = Node(item["node_id"])
                     new_node.setAccessCard(self._rfid_card)
