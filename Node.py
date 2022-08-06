@@ -8,6 +8,7 @@ from PyQt5.QtCore import pyqtProperty as Property
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 
 import json
+import random
 
 from NodeResource import NodeResource
 
@@ -70,7 +71,12 @@ class Node(QObject):
         self._max_amount_stored = 0
         self._amount_stored = 0
         self._effectiveness_factor = 0
-        self.fullUpdate()
+
+        self._random_delay_timer = QTimer()
+        self._random_delay_timer.setInterval(random.randint(0, 5000))
+        self._random_delay_timer.setSingleShot(True)
+        self._random_delay_timer.timeout.connect(self.fullUpdate)
+        self._random_delay_timer.start()
 
     temperatureChanged = Signal()
     historyPropertiesChanged = Signal()
