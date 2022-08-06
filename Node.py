@@ -67,7 +67,6 @@ class Node(QObject):
         self._resources_provided = []
         self._health = 100
 
-
         self._max_amount_stored = 0
         self._amount_stored = 0
         self._effectiveness_factor = 0
