@@ -12,7 +12,7 @@ from NFCWorker import NFCWorker
 from ZeroConfWorker import ZeroConfWorker
 
 INACTIVITY_TIMEOUT = 10  # Seconds
-FAILED_REQUEST_TRY_AGAIN = 10  # Seconds
+FAILED_REQUEST_TRY_AGAIN = 30  # Seconds
 
 
 class ApplicationController(QObject):

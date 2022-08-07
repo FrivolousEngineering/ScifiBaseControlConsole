@@ -44,14 +44,14 @@ class Node(QObject):
         self._active = True
 
         self._update_timer = QTimer()
-        self._update_timer.setInterval(10000)
+        self._update_timer.setInterval(30000)
         self._update_timer.setSingleShot(False)
         self._update_timer.timeout.connect(self.partialUpdate)
 
 
         # Timer that is used when the server could not be reached.
         self._failed_update_timer = QTimer()
-        self._failed_update_timer.setInterval(10000)
+        self._failed_update_timer.setInterval(30000)
         self._failed_update_timer.setSingleShot(True)
         self._failed_update_timer.timeout.connect(self.fullUpdate)
 
@@ -72,7 +72,7 @@ class Node(QObject):
         self._effectiveness_factor = 0
 
         self._random_delay_timer = QTimer()
-        self._random_delay_timer.setInterval(random.randint(0, 5000))
+        self._random_delay_timer.setInterval(random.randint(0, 29000))
         self._random_delay_timer.setSingleShot(True)
         self._random_delay_timer.timeout.connect(self.fullUpdate)
         self._random_delay_timer.start()
