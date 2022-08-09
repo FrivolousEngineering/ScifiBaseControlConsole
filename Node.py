@@ -199,6 +199,7 @@ class Node(QObject):
             self.modifiersChanged.emit()
 
     def _onPerformanceChanged(self, reply: QNetworkReply):
+        print("CALLBAAACk")
         result = self._readData(reply)
         if not result:
             return

@@ -25,6 +25,7 @@ class ApplicationController(QObject):
     userNameChanged = Signal()
     accessLevelChanged = Signal()
     showModifierFailedMessage = Signal()
+    showModifierSucceededMessage = Signal()
     showUnknownAccessCardMessage = Signal()
 
     def __init__(self, parent=None, rfid_card = None):
@@ -46,6 +47,7 @@ class ApplicationController(QObject):
         self._serial_network_manager = None
 
         self._modifiers = []
+        self._onFinishedCallbacks = {}
 
         self._failed_update_modifier_timer = QTimer()
         self._failed_update_modifier_timer.setInterval(FAILED_REQUEST_TRY_AGAIN * 1000)
@@ -210,6 +212,11 @@ class ApplicationController(QObject):
         self._network_manager.get(QNetworkRequest(QUrl(modifier_data_url)))
 
     def _onNetworkFinished(self, reply: QNetworkReply):
+        if reply in self._onFinishedCallbacks:
+            self._onFinishedCallbacks[reply](reply)
+            del self._onFinishedCallbacks[reply]
+            return
+
         status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
         if status_code == 503:
             self.onServerReachableChanged(False)
@@ -245,10 +252,6 @@ class ApplicationController(QObject):
                 self._serial_worker.setReadResult(False)
                 self.setAuthenticationRequired(True)
                 self.onServerReachableChanged(True)
-        elif "/modifiers/" in url_string:
-            if status_code == 403:
-                self.showModifierFailedMessage.emit()
-            self.onServerReachableChanged(True)
         elif "/user/" in url_string:
             if status_code not in [404, 500] and self._user_name != "":
                 data = bytes(reply.readAll())
@@ -318,14 +321,25 @@ class ApplicationController(QObject):
             if node.id == node_id:
                 return node
 
+    def _onPostModifierFinished(self, reply: QNetworkReply):
+        status_code = reply.attribute(QNetworkRequest.HttpStatusCodeAttribute)
+        if status_code == 403:
+            self.showModifierFailedMessage.emit()
+        else:
+            self.showModifierSucceededMessage.emit()
+        self.onServerReachableChanged(True)
+        print("DONE")
+        pass
+
     @Slot(str, str)
     def addModifier(self, modifier: str, node_id: str):
         data = "{\"modifier_name\": \"%s\"}" % modifier
 
         modifiers_url = f"{self.getBaseUrl()}/node/{node_id}/modifiers/?accessCardID={self._rfid_card}"
-        print(modifiers_url)
         request = QNetworkRequest(QUrl(modifiers_url))
         request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
 
         reply = self._network_manager.post(request, data.encode())
+
+        self._onFinishedCallbacks[reply] = self._onPostModifierFinished
 

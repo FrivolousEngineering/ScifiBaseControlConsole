@@ -346,6 +346,7 @@ Rectangle
     }
 
     ModifierFailedMessage {}
+    ModifierSucceededMessage {}
 
     DetailedNodeInfoWindow
     {
