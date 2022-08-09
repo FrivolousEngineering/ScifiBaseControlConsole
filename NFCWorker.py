@@ -26,8 +26,8 @@ class NFCWorker(QObject):
         while True:
             try:
                 tag = self.reader.connect(rdwr={'on-connect': lambda tag: False})
-            except OSError: 
-                print("FAILED TO FIND THE READER")
+            except OSError as e:
+                print("FAILED TO FIND THE READER", e)
                 time.sleep(5)
                 # Couldn't find serial connection. Try again in a bit!
                 self.reader.close()
