@@ -124,7 +124,6 @@ class Node(QObject):
         self._incoming_connections_url = f"{self._server_url}/node/{self._node_id}/connections/incoming/"
         self._all_chart_data_url = f"{self._server_url}/node/{self._node_id}/all_property_chart_data/?showLast=50"
         self._outgoing_connections_url = f"{self._server_url}/node/{self._node_id}/connections/outgoing/"
-        self._additional_properties_url = f"{self._server_url}/node/{self._node_id}/additional_properties/"
         self._static_properties_url = f"{self._server_url}/node/{self._node_id}/static_properties/"
         self._modifiers_url = f"{self._server_url}/node/{self._node_id}/modifiers/"
         self._updateUrlsWithAuth(self._server_url, self._access_card)
@@ -154,7 +153,6 @@ class Node(QObject):
         self.get(self._source_url, self._onSourceUrlFinished)
         self.get(self._all_chart_data_url, self._onChartDataFinished)
         self.get(self._modifiers_url, self._onModifiersChanged)
-        self.get(self._additional_properties_url, self._onAdditionalPropertiesFinished)
 
     def _setServerReachable(self, server_reachable: bool):
         if self.server_reachable != server_reachable:
@@ -180,20 +178,16 @@ class Node(QObject):
         except json.decoder.JSONDecodeError:
             return None
 
-    def _onAdditionalPropertiesFinished(self, reply: QNetworkReply) -> None:
-        result = self._readData(reply)
-        if not result:
-            return
-
-        if self._additional_properties != result:
-            self._additional_properties = result
+    def updateAdditionalProperties(self, data):
+        if self._additional_properties != data:
+            self._additional_properties = data
             self._converted_additional_properties = {}
             # Clear the list and convert them in a way that we can use them in a repeater.
-            for additional_property in result:
+            for additional_property in data:
                 self._converted_additional_properties[additional_property["key"]] = {
                                                               "value": additional_property["value"],
                                                               "max_value": additional_property["max_value"]}
-            #self._converted_additional_properties.reverse()
+
             self.additionalPropertiesChanged.emit()
 
     def _onModifiersChanged(self, reply: QNetworkReply):
@@ -383,6 +377,8 @@ class Node(QObject):
         self.updateResourceList("resources_required", data["resources_required"])
         self.updateResourceList("resources_produced", data["resources_produced"])
         self.updateResourceList("resources_provided", data["resources_provided"])
+
+        self.updateAdditionalProperties(data["additional_properties"])
 
     def updateResourceList(self, property_name, data):
         list_to_check = getattr(self, "_" + property_name)
